@@ -4,7 +4,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-from notify import format_report  # noqa: E402
+from notify import format_report, format_discord  # noqa: E402
 
 
 def test_no_changes_returns_none():
@@ -31,3 +31,24 @@ def test_groups_by_district_and_shows_counts():
     assert "📍板橋區" in text and "📍三重區" in text
     assert "$39000→$36000（↓7.7%）" in text
     assert "u1" in text and "u3" in text
+
+
+def test_discord_no_changes_returns_empty():
+    assert format_discord({"new": [], "price_drop": [], "removed": []}) == []
+
+
+def test_discord_embeds_carry_image_and_link():
+    report = {
+        "new": [{"title": "新物件", "district": "板橋區", "total_monthly": 33000,
+                 "rooms": 4, "size_ping": 40.0, "floor": "4F",
+                 "url": "https://rent.591.com.tw/1", "image": "https://img.591/1.jpg"}],
+        "price_drop": [], "removed": [],
+    }
+    payloads = format_discord(report, header="測試")
+    assert len(payloads) == 1
+    p = payloads[0]
+    assert "🔔 **測試**" in p["content"]
+    e = p["embeds"][0]
+    assert e["url"] == "https://rent.591.com.tw/1"
+    assert e["thumbnail"]["url"] == "https://img.591/1.jpg"
+    assert "🆕" in e["title"]

@@ -189,22 +189,39 @@ git push -u origin main
 
 ---
 
-## 9.（選用）Telegram 通知
+## 9.（選用）推播通知：Telegram / Discord
 
-不設也沒關係，只是不推播、流程照跑。要的話：
+不設也沒關係，只是不推播、流程照跑。系統**支援 Telegram 與 Discord，可擇一或兩個都設**——
+哪個 Secret 有填就發哪個，都填就兩邊都收到。所有 Secret 都在
+**Repo → Settings → Secrets and variables → Actions → New repository secret** 新增。
+
+### 方式 A：Telegram Bot
 
 1. 在 Telegram 找 **@BotFather** → `/newbot` → 取得 **bot token**。
 2. 對你的新 bot 傳一則訊息，然後打開
    `https://api.telegram.org/bot<你的token>/getUpdates`，
    在回應裡找 `chat.id`（那串數字就是你的 **chat id**）。
-3. 回 GitHub：**Repo → Settings → Secrets and variables → Actions → New repository secret**，
-   新增兩個：
+3. 新增兩個 Secret：
    - `TELEGRAM_BOT_TOKEN`
    - `TELEGRAM_CHAT_ID`
 
-之後每輪若有新增/降價/下架，就會推到你的 Telegram（依區域分組）。
+Telegram 通知為純文字、依區域分組，像和 bot 的私人對話。
 
-> Token 放在 Secrets（加密），即使 repo 是 Public 也讀不到。
+### 方式 B：Discord Webhook
+
+1. 在你的 Discord 伺服器：**伺服器設定 → 整合(Integrations) → Webhook → 新 Webhook**
+   →（可選）指定要發到哪個頻道 → **複製 Webhook URL**。
+2. 新增一個 Secret：
+   - `DISCORD_WEBHOOK_URL`（貼上剛複製的網址）
+
+Discord 通知用 **embed 卡片，會附物件封面圖縮圖**，看房更直覺。
+
+### 兩個都設
+
+兩邊 Secret 都填即可，每輪有變動時 Telegram 和 Discord **都會收到**。
+
+> 所有 Token / Webhook URL 都放在 Secrets（加密），即使 repo 是 Public 也讀不到，
+> 也不會寫進程式或 repo。
 
 ---
 

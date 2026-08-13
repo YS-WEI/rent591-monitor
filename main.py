@@ -88,7 +88,7 @@ def run() -> dict:
     save_snapshot(payload, timestamp)
 
     header = subs[0].get("name", "591 租屋監控") if len(subs) == 1 else "591 租屋監控"
-    notify.send(notify.format_report(report, header=header))
+    notify.notify(report, header=header)
 
     log.info("完成：🆕%d 💰%d ❌%d（狀態共 %d 筆）",
              len(report["new"]), len(report["price_drop"]), len(report["removed"]),

@@ -33,9 +33,10 @@ python3 -m venv .venv
    分別存於 Actions Secrets（加密）與瀏覽器 localStorage，不進 repo。
 2. **Telegram Bot**：向 [@BotFather](https://t.me/BotFather) 建立 bot 取得 token；
    對 bot 送一則訊息後，用 `https://api.telegram.org/bot<token>/getUpdates` 取得你的 chat id。
-3. **設定 Secrets**（repo → Settings → Secrets and variables → Actions）：
-   - `TELEGRAM_BOT_TOKEN`
-   - `TELEGRAM_CHAT_ID`
+3. **設定通知 Secrets**（repo → Settings → Secrets and variables → Actions）——
+   Telegram 與 Discord 可擇一或都設，有設定就會發：
+   - Telegram：`TELEGRAM_BOT_TOKEN`、`TELEGRAM_CHAT_ID`
+   - Discord：`DISCORD_WEBHOOK_URL`（Discord 通知附封面圖 embed）
 4. **允許 Actions 寫入**：Settings → Actions → General → Workflow permissions →
    選「Read and write permissions」（workflow 已宣告 `contents: write`）。
 5. **啟用 Pages**：Settings → Pages → Source 選 `main` 分支，即可用網頁。
