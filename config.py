@@ -8,9 +8,9 @@ LIST_URL = f"{BASE_URL}/list"
 # 多排序聯集法用的排序清單（同一條件用多種 sort 各抓一次取聯集）
 SORTS = ["posttime_desc", "money_asc", "money_desc", "area_asc", "area_desc"]
 
-# 逐區查詢時每個區用的排序（單區通常 <30 筆，posttime 一次即可涵蓋；
-# money_asc 補漏防單區超過 30 筆時漏抓）
-SECTION_SORTS = ["posttime_desc", "money_asc"]
+# 逐區查詢時每個區用的排序。單區通常 <30 筆，posttime 一次即可涵蓋；
+# 只用一種排序可大幅減少請求數（降低 591 擋機房 IP 的機率、讓筆數更穩定）。
+SECTION_SORTS = ["posttime_desc"]
 
 # 城市代碼 → 名稱
 REGION_NAMES = {"1": "台北市", "3": "新北市"}
@@ -19,7 +19,7 @@ REGION_NAMES = {"1": "台北市", "3": "新北市"}
 KIND_NAMES = {"1": "整層住家", "2": "獨立套房", "3": "分租套房", "4": "雅房"}
 
 # 反爬：請求間隔與重試
-REQUEST_INTERVAL_SEC = 3
+REQUEST_INTERVAL_SEC = 4  # 請求間隔；拉長較不易被 591 擋
 REQUEST_TIMEOUT_SEC = 20
 MAX_RETRIES = 3  # 591 對機房 IP 偶發 403，多給幾次重試較能撐過
 USER_AGENT = (

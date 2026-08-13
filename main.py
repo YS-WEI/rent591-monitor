@@ -61,13 +61,13 @@ def run() -> dict:
     current, stats = collect_current(subs, fetched_at=now)
     previous = load_latest()
 
-    # 保險絲：整批抓到 0 筆、但上輪明明有資料 → 幾乎必為反爬/被擋，
-    # 不可拿來比對（否則會把全部物件誤判為下架）。中止本輪、不動已存狀態。
+    # 保險絲：本輪抓到的筆數比上輪在架「驟降」（<70%），幾乎必為反爬/部分被擋，
+    # 不可拿來比對（否則畫面忽上忽下、還可能把物件誤判為下架）。中止本輪、不動已存狀態。
     prev_active = sum(1 for v in (previous or {}).get("listings", {}).values()
                       if v.get("status") == "active")
-    if not current and prev_active > 0:
-        log.error("本輪抓到 0 筆，但上輪有 %d 筆在架 —— 疑似被反爬/擋 IP。"
-                  "中止本輪，不覆寫狀態、不通知。", prev_active)
+    if prev_active >= 10 and len(current) < prev_active * 0.7:
+        log.error("本輪抓到 %d 筆，較上輪在架 %d 筆驟降 —— 疑似被反爬/擋 IP。"
+                  "中止本輪，不覆寫狀態、不通知。", len(current), prev_active)
         raise SystemExit(1)
 
     new_state, report = diff_snapshots(previous, current, today=today,
