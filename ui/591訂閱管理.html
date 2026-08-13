@@ -166,16 +166,20 @@ input:focus{outline:2px solid var(--accent);outline-offset:1px;border-color:var(
 <!-- 設定面板 -->
 <div class="overlay" id="settingsOverlay">
   <div class="panel">
-    <h2>GitHub 連線設定</h2>
+    <h2>編輯用的 GitHub Token</h2>
     <div class="note-box">
-      這頁透過 GitHub API 讀寫你 repo 內的 <b>subscriptions.json</b> 與 <b>watchlist.json</b>。<br>
-      建議：repo 設 <b>private</b>、用 <b>fine-grained token</b> 只授權此 repo 的 <b>Contents: Read and write</b>。
-      Token 只存在此瀏覽器（localStorage），不會寫進 repo。
+      <b>看資料不需要設定</b>（owner/repo 已從網址自動判斷、公開檔直接讀）。<br>
+      只有<b>編輯訂閱、加入關注、立即更新</b>才需要 Token：用 <b>fine-grained token</b>，
+      授權此 repo 的 <b>Contents: Read and write</b>（要用立即更新再加 <b>Actions: Read and write</b>）。<br>
+      Token 只存在此瀏覽器；瀏覽器會問你要不要儲存密碼，存了即可跨裝置自動填入。
     </div>
-    <div class="field"><label>擁有者 owner<span class="hint">如 swei</span></label><input type="text" id="s-owner" placeholder="your-github-account"></div>
-    <div class="field"><label>Repo 名稱</label><input type="text" id="s-repo" placeholder="rent591-monitor"></div>
-    <div class="field"><label>分支<span class="hint">預設 main</span></label><input type="text" id="s-branch" placeholder="main"></div>
-    <div class="field"><label>GitHub Token<span class="hint">fine-grained, Contents RW</span></label><input type="password" id="s-token" placeholder="github_pat_..."></div>
+    <div class="field"><label>GitHub Token<span class="hint">fine-grained</span></label><input type="password" id="s-token" placeholder="github_pat_..." autocomplete="current-password"></div>
+    <details style="margin-bottom:14px">
+      <summary style="font-size:12px;color:var(--muted);cursor:pointer">進階：手動指定 owner / repo / branch（通常免填）</summary>
+      <div class="field" style="margin-top:10px"><label>擁有者 owner</label><input type="text" id="s-owner" placeholder="自動判斷"></div>
+      <div class="field"><label>Repo 名稱</label><input type="text" id="s-repo" placeholder="自動判斷"></div>
+      <div class="field"><label>分支<span class="hint">預設 main</span></label><input type="text" id="s-branch" placeholder="main"></div>
+    </details>
     <div class="panel-actions">
       <button class="btn-line" onclick="closeSettings()">取消</button>
       <button class="btn-main" onclick="saveSettings()">儲存並連線</button>
@@ -199,8 +203,8 @@ const CFG_KEY="rent591-gh-config";
 
 // ===== 狀態 =====
 let cfg=loadCfg();
-let subsDoc=null, subsSha=null;      // subscriptions.json 內容與 sha
-let watchDoc={items:{}}, watchSha=null;
+let subsDoc=null;                    // subscriptions.json 內容
+let watchDoc={items:{}};             // watchlist.json 內容
 let latest=null;                     // data/latest.json
 let editingId=null;
 let statusFilter="";              // 狀態頁「只看區域」篩選
@@ -208,61 +212,73 @@ let watchFilter="";               // 關注頁「只看區域」篩選
 let form=blankForm();
 
 function blankForm(){return{region:"3",sections:[],kind:"1",layout:[],shape:[],name:"",price_min:"",price_max:"",acreage_min:"",acreage_max:""};}
-function loadCfg(){try{return JSON.parse(localStorage.getItem(CFG_KEY))||null;}catch(e){return null;}}
+// 自動從 GitHub Pages 網址判斷 owner/repo（免手動設定）
+function detectRepo(){
+  const h=location.hostname,p=location.pathname.split("/").filter(Boolean);
+  if(h.endsWith("github.io")&&p.length) return {owner:h.split(".")[0],repo:p[0],branch:"main"};
+  return null;
+}
+function loadCfg(){
+  let s={};try{s=JSON.parse(localStorage.getItem(CFG_KEY))||{};}catch(e){}
+  const d=detectRepo()||{};
+  return {owner:s.owner||d.owner||"",repo:s.repo||d.repo||"",branch:s.branch||d.branch||"main",token:s.token||""};
+}
 function esc(t){return(t||"").replace(/[<>&"]/g,c=>({"<":"&lt;",">":"&gt;","&":"&amp;",'"':"&quot;"}[c]));}
 function num(v){return(v===""||v===null||v===undefined)?null:Number(v);}
+function hasToken(){return !!(cfg&&cfg.token);}
+function needToken(){showToast("此動作需要 GitHub Token，請先在設定填入");openSettings();}
 
 // ===== base64 (UTF-8) =====
 function b64e(str){return btoa(unescape(encodeURIComponent(str)));}
-function b64d(b64){return decodeURIComponent(escape(atob(b64.replace(/\s/g,""))));}
 
-// ===== GitHub API =====
-function ghUrl(path){return `https://api.github.com/repos/${cfg.owner}/${cfg.repo}/contents/${path}`;}
-async function ghGet(path){
-  const r=await fetch(`${ghUrl(path)}?ref=${cfg.branch}`,{headers:{Authorization:`Bearer ${cfg.token}`,Accept:"application/vnd.github+json"}});
-  if(r.status===404) return {json:null,sha:null};
-  if(!r.ok) throw new Error(`讀取 ${path} 失敗（${r.status}）`);
-  const d=await r.json();
-  return {json:JSON.parse(b64d(d.content)),sha:d.sha};
+// ===== 讀取：公開檔（同源 Pages），免 token =====
+async function pubGet(relpath){
+  const r=await fetch(`${relpath}?t=${Date.now()}`,{cache:"no-store"});
+  if(r.status===404) return null;
+  if(!r.ok) throw new Error(`讀取 ${relpath} 失敗（${r.status}）`);
+  return r.json();
 }
-async function ghPut(path,obj,sha,message){
+
+// ===== 寫入：GitHub API（需 token），每次即時取最新 sha 再 PUT =====
+function apiUrl(path){return `https://api.github.com/repos/${cfg.owner}/${cfg.repo}/contents/${path}`;}
+function authHeaders(){return {Authorization:`Bearer ${cfg.token}`,Accept:"application/vnd.github+json"};}
+async function ghPutFile(path,obj,message){
+  if(!hasToken()){needToken();throw new Error("需要 token");}
+  let sha=null;
+  const g=await fetch(`${apiUrl(path)}?ref=${cfg.branch}`,{headers:authHeaders()});
+  if(g.status===200) sha=(await g.json()).sha;
+  else if(g.status!==404) throw new Error(`讀取 ${path} 失敗（${g.status}）`);
   const body={message:message||`更新 ${path}`,content:b64e(JSON.stringify(obj,null,2)),branch:cfg.branch};
   if(sha) body.sha=sha;
-  const r=await fetch(ghUrl(path),{method:"PUT",headers:{Authorization:`Bearer ${cfg.token}`,Accept:"application/vnd.github+json"},body:JSON.stringify(body)});
+  const r=await fetch(apiUrl(path),{method:"PUT",headers:authHeaders(),body:JSON.stringify(body)});
   if(!r.ok){const t=await r.text();throw new Error(`寫入 ${path} 失敗（${r.status}）：${t.slice(0,120)}`);}
-  const d=await r.json();
-  return d.content.sha;
 }
 
-// ===== 載入 =====
+// ===== 載入（免 token 讀取，任何瀏覽器打開即可看）=====
 async function boot(){
-  if(!cfg||!cfg.owner||!cfg.repo||!cfg.token){
-    document.getElementById("gearBtn").classList.add("warn");
-    document.getElementById("genAt").textContent="請先點右上「設定」連線 GitHub";
-    renderNeedSetup();
-    return;
-  }
-  cfg.branch=cfg.branch||"main";
+  cfg=loadCfg();
   try{
-    const [s,w,l]=await Promise.all([ghGet("subscriptions.json"),ghGet("watchlist.json"),ghGet("data/latest.json").catch(()=>({json:null}))]);
-    subsDoc=s.json||{subscriptions:[],settings:{}}; subsSha=s.sha;
-    watchDoc=w.json?(w.json.items?w.json:{items:w.json}):{items:{}}; watchSha=w.sha;
-    latest=l.json;
-    document.getElementById("gearBtn").classList.remove("warn");
-    const cnt=latest?Object.keys(latest.listings||{}).length:0;
-    document.getElementById("genAt").textContent=latest?`已連線 · 最新更新 ${latest.generated_at} · 在架 ${cnt} 筆`:`已連線 · 尚無快照（等排程跑第一輪）`;
-    renderStatus(); renderSubs(); renderWatch();
+    const [l,s,w]=await Promise.all([
+      pubGet("../data/latest.json").catch(()=>null),
+      pubGet("../subscriptions.json"),
+      pubGet("../watchlist.json").catch(()=>null),
+    ]);
+    latest=l;
+    subsDoc=s||{subscriptions:[],settings:{}};
+    watchDoc=w?(w.items?w:{items:w}):{items:{}};
   }catch(e){
+    document.getElementById("genAt").textContent="載入失敗："+e.message;
     showToast("⚠️ "+e.message);
-    document.getElementById("genAt").textContent="連線失敗："+e.message;
-    renderNeedSetup();
   }
+  updateHeader();
+  renderStatus();renderSubs();renderWatch();
 }
-function renderNeedSetup(){
-  const html=`<div class="empty">尚未連線 GitHub。<br>點右上「⚙️ 設定」填入 owner / repo / token 後即可讀寫訂閱與顯示狀態。</div>`;
-  document.getElementById("view-status").innerHTML=html;
-  document.getElementById("subList").innerHTML=html;
-  document.getElementById("view-watch").innerHTML=html;
+function updateHeader(){
+  const gear=document.getElementById("gearBtn"),el=document.getElementById("genAt");
+  const cnt=latest?Object.keys(latest.listings||{}).length:0;
+  const base=latest?`最新更新 ${latest.generated_at} · 在架 ${cnt} 筆`:`尚無快照（等排程跑第一輪）`;
+  if(hasToken()){gear.classList.remove("warn");el.textContent=`可編輯 · ${base}`;}
+  else{gear.classList.add("warn");el.textContent=`唯讀（編輯/關注需在設定填 token）· ${base}`;}
 }
 
 // ===== 分頁 =====
@@ -400,7 +416,7 @@ function renderSubs(){
     </div>`).join("");
 }
 async function persistSubs(msg){
-  try{subsSha=await ghPut("subscriptions.json",subsDoc,subsSha,msg);showToast("已存回 GitHub ✓");}
+  try{await ghPutFile("subscriptions.json",subsDoc,msg);showToast("已存回 GitHub ✓");}
   catch(e){showToast("⚠️ "+e.message);}
 }
 
@@ -441,6 +457,7 @@ function renderSections(){
 function addSection(id){if(id&&!form.sections.includes(id)){form.sections.push(id);renderSections();}}
 function removeSection(id){const i=form.sections.indexOf(id);if(i>=0){form.sections.splice(i,1);renderSections();}}
 async function saveSub(){
+  if(!hasToken()){needToken();return;}
   form.name=document.getElementById("f-name").value.trim();
   const pmin=num(document.getElementById("f-priceMin").value),pmax=num(document.getElementById("f-priceMax").value);
   const amin=num(document.getElementById("f-acreMin").value),amax=num(document.getElementById("f-acreMax").value);
@@ -452,11 +469,12 @@ async function saveSub(){
   closeEditor();renderSubs();
   await persistSubs(editingId?`更新訂閱 ${rec.name}`:`新增訂閱 ${rec.name}`);
 }
-async function toggleSub(id){const s=subsDoc.subscriptions.find(x=>x.id===id);s.enabled=!s.enabled;renderSubs();await persistSubs(`${s.enabled?"啟用":"暫停"}訂閱 ${s.name}`);}
-async function delSub(id){const s=subsDoc.subscriptions.find(x=>x.id===id);if(!confirm(`確定刪除「${s.name}」？`))return;subsDoc.subscriptions=subsDoc.subscriptions.filter(x=>x.id!==id);renderSubs();await persistSubs(`刪除訂閱 ${s.name}`);}
+async function toggleSub(id){if(!hasToken()){needToken();return;}const s=subsDoc.subscriptions.find(x=>x.id===id);s.enabled=!s.enabled;renderSubs();await persistSubs(`${s.enabled?"啟用":"暫停"}訂閱 ${s.name}`);}
+async function delSub(id){if(!hasToken()){needToken();return;}const s=subsDoc.subscriptions.find(x=>x.id===id);if(!confirm(`確定刪除「${s.name}」？`))return;subsDoc.subscriptions=subsDoc.subscriptions.filter(x=>x.id!==id);renderSubs();await persistSubs(`刪除訂閱 ${s.name}`);}
 
 // ===== 關注 =====
 async function toggleWatch(id){
+  if(!hasToken()){needToken();return;}
   if(watchDoc.items[id]) delete watchDoc.items[id];
   else{
     const r=(latest&&latest.listings&&latest.listings[id])||{};
@@ -464,7 +482,7 @@ async function toggleWatch(id){
   }
   // 即時更新畫面星號
   renderStatus();renderWatch();
-  try{watchSha=await ghPut("watchlist.json",watchDoc,watchSha,`更新關注清單`);showToast("關注已更新 ✓");}
+  try{await ghPutFile("watchlist.json",watchDoc,`更新關注清單`);showToast("關注已更新 ✓");}
   catch(e){showToast("⚠️ "+e.message);}
 }
 function renderWatch(){
@@ -493,7 +511,7 @@ function onWatchFilter(v){watchFilter=v;renderWatch();document.getElementById("v
 
 // ===== 立即更新（觸發 GitHub Actions）=====
 async function triggerRun(btn){
-  if(!cfg||!cfg.token){showToast("請先在「⚙️ 設定」連線 GitHub");return;}
+  if(!hasToken()){needToken();return;}
   const before=latest?latest.generated_at:null;
   try{
     const r=await fetch(`https://api.github.com/repos/${cfg.owner}/${cfg.repo}/actions/workflows/monitor.yml/dispatches`,
@@ -514,12 +532,11 @@ async function pollUpdate(before,btn,tries){
   }
   setTimeout(async()=>{
     try{
-      const {json}=await ghGet("data/latest.json");
+      const json=await pubGet("../data/latest.json");
       if(json&&json.generated_at!==before){
         latest=json;
-        const cnt=Object.keys(latest.listings||{}).length;
-        document.getElementById("genAt").textContent=`已連線 · 最新更新 ${latest.generated_at} · 在架 ${cnt} 筆`;
-        renderStatus();renderWatch();
+        if(btn){btn.disabled=false;btn.textContent="🔄 立即更新";}
+        updateHeader();renderStatus();renderWatch();
         showToast("已更新為最新資料 ✓");
         return;
       }
@@ -538,8 +555,14 @@ function openSettings(){
 }
 function closeSettings(){document.getElementById("settingsOverlay").classList.remove("show");}
 function saveSettings(){
-  cfg={owner:document.getElementById("s-owner").value.trim(),repo:document.getElementById("s-repo").value.trim(),branch:document.getElementById("s-branch").value.trim()||"main",token:document.getElementById("s-token").value.trim()};
-  if(!cfg.owner||!cfg.repo||!cfg.token){showToast("owner / repo / token 請都填");return;}
+  const det=detectRepo()||{};
+  const owner=document.getElementById("s-owner").value.trim()||det.owner||"";
+  const repo=document.getElementById("s-repo").value.trim()||det.repo||"";
+  const branch=document.getElementById("s-branch").value.trim()||det.branch||"main";
+  const token=document.getElementById("s-token").value.trim();
+  if(!token){showToast("請貼上 Token（只看資料的話免 token，直接按取消即可）");return;}
+  if(!owner||!repo){showToast("無法自動判斷 owner/repo，請展開進階手動填");return;}
+  cfg={owner,repo,branch,token};
   localStorage.setItem(CFG_KEY,JSON.stringify(cfg));
   closeSettings();boot();
 }
