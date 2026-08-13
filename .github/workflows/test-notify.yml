@@ -1,0 +1,23 @@
+name: 測試通知
+
+# 手動觸發：Actions → 測試通知 → Run workflow
+on:
+  workflow_dispatch: {}
+
+jobs:
+  test-notify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+          cache: pip
+      - name: 安裝相依套件
+        run: pip install -r requirements.txt
+      - name: 送測試通知
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+        run: python send_test.py
