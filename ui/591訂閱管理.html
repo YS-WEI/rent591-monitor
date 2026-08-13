@@ -225,6 +225,15 @@ function loadCfg(){
 }
 function esc(t){return(t||"").replace(/[<>&"]/g,c=>({"<":"&lt;",">":"&gt;","&":"&amp;",'"':"&quot;"}[c]));}
 function num(v){return(v===""||v===null||v===undefined)?null:Number(v);}
+// 把 UTC(或帶時區) ISO 時間換算成瀏覽器當地時區顯示，並標出時區名稱
+function fmtTime(iso){
+  if(!iso) return "";
+  const d=new Date(iso);
+  if(isNaN(d.getTime())) return iso;
+  const p=n=>String(n).padStart(2,"0");
+  const tz=(Intl.DateTimeFormat().resolvedOptions().timeZone)||"本地";
+  return `${d.getFullYear()}/${p(d.getMonth()+1)}/${p(d.getDate())} ${p(d.getHours())}:${p(d.getMinutes())}（${tz}）`;
+}
 function hasToken(){return !!(cfg&&cfg.token);}
 function needToken(){showToast("此動作需要 GitHub Token，請先在設定填入");openSettings();}
 
@@ -276,7 +285,7 @@ async function boot(){
 function updateHeader(){
   const gear=document.getElementById("gearBtn"),el=document.getElementById("genAt");
   const cnt=latest?Object.values(latest.listings||{}).filter(r=>r.status==="active").length:0;
-  const base=latest?`最新更新 ${latest.generated_at} · 在架 ${cnt} 筆`:`尚無快照（等排程跑第一輪）`;
+  const base=latest?`最新更新 ${fmtTime(latest.generated_at)} · 在架 ${cnt} 筆`:`尚無快照（等排程跑第一輪）`;
   if(hasToken()){gear.classList.remove("warn");el.textContent=`可編輯 · ${base}`;}
   else{gear.classList.add("warn");el.textContent=`唯讀（編輯/關注需在設定填 token）· ${base}`;}
 }
@@ -374,7 +383,7 @@ function renderStatus(){
     `<option value="">全部區域（${active.length}）</option>`+
     dists.map(d=>`<option value="${esc(d)}" ${statusFilter===d?"selected":""}>${esc(d)}（${cnt[d]}）</option>`).join("")+
     `</select></div>`+
-    `<div class="summary">本輪更新 ${latest.generated_at}　🆕 ${nNew.length}｜💰 ${nDrop.length}｜❌ ${nOff.length}</div>`;
+    `<div class="summary">本輪更新 ${fmtTime(latest.generated_at)}　🆕 ${nNew.length}｜💰 ${nDrop.length}｜❌ ${nOff.length}</div>`;
 
   if(nNew.length+nDrop.length+nOff.length===0) el.insertAdjacentHTML("beforeend",`<div class="empty">本輪沒有新增／降價／下架${statusFilter?"（此區）":""}。</div>`);
   if(nNew.length) el.insertAdjacentHTML("beforeend",section("🆕 新增",nNew,{flag:{cls:"flag-new",txt:"🆕"},stripe:"var(--accent)"}));

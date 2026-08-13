@@ -6,7 +6,7 @@ from __future__ import annotations
 
 import json
 import logging
-from datetime import datetime
+from datetime import datetime, timezone
 
 import config
 import notify
@@ -53,7 +53,7 @@ def collect_current(subs: list[dict], fetched_at: datetime) -> tuple[list[dict],
 
 def run() -> dict:
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
-    now = datetime.now()
+    now = datetime.now(timezone.utc)  # 存 UTC-aware，網頁再換算成使用者當地時區
     today = now.date().isoformat()
     timestamp = now.strftime("%Y%m%d-%H%M%S")
 
