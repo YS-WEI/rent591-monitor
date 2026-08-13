@@ -45,7 +45,7 @@ def fetch_list_html(url: str, client: httpx.Client) -> str | None:
             return resp.text
         except Exception as exc:  # noqa: BLE001 — 任何失敗都應可跳過重試
             if attempt < config.MAX_RETRIES:
-                backoff = config.REQUEST_INTERVAL_SEC * (attempt + 1)  # 遞增退避 3→6→9…
+                backoff = config.REQUEST_INTERVAL_SEC * (2 ** attempt)  # 指數退避 4→8→16→32
                 log.warning("抓取失敗（第 %d 次重試，等 %ds）：%s", attempt + 1, backoff, exc)
                 time.sleep(backoff)
                 continue
@@ -75,7 +75,11 @@ def scrape_subscription(
     fetched_at: datetime | None = None,
     client: httpx.Client | None = None,
 ) -> list[dict]:
-    """抓取單一訂閱（多排序聯集），回傳去重後的物件清單。
+    """抓取單一訂閱（逐區 + 多排序聯集），回傳 (物件清單, 已涵蓋的行政區集合)。
+
+    「已涵蓋」= 該區這輪成功抓到（HTTP 有回應）。被擋（403 重試後仍失敗）的區
+    不列入，供上層判斷「這區沒抓到就別動它的資料」。
+    無 sections 的（全區）訂閱回傳 covered=None，代表視為全部涵蓋。
 
     每次請求之間間隔 config.REQUEST_INTERVAL_SEC 秒。
     可注入 httpx.Client（測試用）；未提供則自建。
@@ -96,7 +100,10 @@ def scrape_subscription(
         )
 
     # 逐區查詢：每個 section 各自查（避免多區共用 SSR 的 ~30 筆名額而漏抓）
+    section_map = config.SECTION_NAMES.get(str(sub["region"]), {})
     sections = sub.get("sections") or [None]
+    region_wide = not sub.get("sections")
+    covered_sections: set = set()
     batches: list[list[dict]] = []
     first = True
     try:
@@ -109,7 +116,9 @@ def scrape_subscription(
                 url = build_list_url(sub_one, sort=sort)
                 html = fetch_list_html(url, client)
                 if not html:
-                    continue
+                    continue  # 被擋：此 section 這輪未涵蓋，不加入 covered
+                if section is not None:
+                    covered_sections.add(str(section))
                 parsed = parse_list_html(html, fetched_at=fetched_at)
                 if not parsed:
                     # 200 但解析不到物件：多半是反爬頁／機房 IP 被擋，記標題方便診斷
@@ -132,5 +141,10 @@ def scrape_subscription(
             client.close()
 
     merged = merge_listings(sub, batches, region_name)
-    log.info("[%s] 完成，聯集共 %d 筆", sub["id"], len(merged))
-    return merged
+    if region_wide:
+        covered = None  # 全區訂閱無法逐區判斷，視為全部涵蓋
+    else:
+        covered = {section_map[s] for s in covered_sections if s in section_map}
+    log.info("[%s] 完成，聯集共 %d 筆（涵蓋區：%s）",
+             sub["id"], len(merged), "全區" if covered is None else "、".join(sorted(covered)) or "無")
+    return merged, covered

@@ -78,6 +78,23 @@ def test_reappearing_listing_resets_missing():
     assert report["removed"] == []
 
 
+def test_uncovered_district_carried_forward():
+    # 士林區這輪沒抓到（被擋）→ 物件原狀保留，不算 missing、不下架
+    prev = {"listings": {"A": _listing("A", 30000, district="士林區", missing_count=0, status="active")}}
+    state, report = diff_snapshots(prev, [], today="2026-08-13", covered_districts={"板橋區"})
+    assert state["listings"]["A"]["status"] == "active"
+    assert state["listings"]["A"]["missing_count"] == 0
+    assert report["removed"] == []
+
+
+def test_covered_district_absent_marks_missing():
+    # 板橋區有抓到、但此物件不在結果中 → 正常累積 missing
+    prev = {"listings": {"A": _listing("A", 30000, district="板橋區", missing_count=0, status="active")}}
+    state, report = diff_snapshots(prev, [], today="2026-08-13", covered_districts={"板橋區"})
+    assert state["listings"]["A"]["status"] == "missing"
+    assert state["listings"]["A"]["missing_count"] == 1
+
+
 def test_mixed_round():
     prev = {"listings": {
         "keep": _listing("keep", 30000, price_history=[{"date": "2026-08-10", "price": 30000}],

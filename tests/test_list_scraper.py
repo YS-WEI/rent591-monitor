@@ -38,13 +38,15 @@ def test_scrape_subscription_unions_across_sorts(monkeypatch):
         return httpx.Response(200, text=html)
 
     client = httpx.Client(transport=httpx.MockTransport(handler))
-    rows = scrape_subscription(
+    rows, covered = scrape_subscription(
         SUB, sorts=["posttime_desc", "money_asc"], fetched_at=FETCHED_AT, client=client
     )
     # 兩個排序都回同一份 30 筆 → 聯集仍為 30
     assert len(rows) == 30
     assert all(r["subscription_id"] == "sub-001" for r in rows)
     assert all(r["region"] == "新北市" for r in rows)
+    # section 26 成功抓到 → 涵蓋板橋區
+    assert covered == {"板橋區"}
 
 
 def test_fetch_returns_none_on_persistent_failure(monkeypatch):

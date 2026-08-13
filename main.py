@@ -27,12 +27,18 @@ def load_subscriptions() -> tuple[list[dict], dict]:
 def collect_current(subs: list[dict], fetched_at: datetime) -> tuple[list[dict], list[dict]]:
     """逐訂閱抓取，跨訂閱以 listing_id 去重（先出現者為準）。
 
-    回傳 (去重後物件清單, 每訂閱統計)。
+    回傳 (去重後物件清單, 每訂閱統計, 已涵蓋行政區集合或 None=全涵蓋)。
     """
     merged: dict[str, dict] = {}
     stats = []
+    all_covered: set = set()
+    cover_all = False
     for sub in subs:
-        rows = scrape_subscription(sub, fetched_at=fetched_at)
+        rows, covered = scrape_subscription(sub, fetched_at=fetched_at)
+        if covered is None:
+            cover_all = True
+        else:
+            all_covered |= covered
         added = 0
         for r in rows:
             if r["listing_id"] not in merged:
@@ -41,7 +47,8 @@ def collect_current(subs: list[dict], fetched_at: datetime) -> tuple[list[dict],
         stats.append({"id": sub["id"], "name": sub.get("name", sub["id"]),
                       "fetched": len(rows), "unique_added": added})
         log.info("訂閱 %s：抓到 %d 筆，新增去重 %d 筆", sub["id"], len(rows), added)
-    return list(merged.values()), stats
+    covered_districts = None if cover_all else all_covered
+    return list(merged.values()), stats, covered_districts
 
 
 def run() -> dict:
@@ -58,20 +65,17 @@ def run() -> dict:
     threshold = settings.get("missing_rounds_before_removed", 2)
     watchlist = load_watchlist()
 
-    current, stats = collect_current(subs, fetched_at=now)
+    current, stats, covered = collect_current(subs, fetched_at=now)
     previous = load_latest()
 
-    # 保險絲：本輪抓到的筆數比上輪在架「驟降」（<70%），幾乎必為反爬/部分被擋，
-    # 不可拿來比對（否則畫面忽上忽下、還可能把物件誤判為下架）。中止本輪、不動已存狀態。
-    prev_active = sum(1 for v in (previous or {}).get("listings", {}).values()
-                      if v.get("status") == "active")
-    if prev_active >= 10 and len(current) < prev_active * 0.7:
-        log.error("本輪抓到 %d 筆，較上輪在架 %d 筆驟降 —— 疑似被反爬/擋 IP。"
-                  "中止本輪，不覆寫狀態、不通知。", len(current), prev_active)
-        raise SystemExit(1)
+    # 被擋的區其資料原狀保留、不誤判下架（見 diff_snapshots 的 covered_districts）。
+    # 全部被擋（covered 為空集合）時，等於所有物件都原狀保留、本輪無任何變動。
+    if covered is not None and not covered:
+        log.warning("本輪所有區皆未抓到（疑似被擋），維持既有狀態。")
 
     new_state, report = diff_snapshots(previous, current, today=today,
-                                       missing_rounds_before_removed=threshold)
+                                       missing_rounds_before_removed=threshold,
+                                       covered_districts=covered)
 
     # 標記關注狀態，供網頁使用
     for lid, rec in new_state["listings"].items():

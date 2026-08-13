@@ -34,11 +34,15 @@ def diff_snapshots(
     current_listings: list[dict],
     today: str,
     missing_rounds_before_removed: int = 2,
+    covered_districts: set | None = None,
 ) -> tuple[dict, dict]:
     """比對前次狀態與本輪抓取結果。
 
     回傳 (new_state, report)。report 內每筆保留完整物件 dict，方便通知分組。
     today 為本輪日期字串（YYYY-MM-DD），供 price_history 記錄；不在函式內取系統時間。
+
+    covered_districts：這輪「有成功抓到」的行政區集合；None 代表全部涵蓋。
+    消失的物件若其所在區這輪沒抓到（被擋），則原狀保留、不算 missing、不會被判下架。
     """
     prev_listings: dict[str, dict] = dict((previous or {}).get("listings", {}))
     current_by_id = {c["listing_id"]: c for c in current_listings}
@@ -95,6 +99,10 @@ def diff_snapshots(
     # 2) 本輪消失的物件：累積 missing，達門檻才判下架
     for lid, prev in prev_listings.items():
         if lid in current_by_id:
+            continue
+        # 此物件所在區這輪沒抓到（被擋）→ 原狀保留，不算 missing、不誤判下架
+        if covered_districts is not None and prev.get("district") not in covered_districts:
+            new_state_listings[lid] = {**prev}
             continue
         prev_status = prev.get("status", "active")
         missing = prev.get("missing_count", 0) + 1
