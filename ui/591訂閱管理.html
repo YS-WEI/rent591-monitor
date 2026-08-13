@@ -275,7 +275,7 @@ async function boot(){
 }
 function updateHeader(){
   const gear=document.getElementById("gearBtn"),el=document.getElementById("genAt");
-  const cnt=latest?Object.keys(latest.listings||{}).length:0;
+  const cnt=latest?Object.values(latest.listings||{}).filter(r=>r.status==="active").length:0;
   const base=latest?`最新更新 ${latest.generated_at} · 在架 ${cnt} 筆`:`尚無快照（等排程跑第一輪）`;
   if(hasToken()){gear.classList.remove("warn");el.textContent=`可編輯 · ${base}`;}
   else{gear.classList.add("warn");el.textContent=`唯讀（編輯/關注需在設定填 token）· ${base}`;}
