@@ -173,19 +173,23 @@ git push -u origin main
 
 ---
 
-## 8. 在網頁填入 Token
+## 8. 在網頁填入 Token（只有要編輯才需要）
 
-打開 `https://YS-WEI.github.io/rent591-monitor/` → 右上 **⚙️ 設定**，填：
+**看資料不用任何設定**：打開 `https://YS-WEI.github.io/rent591-monitor/`，
+網頁會自動判斷 owner/repo 並直接讀公開檔，狀態/訂閱/關注**任何瀏覽器打開就看得到**。
 
-- owner：`YS-WEI`
-- repo：`rent591-monitor`
-- branch：`main`
-- token：貼上剛才的 `github_pat_...`
+要**編輯訂閱、加入關注、立即更新**時才需要 Token：右上 **⚙️ 設定** → 貼上 `github_pat_...` → 儲存。
+（owner/repo 已自動帶入，通常不用填；特殊情況可展開「進階」手動指定。）
 
-按 **儲存並連線**。頂端會顯示「已連線 · 最新更新 …」，狀態頁出現物件。
+> Token 只存在**你這台瀏覽器**，不會寫進 repo。欄位是密碼型，瀏覽器會問你要不要儲存——
+> 存了之後、在有登入瀏覽器帳號的裝置上會**自動填入**，換裝置就不用重打。
+> Token 到期後在 GitHub Edit 現有 token 續期即可（token 字串不變，網頁不用重貼）。
 
-> Token 只存在**你這台瀏覽器的 localStorage**，不會寫進 repo，也不會外流。
-> 換裝置要重貼；Token 到期後在 GitHub 重簽再貼即可（可直接 Edit 現有 token 續期，token 字串不變）。
+### 跨瀏覽器 / 跨裝置
+
+- **看**：零設定，到處打開都能看（公開檔直接讀）。
+- **編輯/關注**：需要 Token。建議把 Token 交給**瀏覽器內建密碼管理或 1Password/Bitwarden** 同步，
+  換裝置時自動填入。（Token 是憑證，無法安全地放進網址或 repo 來「自動同步」，那樣會外洩。）
 
 ---
 
