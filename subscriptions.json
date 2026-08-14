@@ -6,10 +6,19 @@
       "enabled": true,
       "group": "我",
       "region": "3",
-      "sections": ["43", "47", "44", "26"],
+      "sections": [
+        "43",
+        "47",
+        "44",
+        "26"
+      ],
       "kind": "1",
-      "layout": ["4"],
-      "shape": ["2"],
+      "layout": [
+        "4"
+      ],
+      "shape": [
+        "2"
+      ],
       "price_min": 0,
       "price_max": 50000,
       "acreage_min": 30,
@@ -22,10 +31,19 @@
       "enabled": true,
       "group": "我",
       "region": "1",
-      "sections": ["4", "7", "5", "11"],
+      "sections": [
+        "4",
+        "7",
+        "5",
+        "11"
+      ],
       "kind": "1",
-      "layout": ["4"],
-      "shape": ["2"],
+      "layout": [
+        "4"
+      ],
+      "shape": [
+        "2"
+      ],
       "price_min": 0,
       "price_max": 50000,
       "acreage_min": 30,
@@ -38,10 +56,20 @@
       "enabled": true,
       "group": "我",
       "region": "1",
-      "sections": ["8", "3", "2", "1", "6"],
+      "sections": [
+        "8",
+        "3",
+        "2",
+        "1",
+        "6"
+      ],
       "kind": "1",
-      "layout": ["4"],
-      "shape": ["2"],
+      "layout": [
+        "4"
+      ],
+      "shape": [
+        "2"
+      ],
       "price_min": 0,
       "price_max": 50000,
       "acreage_min": 30,
@@ -54,13 +82,45 @@
       "enabled": true,
       "group": "我",
       "region": "1",
-      "sections": ["9", "11", "12"],
+      "sections": [
+        "9",
+        "11",
+        "12"
+      ],
       "kind": "1",
-      "layout": ["4"],
-      "shape": ["2"],
+      "layout": [
+        "4"
+      ],
+      "shape": [
+        "2"
+      ],
       "price_min": 0,
       "price_max": 50000,
       "acreage_min": 30,
+      "acreage_max": null,
+      "sort": "posttime_desc"
+    },
+    {
+      "id": "sub-1786697700649",
+      "name": "外婆租屋條件",
+      "group": "外婆家",
+      "enabled": true,
+      "region": "1",
+      "sections": [
+        "8",
+        "1",
+        "3"
+      ],
+      "kind": "1",
+      "layout": [
+        "4"
+      ],
+      "shape": [
+        "2"
+      ],
+      "price_min": 0,
+      "price_max": 80000,
+      "acreage_min": null,
       "acreage_max": null,
       "sort": "posttime_desc"
     }
