@@ -34,6 +34,7 @@ def collect_current(subs: list[dict], fetched_at: datetime) -> tuple[list[dict],
     all_covered: set = set()
     cover_all = False
     for sub in subs:
+        group = sub.get("group") or "我"
         rows, covered = scrape_subscription(sub, fetched_at=fetched_at)
         if covered is None:
             cover_all = True
@@ -41,12 +42,18 @@ def collect_current(subs: list[dict], fetched_at: datetime) -> tuple[list[dict],
             all_covered |= covered
         added = 0
         for r in rows:
-            if r["listing_id"] not in merged:
-                merged[r["listing_id"]] = r
+            lid = r["listing_id"]
+            if lid in merged:
+                # 同物件也符合這位家人的訂閱 → 併入其歸屬人（重疊區照樣各自看得到）
+                if group not in merged[lid]["groups"]:
+                    merged[lid]["groups"].append(group)
+            else:
+                r["groups"] = [group]
+                merged[lid] = r
                 added += 1
         stats.append({"id": sub["id"], "name": sub.get("name", sub["id"]),
-                      "fetched": len(rows), "unique_added": added})
-        log.info("訂閱 %s：抓到 %d 筆，新增去重 %d 筆", sub["id"], len(rows), added)
+                      "group": group, "fetched": len(rows), "unique_added": added})
+        log.info("訂閱 %s（%s）：抓到 %d 筆，新增去重 %d 筆", sub["id"], group, len(rows), added)
     covered_districts = None if cover_all else all_covered
     return list(merged.values()), stats, covered_districts
 
@@ -91,8 +98,7 @@ def run() -> dict:
     }
     save_snapshot(payload, timestamp)
 
-    header = subs[0].get("name", "591 租屋監控") if len(subs) == 1 else "591 租屋監控"
-    notify.notify(report, header=header)
+    notify.notify(report, subs)
 
     log.info("完成：🆕%d 💰%d ❌%d（狀態共 %d 筆）",
              len(report["new"]), len(report["price_drop"]), len(report["removed"]),

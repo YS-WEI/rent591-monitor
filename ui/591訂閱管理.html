@@ -141,6 +141,7 @@ input:focus{outline:2px solid var(--accent);outline-offset:1px;border-color:var(
 <div class="overlay" id="editOverlay">
   <div class="panel">
     <h2 id="panelTitle">新增訂閱</h2>
+    <div class="field"><label>歸屬人<span class="hint">誰的需求，如 我／媽媽</span></label><input type="text" id="f-group" placeholder="我"></div>
     <div class="field"><label>訂閱名稱</label><input type="text" id="f-name" placeholder="例：板橋 4 房家庭宅"></div>
     <div class="field"><label>城市</label><div class="opt-grid region-tabs" id="f-region"></div></div>
     <div class="field"><label>區域<span class="hint">可複選</span></label>
@@ -208,10 +209,11 @@ let watchDoc={items:{}};             // watchlist.json 內容
 let latest=null;                     // data/latest.json
 let editingId=null;
 let statusFilter="";              // 狀態頁「只看區域」篩選
+let personFilter="";              // 狀態頁「看誰的」篩選
 let watchFilter="";               // 關注頁「只看區域」篩選
 let form=blankForm();
 
-function blankForm(){return{region:"3",sections:[],kind:"1",layout:[],shape:[],name:"",price_min:"",price_max:"",acreage_min:"",acreage_max:""};}
+function blankForm(){return{group:"我",region:"3",sections:[],kind:"1",layout:[],shape:[],name:"",price_min:"",price_max:"",acreage_min:"",acreage_max:""};}
 // 自動從 GitHub Pages 網址判斷 owner/repo（免手動設定）
 function detectRepo(){
   const h=location.hostname,p=location.pathname.split("/").filter(Boolean);
@@ -364,23 +366,40 @@ function section(title,rows,opt){
   return html;
 }
 function onStatusFilter(v){statusFilter=v;renderStatus();document.getElementById("view-status").scrollIntoView({block:"start"});}
+function onPersonFilter(v){personFilter=v;statusFilter="";renderStatus();document.getElementById("view-status").scrollIntoView({block:"start"});}
 function renderStatus(){
   const el=document.getElementById("view-status");
   if(!latest){el.innerHTML=`<div class="empty">尚無快照。等 GitHub Actions 跑完第一輪後，這裡會顯示本輪變動與在架物件。</div>`;return;}
   const rep=latest.report||{new:[],price_drop:[],removed:[]};
   const active=Object.values(latest.listings||{}).filter(r=>r.status==="active");
-  // 各區數量（供下拉）
-  const cnt={};active.forEach(r=>{const d=r.district||"其他";cnt[d]=(cnt[d]||0)+1;});
+
+  // 歸屬人數量（供「看誰的」下拉）
+  const gcnt={};active.forEach(r=>(r.groups||["我"]).forEach(g=>{gcnt[g]=(gcnt[g]||0)+1;}));
+  const groups=Object.keys(gcnt).sort((a,b)=>gcnt[b]-gcnt[a]);
+  if(personFilter&&!gcnt[personFilter]) personFilter="";
+  const byPerson=r=>!personFilter||(r.groups||["我"]).includes(personFilter);
+
+  // 區域數量（在選定歸屬人範圍內計算）
+  const pActive=active.filter(byPerson);
+  const cnt={};pActive.forEach(r=>{const d=r.district||"其他";cnt[d]=(cnt[d]||0)+1;});
   const dists=Object.keys(cnt).sort((a,b)=>cnt[b]-cnt[a]);
   if(statusFilter&&!cnt[statusFilter]) statusFilter="";
-  const flt=rows=>statusFilter?rows.filter(r=>(r.district||"其他")===statusFilter):rows;
+  const flt=rows=>rows.filter(r=>byPerson(r)&&(!statusFilter||(r.district||"其他")===statusFilter));
   const nNew=flt(rep.new),nDrop=flt(rep.price_drop),nOff=flt(rep.removed),nAct=flt(active);
+
+  const personSelect=groups.length>1
+    ? `<div class="field" style="margin-bottom:10px"><label>看誰的</label>`+
+      `<select class="sel-input" onchange="onPersonFilter(this.value)">`+
+      `<option value="">全部人（${active.length}）</option>`+
+      groups.map(g=>`<option value="${esc(g)}" ${personFilter===g?"selected":""}>${esc(g)}（${gcnt[g]}）</option>`).join("")+
+      `</select></div>` : "";
 
   el.innerHTML=`<div style="margin-bottom:8px"><button class="btn-main" onclick="triggerRun(this)">🔄 立即更新</button></div>`+
     `<div class="summary">自動更新（台灣時間）：02:17・05:17・08:17・11:17・14:17・17:17・20:17・23:17（每 3 小時，可能延遲數分鐘）</div>`+
+    personSelect+
     `<div class="field" style="margin-bottom:12px"><label>只看區域</label>`+
     `<select class="sel-input" onchange="onStatusFilter(this.value)">`+
-    `<option value="">全部區域（${active.length}）</option>`+
+    `<option value="">全部區域（${pActive.length}）</option>`+
     dists.map(d=>`<option value="${esc(d)}" ${statusFilter===d?"selected":""}>${esc(d)}（${cnt[d]}）</option>`).join("")+
     `</select></div>`+
     `<div class="summary">本輪更新 ${fmtTime(latest.generated_at)}　🆕 ${nNew.length}｜💰 ${nDrop.length}｜❌ ${nOff.length}</div>`;
@@ -416,7 +435,7 @@ function renderSubs(){
   el.innerHTML=subs.map((s,i)=>`
     <div class="sub-card ${s.enabled?"":"disabled"}" style="--edge:${EDGE[i%EDGE.length]}">
       <div class="sub-name">${esc(s.name)||"未命名訂閱"}${s.enabled?"":'<span class="off-tag">已暫停</span>'}</div>
-      <div class="chips">${summaryChips(s)}</div>
+      <div class="chips"><span class="chip">👤 ${esc(s.group||"我")}</span>${summaryChips(s)}</div>
       <div class="sub-actions">
         <button class="btn-line" onclick="openEditor('${s.id}')">✏️ 編輯</button>
         <button class="btn-line" onclick="toggleSub('${s.id}')">${s.enabled?"⏸ 暫停":"▶️ 啟用"}</button>
@@ -433,8 +452,9 @@ async function persistSubs(msg){
 function openEditor(id){
   editingId=id||null;
   const s=id?subsDoc.subscriptions.find(x=>x.id===id):null;
-  form=s?{region:s.region,sections:[...(s.sections||[])],kind:s.kind,layout:[...(s.layout||[])],shape:[...(s.shape||[])],name:s.name||"",price_min:s.price_min??"",price_max:s.price_max??"",acreage_min:s.acreage_min??"",acreage_max:s.acreage_max??""}:blankForm();
+  form=s?{group:s.group||"我",region:s.region,sections:[...(s.sections||[])],kind:s.kind,layout:[...(s.layout||[])],shape:[...(s.shape||[])],name:s.name||"",price_min:s.price_min??"",price_max:s.price_max??"",acreage_min:s.acreage_min??"",acreage_max:s.acreage_max??""}:blankForm();
   document.getElementById("panelTitle").textContent=id?"編輯訂閱":"新增訂閱";
+  document.getElementById("f-group").value=form.group||"我";
   document.getElementById("f-name").value=form.name;
   document.getElementById("f-priceMin").value=form.price_min??"";
   document.getElementById("f-priceMax").value=form.price_max??"";
@@ -468,11 +488,12 @@ function removeSection(id){const i=form.sections.indexOf(id);if(i>=0){form.secti
 async function saveSub(){
   if(!hasToken()){needToken();return;}
   form.name=document.getElementById("f-name").value.trim();
+  form.group=document.getElementById("f-group").value.trim()||"我";
   const pmin=num(document.getElementById("f-priceMin").value),pmax=num(document.getElementById("f-priceMax").value);
   const amin=num(document.getElementById("f-acreMin").value),amax=num(document.getElementById("f-acreMax").value);
   if(!form.sections.length){showToast("請至少選一個區域");return;}
   if(!form.name) form.name=form.sections.map(id=>REGIONS[form.region].sections[id]).join("・")+((form.layout||[]).length?" "+form.layout.map(l=>LAYOUTS[l]).join("/"):"");
-  const rec={id:editingId||("sub-"+Date.now()),name:form.name,enabled:true,region:form.region,sections:form.sections,kind:form.kind,layout:form.layout,shape:form.shape,price_min:pmin,price_max:pmax,acreage_min:amin,acreage_max:amax,sort:"posttime_desc"};
+  const rec={id:editingId||("sub-"+Date.now()),name:form.name,group:form.group,enabled:true,region:form.region,sections:form.sections,kind:form.kind,layout:form.layout,shape:form.shape,price_min:pmin,price_max:pmax,acreage_min:amin,acreage_max:amax,sort:"posttime_desc"};
   if(editingId){const i=subsDoc.subscriptions.findIndex(x=>x.id===editingId);rec.enabled=subsDoc.subscriptions[i].enabled;subsDoc.subscriptions[i]=rec;}
   else subsDoc.subscriptions.push(rec);
   closeEditor();renderSubs();

@@ -24,6 +24,9 @@ def _sample_listing() -> dict:
 
 
 if __name__ == "__main__":
-    report = {"new": [_sample_listing()], "price_drop": [], "removed": []}
-    notify.notify(report, header="🧪 測試通知（若收到代表通知已接通，可忽略）")
+    sample = _sample_listing()
+    sample["groups"] = ["🧪測試"]
+    report = {"new": [sample], "price_drop": [], "removed": []}
+    # 用一個測試用歸屬人；未設路由會退回預設管道
+    notify.notify(report, [{"group": "🧪測試"}])
     print("已呼叫 notify()，請查看 Telegram / Discord。")

@@ -4,7 +4,17 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-from notify import format_report, format_discord  # noqa: E402
+from notify import format_report, format_discord, _filter_by_group  # noqa: E402
+
+
+def test_filter_by_group_splits_report():
+    # 同物件屬多人時，各自的報告都要看得到；不屬於某人的不出現
+    report = {"new": [{"title": "A", "groups": ["我"]},
+                      {"title": "B", "groups": ["媽媽"]},
+                      {"title": "C", "groups": ["我", "媽媽"]}],
+              "price_drop": [], "removed": []}
+    assert [r["title"] for r in _filter_by_group(report, "我")["new"]] == ["A", "C"]
+    assert [r["title"] for r in _filter_by_group(report, "媽媽")["new"]] == ["B", "C"]
 
 
 def test_no_changes_returns_none():

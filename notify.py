@@ -179,29 +179,62 @@ def send_discord(payloads: list[dict], webhook_url: str) -> bool:
     return ok
 
 
-# ---------- 統一入口 ----------
+# ---------- 依歸屬人分流 ----------
 
-def notify(report: dict, header: str = "591 租屋監控") -> None:
-    """依已設定的 Secret，發送到 Telegram 與/或 Discord。無變動則不發。"""
+def _filter_by_group(report: dict, group: str) -> dict:
+    """取出屬於某位歸屬人（group）的變動子集。"""
+    def keep(rows):
+        return [r for r in rows if group in (r.get("groups") or [])]
+    return {"new": keep(report["new"]), "price_drop": keep(report["price_drop"]),
+            "removed": keep(report["removed"])}
+
+
+def _routes() -> dict:
+    """讀取 NOTIFY_ROUTES（JSON）：{ "<歸屬人>": {"discord": url, "telegram_chat": id}, ... }。"""
+    import json
+    try:
+        return json.loads(os.environ.get("NOTIFY_ROUTES") or "{}")
+    except Exception:  # noqa: BLE001
+        log.warning("NOTIFY_ROUTES 不是合法 JSON，忽略。")
+        return {}
+
+
+def _send_one(report: dict, header: str, discord_url: str | None,
+              tg_token: str | None, tg_chat: str | None) -> bool:
+    sent = False
+    if tg_token and tg_chat:
+        send_telegram(format_report(report, header), tg_token, tg_chat)
+        sent = True
+    if discord_url:
+        send_discord(format_discord(report, header), discord_url)
+        sent = True
+    return sent
+
+
+def notify(report: dict, subs: list[dict]) -> None:
+    """依歸屬人把變動分流到各自的管道。
+
+    路由來源 NOTIFY_ROUTES（Secret，JSON）；某人沒設定就退回預設管道
+    （DISCORD_WEBHOOK_URL / TELEGRAM_BOT_TOKEN+TELEGRAM_CHAT_ID）。
+    """
     if not has_changes(report):
         log.info("本輪無變動，不發送通知。")
         return
 
-    sent_any = False
-
+    groups = list(dict.fromkeys((s.get("group") or "我") for s in subs))  # 保序去重
+    routes = _routes()
     tg_token = os.environ.get("TELEGRAM_BOT_TOKEN")
-    tg_chat = os.environ.get("TELEGRAM_CHAT_ID")
-    if tg_token and tg_chat:
-        send_telegram(format_report(report, header), tg_token, tg_chat)
-        sent_any = True
+    default_dc = os.environ.get("DISCORD_WEBHOOK_URL")
+    default_tg_chat = os.environ.get("TELEGRAM_CHAT_ID")
 
-    dc_url = os.environ.get("DISCORD_WEBHOOK_URL")
-    if dc_url:
-        send_discord(format_discord(report, header), dc_url)
-        sent_any = True
-
-    if not sent_any:
-        log.warning(
-            "未設定任何通知管道（TELEGRAM_BOT_TOKEN/CHAT_ID 或 DISCORD_WEBHOOK_URL）。"
-            "內容預覽：\n%s", format_report(report, header),
-        )
+    for group in groups:
+        sub_report = _filter_by_group(report, group)
+        if not has_changes(sub_report):
+            continue
+        route = routes.get(group, {})
+        discord_url = route.get("discord") or default_dc
+        tg_chat = route.get("telegram_chat") or default_tg_chat
+        header = f"{group}的租屋監控" if group else "591 租屋監控"
+        if not _send_one(sub_report, header, discord_url, tg_token, tg_chat):
+            log.warning("「%s」無可用通知管道，內容預覽：\n%s",
+                        group, format_report(sub_report, header))
