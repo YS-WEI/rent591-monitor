@@ -68,4 +68,4 @@
 | 重試次數 | `config.MAX_RETRIES` | 4（指數退避） |
 | 每區排序 | `config.SECTION_SORTS` | `["posttime_desc"]` |
 | 下架門檻 | `subscriptions.json` settings | 2 輪 |
-| 排程頻率 | `.github/workflows/monitor.yml` | 每 3 小時（UTC cron） |
+| 排程頻率 | `.github/workflows/monitor.yml` | 每 2 小時（`17 */2 * * *` UTC） |

@@ -398,7 +398,7 @@ function renderStatus(){
       `</select></div>` : "";
 
   el.innerHTML=`<div style="margin-bottom:8px"><button class="btn-main" onclick="triggerRun(this)">🔄 立即更新</button></div>`+
-    `<div class="summary">自動更新（台灣時間）：02:17・05:17・08:17・11:17・14:17・17:17・20:17・23:17（每 3 小時，可能延遲數分鐘）</div>`+
+    `<div class="summary">自動更新：每 2 小時的第 17 分（台灣 00:17、02:17…22:17；GitHub 排程可能延遲數分鐘）</div>`+
     personSelect+
     `<div class="field" style="margin-bottom:12px"><label>只看區域</label>`+
     `<select class="sel-input" onchange="onStatusFilter(this.value)">`+
