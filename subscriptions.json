@@ -104,7 +104,7 @@
       "id": "sub-1786697772632",
       "name": "外婆租屋條件",
       "group": "外婆家",
-      "enabled": true,
+      "enabled": false,
       "region": "1",
       "sections": [
         "1",
