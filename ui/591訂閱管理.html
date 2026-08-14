@@ -284,8 +284,10 @@ async function boot(){
     document.getElementById("genAt").textContent="載入失敗："+e.message;
     showToast("⚠️ "+e.message);
   }
+  const tab=readUrl();            // 從網址還原篩選狀態與分頁
   updateHeader();
   renderStatus();renderSubs();renderWatch();
+  switchView(tab);
 }
 function updateHeader(){
   const gear=document.getElementById("gearBtn"),el=document.getElementById("genAt");
@@ -295,11 +297,35 @@ function updateHeader(){
   else{gear.classList.add("warn");el.textContent=`唯讀（編輯/關注需在設定填 token）· ${base}`;}
 }
 
+// ===== 網址參數（保存分頁與篩選，重新整理不跑掉、可分享）=====
+function currentView(){const t=document.querySelector(".tab.on");return t?t.dataset.view:"status";}
+function writeUrl(){
+  try{
+    const p=new URLSearchParams();
+    const v=currentView(); if(v&&v!=="status") p.set("tab",v);
+    if(personFilter) p.set("person",personFilter);
+    if(statusFilter) p.set("district",statusFilter);
+    if(watchPerson) p.set("wperson",watchPerson);
+    if(watchFilter) p.set("wdistrict",watchFilter);
+    const qs=p.toString();
+    history.replaceState(null,"",qs?("?"+qs):location.pathname);
+  }catch(e){/* 某些環境不支援 replaceState，忽略 */}
+}
+function readUrl(){
+  const p=new URLSearchParams(location.search);
+  personFilter=p.get("person")||"";
+  statusFilter=p.get("district")||"";
+  watchPerson=p.get("wperson")||"";
+  watchFilter=p.get("wdistrict")||"";
+  return p.get("tab")||"status";
+}
+
 // ===== 分頁 =====
 function switchView(v){
   document.querySelectorAll(".tab").forEach(t=>t.classList.toggle("on",t.dataset.view===v));
   document.querySelectorAll(".view").forEach(x=>x.classList.remove("on"));
   document.getElementById("view-"+v).classList.add("on");
+  writeUrl();
 }
 
 // ===== 狀態總覽 =====
@@ -368,8 +394,8 @@ function section(title,rows,opt){
   }
   return html;
 }
-function onStatusFilter(v){statusFilter=v;renderStatus();document.getElementById("view-status").scrollIntoView({block:"start"});}
-function onPersonFilter(v){personFilter=v;statusFilter="";renderStatus();document.getElementById("view-status").scrollIntoView({block:"start"});}
+function onStatusFilter(v){statusFilter=v;writeUrl();renderStatus();document.getElementById("view-status").scrollIntoView({block:"start"});}
+function onPersonFilter(v){personFilter=v;statusFilter="";writeUrl();renderStatus();document.getElementById("view-status").scrollIntoView({block:"start"});}
 function renderStatus(){
   const el=document.getElementById("view-status");
   if(!latest){el.innerHTML=`<div class="empty">尚無快照。等 GitHub Actions 跑完第一輪後，這裡會顯示本輪變動與在架物件。</div>`;return;}
@@ -552,8 +578,8 @@ function renderWatch(){
     `<div class="summary">關注 ${shown.length} 筆　排程會持續追蹤狀態變化</div>`+
     shown.map(r=>listingCard(r,{stripe:r.status==="removed"?"var(--danger)":"var(--accent)",flag:r.status==="removed"?{cls:"flag-off",txt:"❌ 已下架"}:null})).join("");
 }
-function onWatchPerson(v){watchPerson=v;watchFilter="";renderWatch();document.getElementById("view-watch").scrollIntoView({block:"start"});}
-function onWatchFilter(v){watchFilter=v;renderWatch();document.getElementById("view-watch").scrollIntoView({block:"start"});}
+function onWatchPerson(v){watchPerson=v;watchFilter="";writeUrl();renderWatch();document.getElementById("view-watch").scrollIntoView({block:"start"});}
+function onWatchFilter(v){watchFilter=v;writeUrl();renderWatch();document.getElementById("view-watch").scrollIntoView({block:"start"});}
 
 // ===== 立即更新（觸發 GitHub Actions）=====
 async function triggerRun(btn){
