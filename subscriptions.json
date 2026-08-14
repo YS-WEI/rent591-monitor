@@ -99,32 +99,6 @@
       "acreage_min": 30,
       "acreage_max": null,
       "sort": "posttime_desc"
-    },
-    {
-      "id": "sub-1786697772632",
-      "name": "外婆租屋條件",
-      "group": "外婆家",
-      "enabled": false,
-      "region": "1",
-      "sections": [
-        "1",
-        "3",
-        "2",
-        "8"
-      ],
-      "kind": "1",
-      "layout": [
-        "4",
-        "3"
-      ],
-      "shape": [
-        "2"
-      ],
-      "price_min": 0,
-      "price_max": 80000,
-      "acreage_min": null,
-      "acreage_max": null,
-      "sort": "posttime_desc"
     }
   ],
   "settings": {
