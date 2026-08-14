@@ -211,6 +211,7 @@ let editingId=null;
 let statusFilter="";              // 狀態頁「只看區域」篩選
 let personFilter="";              // 狀態頁「看誰的」篩選
 let watchFilter="";               // 關注頁「只看區域」篩選
+let watchPerson="";               // 關注頁「看誰的」篩選
 let form=blankForm();
 
 function blankForm(){return{group:"我",region:"3",sections:[],kind:"1",layout:[],shape:[],name:"",price_min:"",price_max:"",acreage_min:"",acreage_max:""};}
@@ -236,6 +237,8 @@ function fmtTime(iso){
   const tz=(Intl.DateTimeFormat().resolvedOptions().timeZone)||"本地";
   return `${d.getFullYear()}/${p(d.getMonth()+1)}/${p(d.getDate())} ${p(d.getHours())}:${p(d.getMinutes())}（${tz}）`;
 }
+// 訂閱設定裡有哪些歸屬人（保序去重）
+function configuredGroups(){return [...new Set(((subsDoc&&subsDoc.subscriptions)||[]).map(s=>s.group||"我"))];}
 function hasToken(){return !!(cfg&&cfg.token);}
 function needToken(){showToast("此動作需要 GitHub Token，請先在設定填入");openSettings();}
 
@@ -373,10 +376,10 @@ function renderStatus(){
   const rep=latest.report||{new:[],price_drop:[],removed:[]};
   const active=Object.values(latest.listings||{}).filter(r=>r.status==="active");
 
-  // 歸屬人數量（供「看誰的」下拉）
+  // 歸屬人（供「看誰的」下拉）：訂閱設定的人 ∪ 資料中出現的人（加了訂閱就立刻出現）
   const gcnt={};active.forEach(r=>(r.groups||["我"]).forEach(g=>{gcnt[g]=(gcnt[g]||0)+1;}));
-  const groups=Object.keys(gcnt).sort((a,b)=>gcnt[b]-gcnt[a]);
-  if(personFilter&&!gcnt[personFilter]) personFilter="";
+  const groups=[...new Set([...configuredGroups(),...Object.keys(gcnt)])];
+  if(personFilter&&!groups.includes(personFilter)) personFilter="";
   const byPerson=r=>!personFilter||(r.groups||["我"]).includes(personFilter);
 
   // 區域數量（在選定歸屬人範圍內計算）
@@ -391,7 +394,7 @@ function renderStatus(){
     ? `<div class="field" style="margin-bottom:10px"><label>看誰的</label>`+
       `<select class="sel-input" onchange="onPersonFilter(this.value)">`+
       `<option value="">全部人（${active.length}）</option>`+
-      groups.map(g=>`<option value="${esc(g)}" ${personFilter===g?"selected":""}>${esc(g)}（${gcnt[g]}）</option>`).join("")+
+      groups.map(g=>`<option value="${esc(g)}" ${personFilter===g?"selected":""}>${esc(g)}（${gcnt[g]||0}）</option>`).join("")+
       `</select></div>` : "";
 
   el.innerHTML=`<div style="margin-bottom:8px"><button class="btn-main" onclick="triggerRun(this)">🔄 立即更新</button></div>`+
@@ -522,21 +525,34 @@ function renderWatch(){
   const rows=ids.map(id=>{
     const live=(latest&&latest.listings&&latest.listings[id])||{};
     const w=watchDoc.items[id];
-    return {listing_id:id,title:live.title||w.title||("物件 "+id),url:live.url||w.url,image:live.image,district:live.district,community:live.community,total_monthly:live.total_monthly,rooms:live.rooms,size_ping:live.size_ping,floor:live.floor,updated_rel:live.updated_rel,posted_at:live.posted_at,first_seen:live.first_seen,status:live.status,note:w.note};
+    return {listing_id:id,title:live.title||w.title||("物件 "+id),url:live.url||w.url,image:live.image,groups:live.groups,district:live.district,community:live.community,total_monthly:live.total_monthly,rooms:live.rooms,size_ping:live.size_ping,floor:live.floor,updated_rel:live.updated_rel,posted_at:live.posted_at,first_seen:live.first_seen,status:live.status,note:w.note};
   });
-  // 各區數量（供下拉）
-  const cnt={};rows.forEach(r=>{const d=r.district||"其他";cnt[d]=(cnt[d]||0)+1;});
+  // 歸屬人（訂閱設定 ∪ 關注物件中出現）
+  const wgroups=[...new Set([...configuredGroups(),...rows.flatMap(r=>r.groups||[])])];
+  if(watchPerson&&!wgroups.includes(watchPerson)) watchPerson="";
+  const byP=r=>!watchPerson||(r.groups||[]).includes(watchPerson);
+  const pRows=rows.filter(byP);
+  // 各區數量（在選定歸屬人範圍內）
+  const cnt={};pRows.forEach(r=>{const d=r.district||"其他";cnt[d]=(cnt[d]||0)+1;});
   const dists=Object.keys(cnt).sort((a,b)=>cnt[b]-cnt[a]);
   if(watchFilter&&!cnt[watchFilter]) watchFilter="";
-  const shown=(watchFilter?rows.filter(r=>(r.district||"其他")===watchFilter):rows).sort(byRecency);
-  el.innerHTML=`<div class="field" style="margin-bottom:12px"><label>只看區域</label>`+
+  const shown=pRows.filter(r=>!watchFilter||(r.district||"其他")===watchFilter).sort(byRecency);
+  const personSelect=wgroups.length>1
+    ? `<div class="field" style="margin-bottom:10px"><label>看誰的</label>`+
+      `<select class="sel-input" onchange="onWatchPerson(this.value)">`+
+      `<option value="">全部人（${rows.length}）</option>`+
+      wgroups.map(g=>`<option value="${esc(g)}" ${watchPerson===g?"selected":""}>${esc(g)}（${rows.filter(r=>(r.groups||[]).includes(g)).length}）</option>`).join("")+
+      `</select></div>` : "";
+  el.innerHTML=personSelect+
+    `<div class="field" style="margin-bottom:12px"><label>只看區域</label>`+
     `<select class="sel-input" onchange="onWatchFilter(this.value)">`+
-    `<option value="">全部區域（${rows.length}）</option>`+
+    `<option value="">全部區域（${pRows.length}）</option>`+
     dists.map(d=>`<option value="${esc(d)}" ${watchFilter===d?"selected":""}>${esc(d)}（${cnt[d]}）</option>`).join("")+
     `</select></div>`+
     `<div class="summary">關注 ${shown.length} 筆　排程會持續追蹤狀態變化</div>`+
     shown.map(r=>listingCard(r,{stripe:r.status==="removed"?"var(--danger)":"var(--accent)",flag:r.status==="removed"?{cls:"flag-off",txt:"❌ 已下架"}:null})).join("");
 }
+function onWatchPerson(v){watchPerson=v;watchFilter="";renderWatch();document.getElementById("view-watch").scrollIntoView({block:"start"});}
 function onWatchFilter(v){watchFilter=v;renderWatch();document.getElementById("view-watch").scrollIntoView({block:"start"});}
 
 // ===== 立即更新（觸發 GitHub Actions）=====
