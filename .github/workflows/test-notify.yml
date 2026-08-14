@@ -2,7 +2,13 @@ name: 測試通知
 
 # 手動觸發：Actions → 測試通知 → Run workflow
 on:
-  workflow_dispatch: {}
+  workflow_dispatch:
+    inputs:
+      group:
+        description: "測試哪位歸屬人（例：我／外婆家；填 全部 送所有人）"
+        required: false
+        default: "我"
+        type: string
 
 jobs:
   test-notify:
@@ -21,4 +27,5 @@ jobs:
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
           NOTIFY_ROUTES: ${{ secrets.NOTIFY_ROUTES }}
+          TEST_GROUP: ${{ inputs.group }}
         run: python send_test.py
