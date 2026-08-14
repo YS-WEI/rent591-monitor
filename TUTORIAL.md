@@ -390,4 +390,41 @@ schedule:
 
 ---
 
-完成以上，系統就會 24 小時自動幫你監控 591，並在網頁與 Telegram 呈現變化。
+## 15. 幫家人訂閱（多使用者）
+
+想幫不同家人各自訂閱、案件又分得開，不用開多個 repo——用「歸屬人」分類即可。
+
+### 15-1. 建立各自的訂閱
+
+新增/編輯訂閱時，最上面的 **「歸屬人」** 填該家人的名字（如 `媽媽`、`弟弟`；你自己的預設 `我`）。
+訂閱卡會標示 👤 歸屬人。
+
+### 15-2. 狀態頁按人看
+
+狀態頁上方會出現 **「看誰的」** 下拉（有多位歸屬人時才顯示），選某人就只看那個人的案件，
+可再疊加「只看區域」。同一物件若同時符合多人條件，會在各自的清單都出現。
+
+### 15-3. 通知分人（各自的頻道）
+
+在 **Repo → Settings → Secrets and variables → Actions** 新增一個 Secret **`NOTIFY_ROUTES`**，
+值是 JSON，指定「每位歸屬人 → 各自的管道」：
+
+```json
+{
+  "媽媽": { "discord": "https://discord.com/api/webhooks/AAA/BBB" },
+  "弟弟": { "telegram_chat": "123456789" },
+  "我":   { "discord": "https://discord.com/api/webhooks/CCC/DDD" }
+}
+```
+
+- `discord`：該人的 Discord webhook URL。
+- `telegram_chat`：該人的 Telegram chat id（Bot 仍共用 `TELEGRAM_BOT_TOKEN`）。
+- **沒列在 `NOTIFY_ROUTES` 裡的人**，會退回你原本的預設管道
+  （`DISCORD_WEBHOOK_URL` / `TELEGRAM_CHAT_ID`）。
+- 每輪只把「屬於該人的變動」送到該人的管道，訊息標題會標明是誰的。
+
+> 提醒：`NOTIFY_ROUTES` 含 webhook URL，放在 Secrets（加密），不要寫進 `subscriptions.json` 或 repo。
+
+---
+
+完成以上，系統就會 24 小時自動幫你監控 591，並在網頁與 Telegram/Discord 呈現變化。
