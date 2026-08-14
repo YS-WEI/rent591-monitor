@@ -417,11 +417,13 @@ schedule:
 }
 ```
 
-- `discord`：該人的 Discord webhook URL。
-- `telegram_chat`：該人的 Telegram chat id（Bot 仍共用 `TELEGRAM_BOT_TOKEN`）。
-- **沒列在 `NOTIFY_ROUTES` 裡的人**，會退回你原本的預設管道
-  （`DISCORD_WEBHOOK_URL` / `TELEGRAM_CHAT_ID`）。
-- 每輪只把「屬於該人的變動」送到該人的管道，訊息標題會標明是誰的。
+- **預設管道**（`DISCORD_WEBHOOK_URL` / `TELEGRAM_CHAT_ID`）：**收「所有人」的變動**，
+  每則訊息標題標明是誰的（如「媽媽的租屋監控」）——你自己一個地方就能看全部。
+- **`NOTIFY_ROUTES`**：有幫某人設定，該人的變動就**額外再送一份到他自己的管道**。
+  - `discord`：該人的 Discord webhook URL；`telegram_chat`：該人的 Telegram chat id
+    （Bot 仍共用 `TELEGRAM_BOT_TOKEN`）。
+  - 沒被列到的人，就只出現在預設管道（仍標明是誰的）。
+  - 若某人的個人管道剛好等於預設，會自動去重、不重複送。
 
 > 提醒：`NOTIFY_ROUTES` 含 webhook URL，放在 Secrets（加密），不要寫進 `subscriptions.json` 或 repo。
 

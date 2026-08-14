@@ -199,23 +199,12 @@ def _routes() -> dict:
         return {}
 
 
-def _send_one(report: dict, header: str, discord_url: str | None,
-              tg_token: str | None, tg_chat: str | None) -> bool:
-    sent = False
-    if tg_token and tg_chat:
-        send_telegram(format_report(report, header), tg_token, tg_chat)
-        sent = True
-    if discord_url:
-        send_discord(format_discord(report, header), discord_url)
-        sent = True
-    return sent
-
-
 def notify(report: dict, subs: list[dict]) -> None:
-    """依歸屬人把變動分流到各自的管道。
+    """依歸屬人把變動送到通知管道。
 
-    路由來源 NOTIFY_ROUTES（Secret，JSON）；某人沒設定就退回預設管道
-    （DISCORD_WEBHOOK_URL / TELEGRAM_BOT_TOKEN+TELEGRAM_CHAT_ID）。
+    - 預設管道（DISCORD_WEBHOOK_URL / TELEGRAM_CHAT_ID）：收「所有人」的變動，訊息標明是誰的。
+    - NOTIFY_ROUTES（Secret，JSON）：有幫某人設定，則該人的變動「額外」再送到他自己的管道。
+    Telegram 共用 TELEGRAM_BOT_TOKEN。
     """
     if not has_changes(report):
         log.info("本輪無變動，不發送通知。")
@@ -232,9 +221,18 @@ def notify(report: dict, subs: list[dict]) -> None:
         if not has_changes(sub_report):
             continue
         route = routes.get(group, {})
-        discord_url = route.get("discord") or default_dc
-        tg_chat = route.get("telegram_chat") or default_tg_chat
         header = f"{group}的租屋監控" if group else "591 租屋監控"
-        if not _send_one(sub_report, header, discord_url, tg_token, tg_chat):
+        # 預設頻道全收 + 個人頻道額外送；用集合自動去重（個人頻道剛好等於預設就不重送）
+        discord_targets = {u for u in (default_dc, route.get("discord")) if u}
+        tg_targets = {c for c in (default_tg_chat, route.get("telegram_chat")) if c}
+        if not discord_targets and not tg_targets:
             log.warning("「%s」無可用通知管道，內容預覽：\n%s",
                         group, format_report(sub_report, header))
+            continue
+        for url in discord_targets:
+            send_discord(format_discord(sub_report, header), url)
+        if tg_targets and not tg_token:
+            log.warning("有 Telegram chat 但未設 TELEGRAM_BOT_TOKEN，略過 Telegram。")
+        elif tg_token:
+            for chat in tg_targets:
+                send_telegram(format_report(sub_report, header), tg_token, chat)
