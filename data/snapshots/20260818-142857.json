@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-18T14:30:56+00:00",
+  "generated_at": "2026-08-18T14:28:57+00:00",
   "kind": "rent",
   "subscriptions": [
     {
@@ -20,8 +20,8 @@
       "id": "sub-003",
       "name": "台北 士林・中山・大同・中正・萬華 4房",
       "group": "我",
-      "fetched": 8,
-      "unique_added": 8
+      "fetched": 9,
+      "unique_added": 9
     },
     {
       "id": "sub-004",
@@ -36,24 +36,24 @@
     "price_drop": [],
     "removed": [
       {
-        "listing_id": "21847611",
-        "title": "🍎聯上匯翠~近公園捷運極致4房🍎",
-        "url": "https://rent.591.com.tw/21847611",
-        "image": "https://img2.591.com.tw/house/2026/07/29/178531789131899708.jpg!510x400.jpg",
-        "district": "板橋區",
-        "street": "華江一路",
-        "community": "聯上匯翠",
+        "listing_id": "21846187",
+        "title": "電梯4房｜文山樹語院｜新成屋質感社區｜垃圾、包裹代收",
+        "url": "https://rent.591.com.tw/21846187",
+        "image": "https://img2.591.com.tw/house/2026/08/17/178694063038631603.jpg!510x400.jpg",
+        "district": "文山區",
+        "street": "秀明路一段185巷",
+        "community": "樹語院",
         "kind_name": "整層住家",
         "rooms": 4,
-        "halls": 2,
+        "halls": 1,
         "baths": null,
-        "size_ping": 57.5,
-        "floor": "4F",
-        "total_floor": "19F",
-        "price": 41000,
-        "extra_fee": 3894,
+        "size_ping": 39.0,
+        "floor": "3F",
+        "total_floor": "5F",
+        "price": 43000,
+        "extra_fee": 9300,
         "fee_included": [],
-        "total_monthly": 44894,
+        "total_monthly": 52300,
         "tags": [
           "近捷運",
           "新上架",
@@ -63,61 +63,10 @@
           "有車位"
         ],
         "poster_type": "仲介",
-        "poster_name": "周SIR",
-        "updated_rel": "4小時內更新",
+        "poster_name": "黃先生",
+        "updated_rel": "昨日更新",
         "posted_at": "2026-08-18",
         "first_seen": "2026-08-17",
-        "last_seen": "2026-08-18",
-        "status": "removed",
-        "down_price": 0,
-        "subscription_id": "sub-001",
-        "region": "新北市",
-        "groups": [
-          "我"
-        ],
-        "price_history": [
-          {
-            "date": "2026-08-17",
-            "price": 44894
-          }
-        ],
-        "missing_count": 2,
-        "watched": false
-      },
-      {
-        "listing_id": "21837207",
-        "title": "近再興中學,生活便利,樓下有銀行,超商,公園,餐廳,公車站",
-        "url": "https://rent.591.com.tw/21837207",
-        "image": "https://img1.591.com.tw/house/2026/08/15/178677766888500108.jpg!510x400.jpg",
-        "district": "文山區",
-        "street": "木柵路二段100巷8號",
-        "community": "建築年鑑",
-        "kind_name": "整層住家",
-        "rooms": 4,
-        "halls": 2,
-        "baths": null,
-        "size_ping": 45.0,
-        "floor": "10F",
-        "total_floor": "14F",
-        "price": 50000,
-        "extra_fee": 4900,
-        "fee_included": [
-          "車位租金"
-        ],
-        "total_monthly": 54900,
-        "tags": [
-          "屋主直租",
-          "新上架",
-          "可報稅",
-          "有電梯",
-          "隨時可遷入",
-          "可開伙"
-        ],
-        "poster_type": "屋主",
-        "poster_name": "彭先生",
-        "updated_rel": "3小時內更新",
-        "posted_at": "2026-08-18",
-        "first_seen": "2026-08-15",
         "last_seen": "2026-08-18",
         "status": "removed",
         "down_price": 0,
@@ -128,12 +77,112 @@
         ],
         "price_history": [
           {
-            "date": "2026-08-15",
-            "price": 50000
+            "date": "2026-08-17",
+            "price": 52300
+          }
+        ],
+        "missing_count": 2,
+        "watched": false
+      },
+      {
+        "listing_id": "21831305",
+        "title": "🌲樹語院文山區質感人文宅",
+        "url": "https://rent.591.com.tw/21831305",
+        "image": "https://img2.591.com.tw/house/2026/08/13/178657546586234007.jpg!510x400.jpg",
+        "district": "文山區",
+        "street": "秀明路一段185巷",
+        "community": "樹語院",
+        "kind_name": "整層住家",
+        "rooms": 4,
+        "halls": 1,
+        "baths": null,
+        "size_ping": 39.0,
+        "floor": "3F",
+        "total_floor": "5F",
+        "price": 43000,
+        "extra_fee": 4500,
+        "fee_included": [],
+        "total_monthly": 47500,
+        "tags": [
+          "近捷運",
+          "新上架",
+          "有電梯",
+          "隨時可遷入",
+          "可開伙",
+          "有車位"
+        ],
+        "poster_type": "仲介",
+        "poster_name": "林小姐",
+        "updated_rel": "昨日更新",
+        "posted_at": "2026-08-18",
+        "first_seen": "2026-08-14",
+        "last_seen": "2026-08-18",
+        "status": "removed",
+        "down_price": 0,
+        "subscription_id": "sub-004",
+        "region": "台北市",
+        "groups": [
+          "我"
+        ],
+        "price_history": [
+          {
+            "date": "2026-08-14",
+            "price": 47500
+          }
+        ],
+        "missing_count": 2,
+        "watched": false
+      },
+      {
+        "listing_id": "21826564",
+        "title": "🌲🌳☘️🌿樹語院三樓美邸~四房兩衛~車位",
+        "url": "https://rent.591.com.tw/21826564",
+        "image": "https://img1.591.com.tw/house/2026/08/13/178661463640413002.jpg!510x400.jpg",
+        "district": "文山區",
+        "street": "秀明路一段185巷22號",
+        "community": "樹語院",
+        "kind_name": "整層住家",
+        "rooms": 4,
+        "halls": 2,
+        "baths": null,
+        "size_ping": 47.5,
+        "floor": "3F",
+        "total_floor": "5F",
+        "price": 47000,
+        "extra_fee": 5000,
+        "fee_included": [
+          "車位租金"
+        ],
+        "total_monthly": 52000,
+        "tags": [
+          "近捷運",
+          "新上架",
+          "有電梯",
+          "隨時可遷入",
+          "可開伙",
+          "可養寵物"
+        ],
+        "poster_type": "仲介",
+        "poster_name": "唐先生",
+        "updated_rel": "5天前更新",
+        "posted_at": "2026-08-13",
+        "first_seen": "2026-08-13",
+        "last_seen": "2026-08-18",
+        "status": "removed",
+        "down_price": 0,
+        "subscription_id": "sub-004",
+        "region": "台北市",
+        "groups": [
+          "我"
+        ],
+        "price_history": [
+          {
+            "date": "2026-08-13",
+            "price": 47000
           },
           {
             "date": "2026-08-18",
-            "price": 54900
+            "price": 52000
           }
         ],
         "missing_count": 2,
@@ -171,7 +220,7 @@
       ],
       "poster_type": "仲介",
       "poster_name": "何先生",
-      "updated_rel": "9小時內更新",
+      "updated_rel": "8小時內更新",
       "posted_at": "2026-08-18",
       "first_seen": "2026-08-18",
       "last_seen": "2026-08-18",
@@ -195,7 +244,7 @@
       "listing_id": "21853504",
       "title": "三重/菜寮站、3+1房、大樓管理、可租補、生活機能強",
       "url": "https://rent.591.com.tw/21853504",
-      "image": "https://img1.591.com.tw/house/2025/03/29/174321963319359605.jpg!510x400.jpg",
+      "image": "https://img2.591.com.tw/house/2025/03/29/174321963319359605.jpg!510x400.jpg",
       "district": "三重區",
       "street": "重陽路一段",
       "community": "無",
@@ -244,7 +293,7 @@
       "listing_id": "21852183",
       "title": "三和國中站11分｜溪尾街大空間4房車",
       "url": "https://rent.591.com.tw/21852183",
-      "image": "https://img1.591.com.tw/video/cover/2026-07-19/3171528.png!1000x.water2.png",
+      "image": "https://img2.591.com.tw/video/cover/2026-07-19/3171528.png!1000x.water2.png",
       "district": "三重區",
       "street": "溪尾街27巷",
       "community": "重陽大道",
@@ -342,7 +391,7 @@
       "listing_id": "21833249",
       "title": "菜寮/三重/電梯管理員/4房/可租補稅/天然瓦斯/超大空間",
       "url": "https://rent.591.com.tw/21833249",
-      "image": "https://img2.591.com.tw/house/2026/07/26/178507352511511707.jpg!510x400.jpg",
+      "image": "https://img1.591.com.tw/house/2026/07/26/178507352511511707.jpg!510x400.jpg",
       "district": "三重區",
       "street": "重陽路一段",
       "community": "無",
@@ -547,7 +596,7 @@
       "listing_id": "21798638",
       "title": "三和國中🏠變頻冷氣乾濕分離✅包裹垃圾代收👍間間開窗",
       "url": "https://rent.591.com.tw/21798638",
-      "image": "https://img2.591.com.tw/house/2026/07/08/178352498993299606.jpg!510x400.jpg",
+      "image": "https://img1.591.com.tw/house/2026/07/08/178352498993299606.jpg!510x400.jpg",
       "district": "三重區",
       "street": "力行路一段",
       "community": "無",
@@ -599,7 +648,7 @@
       "listing_id": "21795722",
       "title": "三和國中🍀台水電、4房大空間雙衛雙陽、垃圾代收、平面車位",
       "url": "https://rent.591.com.tw/21795722",
-      "image": "https://img1.591.com.tw/house/2026/07/10/178366131093125007.jpg!510x400.jpg",
+      "image": "https://img2.591.com.tw/house/2026/07/10/178366131093125007.jpg!510x400.jpg",
       "district": "三重區",
       "street": "力行路一段",
       "community": "無",
@@ -703,7 +752,7 @@
       "listing_id": "21793269",
       "title": "<宇您看房>家庭首選-可入籍電梯四房車",
       "url": "https://rent.591.com.tw/21793269",
-      "image": "https://img2.591.com.tw/house/2026/08/08/178616378998190404.jpg!510x400.jpg",
+      "image": "https://img1.591.com.tw/house/2026/08/08/178616378998190404.jpg!510x400.jpg",
       "district": "三重區",
       "street": "溪尾街27巷",
       "community": "重陽大道",
@@ -849,7 +898,7 @@
       "listing_id": "21777871",
       "title": "🏡三重電梯5房🐱可寵⚡️台水電🛀雙衛浴🌞陽台👕獨洗",
       "url": "https://rent.591.com.tw/21777871",
-      "image": "https://img1.591.com.tw/house/2026/07/22/178471059444798506.jpeg!510x400.jpeg",
+      "image": "https://img2.591.com.tw/house/2026/07/22/178471059444798506.jpeg!510x400.jpeg",
       "district": "三重區",
       "street": "三民街300巷",
       "community": "預約看房👉Line:@303dbrpe",
@@ -874,7 +923,7 @@
       ],
       "poster_type": "仲介",
       "poster_name": "楊小姐",
-      "updated_rel": "2小時內更新",
+      "updated_rel": "59分鐘內更新",
       "posted_at": "2026-08-18",
       "first_seen": "2026-08-13",
       "last_seen": "2026-08-18",
@@ -898,7 +947,7 @@
       "listing_id": "21743360",
       "title": "三和國中❣️正四房大空間/免爬梯包裹垃圾/可開火採光通風",
       "url": "https://rent.591.com.tw/21743360",
-      "image": "https://img1.591.com.tw/house/2026/07/09/178359870018486204.jpg!510x400.jpg",
+      "image": "https://img2.591.com.tw/house/2026/07/09/178359870018486204.jpg!510x400.jpg",
       "district": "三重區",
       "street": "力行路一段",
       "community": "築城首富",
@@ -1049,7 +1098,7 @@
       "listing_id": "21701038",
       "title": "三和國中🚝空間寬敞&舒適好規劃✅間間採光🔥",
       "url": "https://rent.591.com.tw/21701038",
-      "image": "https://img1.591.com.tw/video/cover/2026-07-11/3160794.png!1000x.water2.png",
+      "image": "https://img2.591.com.tw/video/cover/2026-07-11/3160794.png!1000x.water2.png",
       "district": "三重區",
       "street": "力行路一段",
       "community": "無",
@@ -1148,7 +1197,7 @@
       "listing_id": "21689442",
       "title": "🌞【走吧!看房】大坪數可入籍電梯精美四房｜中信香香",
       "url": "https://rent.591.com.tw/21689442",
-      "image": "https://img1.591.com.tw/house/2026/07/23/178477765436023605.jpg!510x400.jpg",
+      "image": "https://img2.591.com.tw/house/2026/07/23/178477765436023605.jpg!510x400.jpg",
       "district": "三重區",
       "street": "溪尾街27巷",
       "community": "重陽大道",
@@ -1195,7 +1244,7 @@
       "listing_id": "21670099",
       "title": "近台北市大家庭入住可神明可租補",
       "url": "https://rent.591.com.tw/21670099",
-      "image": "https://img2.591.com.tw/house/2026/07/20/178452429237601300.jpg!510x400.jpg",
+      "image": "https://img1.591.com.tw/house/2026/07/20/178452429237601300.jpg!510x400.jpg",
       "district": "三重區",
       "street": "五華街55巷",
       "community": null,
@@ -1647,7 +1696,7 @@
       "listing_id": "21748187",
       "title": "一卡皮箱入住！仁愛國小低公設精美華廈！(可申請租補)",
       "url": "https://rent.591.com.tw/21748187",
-      "image": "https://img1.591.com.tw/house/2026/07/02/178296677841535002.jpg!fit.1000x.water2.jpg",
+      "image": "https://img2.591.com.tw/house/2026/07/02/178296677841535002.jpg!fit.1000x.water2.jpg",
       "district": "蘆洲區",
       "street": "仁愛街35巷",
       "community": "三多利二期",
@@ -1752,7 +1801,7 @@
       "listing_id": "21853647",
       "title": "🎖️卓悦聯盟🎖️MRT新莊站建中生活便利4R車位可抽",
       "url": "https://rent.591.com.tw/21853647",
-      "image": "https://img1.591.com.tw/house/2026/08/18/178703265133941100.jpg!510x400.jpg",
+      "image": "https://img2.591.com.tw/house/2026/08/18/178703265133941100.jpg!510x400.jpg",
       "district": "新莊區",
       "street": "建中街41巷",
       "community": "天下一家",
@@ -1799,7 +1848,7 @@
       "listing_id": "21829265",
       "title": "🏡【世界盃-雪梨特區4房車｜匯康社會住宅｜免服務費】🏡",
       "url": "https://rent.591.com.tw/21829265",
-      "image": "https://img2.591.com.tw/house/2026/06/30/178280186661891104.jpg!510x400.jpg",
+      "image": "https://img1.591.com.tw/house/2026/06/30/178280186661891104.jpg!510x400.jpg",
       "district": "新莊區",
       "street": "新樹路",
       "community": "世界盃一期二期(雪梨區/雅典區)",
@@ -1848,7 +1897,7 @@
       "listing_id": "21826314",
       "title": "【圓夢小巢】小林⚡️碧瑤君悅3房+車位",
       "url": "https://rent.591.com.tw/21826314",
-      "image": "https://img1.591.com.tw/house/2026/08/13/178661328115160409.jpg!510x400.jpg",
+      "image": "https://img2.591.com.tw/house/2026/08/13/178661328115160409.jpg!510x400.jpg",
       "district": "新莊區",
       "street": "新樹路",
       "community": "碧瑤君悅領袖區",
@@ -1895,7 +1944,7 @@
       "listing_id": "21825884",
       "title": "可租補邊間明亮電梯4房車*鑫典台灣房屋白小姐",
       "url": "https://rent.591.com.tw/21825884",
-      "image": "https://img1.591.com.tw/house/2026/08/13/178661000261791100.jpg!510x400.jpg",
+      "image": "https://img2.591.com.tw/house/2026/08/13/178661000261791100.jpg!510x400.jpg",
       "district": "新莊區",
       "street": "新泰路",
       "community": "台北加州A區",
@@ -1997,7 +2046,7 @@
       "listing_id": "21760142",
       "title": "鳳翔精美四房",
       "url": "https://rent.591.com.tw/21760142",
-      "image": "https://img1.591.com.tw/house/2026/08/03/178574901634646802.jpg!510x400.jpg",
+      "image": "https://img2.591.com.tw/house/2026/08/03/178574901634646802.jpg!510x400.jpg",
       "district": "新莊區",
       "street": "中正路",
       "community": "峰景鳳翔",
@@ -2044,7 +2093,7 @@
       "listing_id": "21749634",
       "title": "歐洲村4房車",
       "url": "https://rent.591.com.tw/21749634",
-      "image": "https://img1.591.com.tw/house/2026/05/14/177875123754692505.jpg!510x400.jpg",
+      "image": "https://img2.591.com.tw/house/2026/05/14/177875123754692505.jpg!510x400.jpg",
       "district": "新莊區",
       "street": "立信一街",
       "community": "台北桂冠凡爾賽區",
@@ -2098,7 +2147,7 @@
       "listing_id": "21749631",
       "title": "歐洲村4房車",
       "url": "https://rent.591.com.tw/21749631",
-      "image": "https://img1.591.com.tw/house/2026/05/14/177875123754692505.jpg!510x400.jpg",
+      "image": "https://img2.591.com.tw/house/2026/05/14/177875123754692505.jpg!510x400.jpg",
       "district": "新莊區",
       "street": "立信一街",
       "community": "台北桂冠凡爾賽區",
@@ -2201,7 +2250,7 @@
       "listing_id": "21721277",
       "title": "【圓夢小巢】雅瑛☀️碧瑤君悅3房+車位",
       "url": "https://rent.591.com.tw/21721277",
-      "image": "https://img1.591.com.tw/house/2026/07/28/178522768848880401.jpg!510x400.jpg",
+      "image": "https://img2.591.com.tw/house/2026/07/28/178522768848880401.jpg!510x400.jpg",
       "district": "新莊區",
       "street": "新樹路",
       "community": "碧瑤君悅領袖區",
@@ -2247,7 +2296,7 @@
       "listing_id": "21644333",
       "title": "新莊新樹電梯4房/可租補/可設籍/含平面車位",
       "url": "https://rent.591.com.tw/21644333",
-      "image": "https://img2.591.com.tw/house/2026/07/15/178411314587363800.jpg!510x400.jpg",
+      "image": "https://img1.591.com.tw/house/2026/07/15/178411314587363800.jpg!510x400.jpg",
       "district": "新莊區",
       "street": "新樹路",
       "community": "世界盃一期二期(雪梨區/雅典區)",
@@ -2300,7 +2349,7 @@
       "listing_id": "21681990",
       "title": "中平國中機能商圈四房-龍邑(新北NO.1)",
       "url": "https://rent.591.com.tw/21681990",
-      "image": "https://img2.591.com.tw/house/2026/06/21/178203002015051809.jpg!510x400.jpg",
+      "image": "https://img1.591.com.tw/house/2026/06/21/178203002015051809.jpg!510x400.jpg",
       "district": "新莊區",
       "street": "中平路",
       "community": "中平國中機能商圈四房",
@@ -2551,7 +2600,7 @@
       "listing_id": "21825626",
       "title": "💖出租懷德華廈捷運四房+車位💖",
       "url": "https://rent.591.com.tw/21825626",
-      "image": "https://img1.591.com.tw/house/2026/07/13/178391172482061005.jpg!510x400.jpg",
+      "image": "https://img2.591.com.tw/house/2026/07/13/178391172482061005.jpg!510x400.jpg",
       "district": "板橋區",
       "street": "懷德街",
       "community": "盈松華廈",
@@ -2610,7 +2659,7 @@
       "listing_id": "21755783",
       "title": "🏠大管家房屋☆板橋大坪數17樓4房☆可營登可報稅☆採光極佳",
       "url": "https://rent.591.com.tw/21755783",
-      "image": "https://img1.591.com.tw/video/cover/2026-06-18/3131629.png!1000x.water2.png",
+      "image": "https://img2.591.com.tw/video/cover/2026-06-18/3131629.png!1000x.water2.png",
       "district": "板橋區",
       "street": "民生路二段",
       "community": "捷和藍京",
@@ -2803,7 +2852,7 @@
       "listing_id": "21771792",
       "title": "板橋體育場旁-電梯四房出租",
       "url": "https://rent.591.com.tw/21771792",
-      "image": "https://img2.591.com.tw/house/2025/11/13/176304650415260803.jpg!510x400.jpg",
+      "image": "https://img1.591.com.tw/house/2025/11/13/176304650415260803.jpg!510x400.jpg",
       "district": "板橋區",
       "street": "國泰街39巷",
       "community": "國泰晶華",
@@ -2850,7 +2899,7 @@
       "listing_id": "21600968",
       "title": "【新埔捷運二號出口】大空間正四房｜可營登可報稅｜周遭機能佳",
       "url": "https://rent.591.com.tw/21600968",
-      "image": "https://img2.591.com.tw/house/2026/06/23/178218127615191109.jpg!510x400.jpg",
+      "image": "https://img1.591.com.tw/house/2026/06/23/178218127615191109.jpg!510x400.jpg",
       "district": "板橋區",
       "street": "民生路二段239號",
       "community": "捷和藍京",
@@ -3002,7 +3051,7 @@
       "listing_id": "21745586",
       "title": "❤️雙租補❤️公園大4房",
       "url": "https://rent.591.com.tw/21745586",
-      "image": "https://img1.591.com.tw/house/2026/03/24/177432164739591901.jpg!510x400.jpg",
+      "image": "https://img2.591.com.tw/house/2026/03/24/177432164739591901.jpg!510x400.jpg",
       "district": "板橋區",
       "street": "華順街",
       "community": "華順大廈",
@@ -3054,7 +3103,7 @@
       "listing_id": "21720333",
       "title": "實踐國小旁多功能住辦一樓+車位(我是承辦)",
       "url": "https://rent.591.com.tw/21720333",
-      "image": "https://img2.591.com.tw/house/2026/02/08/177052829968429705.jpg!510x400.jpg",
+      "image": "https://img1.591.com.tw/house/2026/02/08/177052829968429705.jpg!510x400.jpg",
       "district": "板橋區",
       "street": "國泰街75巷28弄",
       "community": "欽泰甲第",
@@ -3181,7 +3230,7 @@
       ],
       "poster_type": "仲介",
       "poster_name": "鍾先生",
-      "updated_rel": "52分鐘內更新",
+      "updated_rel": "50分鐘內更新",
       "posted_at": "2026-08-18",
       "first_seen": "2026-08-13",
       "last_seen": "2026-08-18",
@@ -3254,7 +3303,7 @@
       "listing_id": "21782150",
       "title": "中山國中🏠電梯管理🌟大空間🌟正4房🌟採光通風🌟租補",
       "url": "https://rent.591.com.tw/21782150",
-      "image": "https://img1.591.com.tw/video/cover/2026-08-06/3196571.png!1000x.water2.png",
+      "image": "https://img2.591.com.tw/video/cover/2026-08-06/3196571.png!1000x.water2.png",
       "district": "松山區",
       "street": "民權東路三段125巷",
       "community": "壽園國宅/民福大廈",
@@ -3352,7 +3401,7 @@
       "listing_id": "21855330",
       "title": "六張犁❣️可租補稅籍可寵/免爬梯大空間/正四房雙陽台垃圾代收",
       "url": "https://rent.591.com.tw/21855330",
-      "image": "https://img2.591.com.tw/video/cover/2026-08-18/3212851.png!1000x.water2.png",
+      "image": "https://img1.591.com.tw/video/cover/2026-08-18/3212851.png!1000x.water2.png",
       "district": "信義區",
       "street": "富陽街",
       "community": "富陽街21巷華廈",
@@ -3401,7 +3450,7 @@
       "listing_id": "21855106",
       "title": "六張犁🏠電梯🌟租補稅籍🌟可寵🌟採光通風🌟超大空間",
       "url": "https://rent.591.com.tw/21855106",
-      "image": "https://img2.591.com.tw/video/cover/2026-08-18/3212792.png!1000x.water2.png",
+      "image": "https://img1.591.com.tw/video/cover/2026-08-18/3212792.png!1000x.water2.png",
       "district": "信義區",
       "street": "富陽街",
       "community": "依社區名稱",
@@ -3450,7 +3499,7 @@
       "listing_id": "21843143",
       "title": "近六張犁捷運站，採光好，生活交通便利。",
       "url": "https://rent.591.com.tw/21843143",
-      "image": "https://img1.591.com.tw/house/2026/08/16/178688697475483905.jpg!510x400.jpg",
+      "image": "https://img2.591.com.tw/house/2026/08/16/178688697475483905.jpg!510x400.jpg",
       "district": "信義區",
       "street": "富陽街24號",
       "community": "信義晶華華廈",
@@ -3547,7 +3596,7 @@
       "listing_id": "21785339",
       "title": "新生國小3～4房電梯華廈",
       "url": "https://rent.591.com.tw/21785339",
-      "image": "https://img2.591.com.tw/house/2026/07/22/178468865741098709.jpg!510x400.jpg",
+      "image": "https://img1.591.com.tw/house/2026/07/22/178468865741098709.jpg!510x400.jpg",
       "district": "大安區",
       "street": "潮州街",
       "community": "無",
@@ -3596,7 +3645,7 @@
       "listing_id": "21836878",
       "title": "天母國小四房美廈.車位可租.重新整理粉刷.可以租補",
       "url": "https://rent.591.com.tw/21836878",
-      "image": "https://img1.591.com.tw/video/cover/2025-07-31/2439412.png!1000x.water2.png",
+      "image": "https://img2.591.com.tw/video/cover/2025-07-31/2439412.png!1000x.water2.png",
       "district": "士林區",
       "street": "天母北路87巷",
       "community": "ㄧ現場名稱",
@@ -3685,6 +3734,55 @@
         {
           "date": "2026-08-13",
           "price": 39000
+        }
+      ],
+      "missing_count": 0,
+      "watched": false
+    },
+    "21821678": {
+      "listing_id": "21821678",
+      "title": "江海小宇近松山機場中山捷運站",
+      "url": "https://rent.591.com.tw/21821678",
+      "image": "https://img2.591.com.tw/house/2026/08/12/178654972276392704.jpg!510x400.jpg",
+      "district": "中山區",
+      "street": "民權東路三段125巷",
+      "community": "民生福星",
+      "kind_name": "整層住家",
+      "rooms": 4,
+      "halls": 2,
+      "baths": null,
+      "size_ping": 32.0,
+      "floor": "9F",
+      "total_floor": "14F",
+      "price": 49500,
+      "extra_fee": 0,
+      "fee_included": [],
+      "total_monthly": 49500,
+      "tags": [
+        "近捷運",
+        "新上架",
+        " 拎包入住",
+        "有電梯",
+        "可開伙",
+        "免管理費"
+      ],
+      "poster_type": "仲介",
+      "poster_name": "簡先生",
+      "updated_rel": "6天前更新",
+      "posted_at": "2026-08-12",
+      "first_seen": "2026-08-13",
+      "last_seen": "2026-08-18",
+      "status": "active",
+      "down_price": 0,
+      "subscription_id": "sub-003",
+      "region": "台北市",
+      "groups": [
+        "我"
+      ],
+      "price_history": [
+        {
+          "date": "2026-08-13",
+          "price": 49500
         }
       ],
       "missing_count": 0,
@@ -3794,7 +3892,7 @@
       "listing_id": "21813491",
       "title": "🔥可租補｜共生公寓｜近捷運雙連站｜民生西路電梯大樓",
       "url": "https://rent.591.com.tw/21813491",
-      "image": "https://img2.591.com.tw/house/2026/08/11/178644557362145702.jpg!510x400.jpg",
+      "image": "https://img1.591.com.tw/house/2026/08/11/178644557362145702.jpg!510x400.jpg",
       "district": "大同區",
       "street": "民生西路177號",
       "community": "民生福星",
@@ -3876,7 +3974,7 @@
       ],
       "poster_type": "屋主",
       "poster_name": "屋主帶看屋",
-      "updated_rel": "4小時內更新",
+      "updated_rel": "3小時內更新",
       "posted_at": "2026-08-18",
       "first_seen": "2026-08-16",
       "last_seen": "2026-08-18",
@@ -3948,7 +4046,7 @@
       "listing_id": "21831319",
       "title": "青年公園【電梯4房2衛】車位洽★警衛管理★一層２戶",
       "url": "https://rent.591.com.tw/21831319",
-      "image": "https://img2.591.com.tw/house/2026/07/22/178471529264413006.jpg!510x400.jpg",
+      "image": "https://img1.591.com.tw/house/2026/07/22/178471529264413006.jpg!510x400.jpg",
       "district": "萬華區",
       "street": "水源路",
       "community": null,
@@ -4045,7 +4143,7 @@
       "listing_id": "21754782",
       "title": "中山北路七段💘超值選擇",
       "url": "https://rent.591.com.tw/21754782",
-      "image": "https://img2.591.com.tw/house/2026/07/01/178287669835958904.jpg!510x400.jpg",
+      "image": "https://img1.591.com.tw/house/2026/07/01/178287669835958904.jpg!510x400.jpg",
       "district": "北投區",
       "street": "中山北路七段219巷3弄",
       "community": "甲桂林山莊A區",
@@ -4092,7 +4190,7 @@
       "listing_id": "21740726",
       "title": "唭哩岸捷運優質景觀美宅.無限景觀.戶數單純.戶戶採光",
       "url": "https://rent.591.com.tw/21740726",
-      "image": "https://img2.591.com.tw/house/2026/06/23/178220074822916906.jpg!510x400.jpg",
+      "image": "https://img1.591.com.tw/house/2026/06/23/178220074822916906.jpg!510x400.jpg",
       "district": "北投區",
       "street": "承德路七段",
       "community": "依現場名稱",
@@ -4190,7 +4288,7 @@
       "listing_id": "21820705",
       "title": "近捷運景美【優質4房2衛】可補助★皆有窗★有陽台",
       "url": "https://rent.591.com.tw/21820705",
-      "image": "https://img2.591.com.tw/house/2026/08/12/178653922077185504.jpg!510x400.jpg",
+      "image": "https://img1.591.com.tw/house/2026/08/12/178653922077185504.jpg!510x400.jpg",
       "district": "文山區",
       "street": "景興路",
       "community": null,
@@ -4242,7 +4340,7 @@
       "listing_id": "21794557",
       "title": "景美捷運站五分鐘生活機能佳，建物面積實際30坪",
       "url": "https://rent.591.com.tw/21794557",
-      "image": "https://img1.591.com.tw/house/2021/10/06/163352848753210400.png!510x400.png",
+      "image": "https://img2.591.com.tw/house/2021/10/06/163352848753210400.png!510x400.png",
       "district": "文山區",
       "street": "景興路177巷",
       "community": "維也納綠堡",
@@ -4287,55 +4385,6 @@
       "missing_count": 0,
       "watched": false
     },
-    "21821678": {
-      "listing_id": "21821678",
-      "title": "江海小宇近松山機場中山捷運站",
-      "url": "https://rent.591.com.tw/21821678",
-      "image": "https://img2.591.com.tw/house/2026/08/12/178654972276392704.jpg!510x400.jpg",
-      "district": "中山區",
-      "street": "民權東路三段125巷",
-      "community": "民生福星",
-      "kind_name": "整層住家",
-      "rooms": 4,
-      "halls": 2,
-      "baths": null,
-      "size_ping": 32.0,
-      "floor": "9F",
-      "total_floor": "14F",
-      "price": 49500,
-      "extra_fee": 0,
-      "fee_included": [],
-      "total_monthly": 49500,
-      "tags": [
-        "近捷運",
-        "新上架",
-        " 拎包入住",
-        "有電梯",
-        "可開伙",
-        "免管理費"
-      ],
-      "poster_type": "仲介",
-      "poster_name": "簡先生",
-      "updated_rel": "6天前更新",
-      "posted_at": "2026-08-12",
-      "first_seen": "2026-08-13",
-      "last_seen": "2026-08-18",
-      "status": "missing",
-      "down_price": 0,
-      "subscription_id": "sub-003",
-      "region": "台北市",
-      "groups": [
-        "我"
-      ],
-      "price_history": [
-        {
-          "date": "2026-08-13",
-          "price": 49500
-        }
-      ],
-      "missing_count": 1,
-      "watched": false
-    },
     "21847611": {
       "listing_id": "21847611",
       "title": "🍎聯上匯翠~近公園捷運極致4房🍎",
@@ -4369,7 +4418,7 @@
       "posted_at": "2026-08-18",
       "first_seen": "2026-08-17",
       "last_seen": "2026-08-18",
-      "status": "removed",
+      "status": "missing",
       "down_price": 0,
       "subscription_id": "sub-001",
       "region": "新北市",
@@ -4382,7 +4431,7 @@
           "price": 44894
         }
       ],
-      "missing_count": 2,
+      "missing_count": 1,
       "watched": false
     },
     "21837207": {
@@ -4420,7 +4469,7 @@
       "posted_at": "2026-08-18",
       "first_seen": "2026-08-15",
       "last_seen": "2026-08-18",
-      "status": "removed",
+      "status": "missing",
       "down_price": 0,
       "subscription_id": "sub-004",
       "region": "台北市",
@@ -4437,7 +4486,7 @@
           "price": 54900
         }
       ],
-      "missing_count": 2,
+      "missing_count": 1,
       "watched": false
     },
     "21846187": {
@@ -4486,7 +4535,7 @@
           "price": 52300
         }
       ],
-      "missing_count": 3,
+      "missing_count": 2,
       "watched": false
     },
     "21831305": {
@@ -4535,7 +4584,7 @@
           "price": 47500
         }
       ],
-      "missing_count": 3,
+      "missing_count": 2,
       "watched": false
     },
     "21826564": {
@@ -4590,7 +4639,7 @@
           "price": 52000
         }
       ],
-      "missing_count": 3,
+      "missing_count": 2,
       "watched": false
     },
     "21763697": {
@@ -4638,7 +4687,7 @@
           "price": 45000
         }
       ],
-      "missing_count": 7,
+      "missing_count": 6,
       "watched": false
     },
     "21817219": {
@@ -4688,7 +4737,7 @@
           "price": 49500
         }
       ],
-      "missing_count": 7,
+      "missing_count": 6,
       "watched": false
     },
     "21738494": {
@@ -4736,7 +4785,7 @@
           "price": 45000
         }
       ],
-      "missing_count": 6,
+      "missing_count": 5,
       "watched": false
     },
     "21719898": {
@@ -4784,7 +4833,7 @@
           "price": 48400
         }
       ],
-      "missing_count": 15,
+      "missing_count": 14,
       "watched": true,
       "note": ""
     },
@@ -4833,7 +4882,7 @@
           "price": 36580
         }
       ],
-      "missing_count": 16,
+      "missing_count": 15,
       "watched": false
     },
     "21826014": {
@@ -4879,7 +4928,7 @@
           "price": 40372
         }
       ],
-      "missing_count": 19,
+      "missing_count": 18,
       "watched": false
     },
     "16638498": {
@@ -4929,7 +4978,7 @@
           "price": 38000
         }
       ],
-      "missing_count": 19,
+      "missing_count": 18,
       "watched": false
     },
     "21845416": {
@@ -4979,7 +5028,7 @@
           "price": 49500
         }
       ],
-      "missing_count": 19,
+      "missing_count": 18,
       "watched": false
     },
     "21786841": {
@@ -5029,7 +5078,7 @@
           "price": 49499
         }
       ],
-      "missing_count": 20,
+      "missing_count": 19,
       "watched": false
     },
     "21803283": {
@@ -5077,7 +5126,7 @@
           "price": 49000
         }
       ],
-      "missing_count": 21,
+      "missing_count": 20,
       "watched": false
     },
     "21822359": {
@@ -5124,7 +5173,7 @@
           "price": 49000
         }
       ],
-      "missing_count": 21,
+      "missing_count": 20,
       "watched": false
     },
     "21726682": {
@@ -5174,7 +5223,7 @@
           "price": 31000
         }
       ],
-      "missing_count": 26,
+      "missing_count": 25,
       "watched": false
     },
     "21783045": {
@@ -5223,7 +5272,7 @@
           "price": 49500
         }
       ],
-      "missing_count": 30,
+      "missing_count": 29,
       "watched": false
     },
     "21782419": {
@@ -5273,7 +5322,7 @@
           "price": 49500
         }
       ],
-      "missing_count": 31,
+      "missing_count": 30,
       "watched": false
     },
     "21652936": {
@@ -5323,7 +5372,7 @@
           "price": 49000
         }
       ],
-      "missing_count": 32,
+      "missing_count": 31,
       "watched": false
     },
     "21817104": {
@@ -5371,7 +5420,7 @@
           "price": 49500
         }
       ],
-      "missing_count": 38,
+      "missing_count": 37,
       "watched": false
     },
     "21719673": {
@@ -5418,7 +5467,7 @@
           "price": 49100
         }
       ],
-      "missing_count": 38,
+      "missing_count": 37,
       "watched": false
     },
     "21824039": {
@@ -5464,7 +5513,7 @@
           "price": 35468
         }
       ],
-      "missing_count": 39,
+      "missing_count": 38,
       "watched": false
     },
     "21649136": {
@@ -5510,7 +5559,7 @@
           "price": 54800
         }
       ],
-      "missing_count": 40,
+      "missing_count": 39,
       "watched": false
     },
     "21648648": {
@@ -5558,7 +5607,7 @@
           "price": 46000
         }
       ],
-      "missing_count": 38,
+      "missing_count": 37,
       "watched": false
     },
     "21646481": {
@@ -5606,7 +5655,7 @@
           "price": 36899
         }
       ],
-      "missing_count": 37,
+      "missing_count": 36,
       "watched": false
     },
     "21819113": {
@@ -5654,7 +5703,7 @@
           "price": 48590
         }
       ],
-      "missing_count": 46,
+      "missing_count": 45,
       "watched": false
     },
     "21829977": {
@@ -5704,7 +5753,7 @@
           "price": 80000
         }
       ],
-      "missing_count": 46,
+      "missing_count": 45,
       "watched": false
     },
     "21828673": {
@@ -5754,7 +5803,7 @@
           "price": 37999
         }
       ],
-      "missing_count": 46,
+      "missing_count": 45,
       "watched": false
     },
     "21824802": {
@@ -5801,7 +5850,7 @@
           "price": 48590
         }
       ],
-      "missing_count": 46,
+      "missing_count": 45,
       "watched": false
     },
     "21824414": {
@@ -5849,7 +5898,7 @@
           "price": 66000
         }
       ],
-      "missing_count": 46,
+      "missing_count": 45,
       "watched": false
     },
     "21821344": {
@@ -5898,7 +5947,7 @@
           "price": 39999
         }
       ],
-      "missing_count": 46,
+      "missing_count": 45,
       "watched": false
     },
     "21816832": {
@@ -5946,7 +5995,7 @@
           "price": 69002
         }
       ],
-      "missing_count": 46,
+      "missing_count": 45,
       "watched": false
     },
     "21739718": {
@@ -5994,7 +6043,7 @@
           "price": 75502
         }
       ],
-      "missing_count": 46,
+      "missing_count": 45,
       "watched": false
     },
     "21669783": {
@@ -6044,7 +6093,7 @@
           "price": 39999
         }
       ],
-      "missing_count": 46,
+      "missing_count": 45,
       "watched": false
     },
     "21808985": {
@@ -6091,7 +6140,7 @@
           "price": 52500
         }
       ],
-      "missing_count": 46,
+      "missing_count": 45,
       "watched": false
     },
     "21806218": {
@@ -6139,7 +6188,7 @@
           "price": 57135
         }
       ],
-      "missing_count": 46,
+      "missing_count": 45,
       "watched": false
     },
     "21763882": {
@@ -6190,7 +6239,7 @@
           "price": 78000
         }
       ],
-      "missing_count": 46,
+      "missing_count": 45,
       "watched": false
     },
     "21793874": {
@@ -6240,7 +6289,7 @@
           "price": 39999
         }
       ],
-      "missing_count": 46,
+      "missing_count": 45,
       "watched": false
     },
     "21788398": {
@@ -6290,7 +6339,7 @@
           "price": 66000
         }
       ],
-      "missing_count": 46,
+      "missing_count": 45,
       "watched": false
     },
     "21783235": {
@@ -6339,7 +6388,7 @@
           "price": 48000
         }
       ],
-      "missing_count": 46,
+      "missing_count": 45,
       "watched": false
     },
     "21782731": {
@@ -6390,7 +6439,7 @@
           "price": 78000
         }
       ],
-      "missing_count": 46,
+      "missing_count": 45,
       "watched": false
     },
     "21778574": {
@@ -6438,7 +6487,7 @@
           "price": 66000
         }
       ],
-      "missing_count": 46,
+      "missing_count": 45,
       "watched": false
     },
     "21778512": {
@@ -6486,7 +6535,7 @@
           "price": 76200
         }
       ],
-      "missing_count": 46,
+      "missing_count": 45,
       "watched": false
     },
     "21775953": {
@@ -6537,7 +6586,7 @@
           "price": 78000
         }
       ],
-      "missing_count": 46,
+      "missing_count": 45,
       "watched": false
     },
     "21749404": {
@@ -6586,7 +6635,7 @@
           "price": 76000
         }
       ],
-      "missing_count": 46,
+      "missing_count": 45,
       "watched": false
     },
     "21736222": {
@@ -6636,7 +6685,7 @@
           "price": 66000
         }
       ],
-      "missing_count": 46,
+      "missing_count": 45,
       "watched": false
     },
     "21720823": {
@@ -6686,7 +6735,7 @@
           "price": 80000
         }
       ],
-      "missing_count": 46,
+      "missing_count": 45,
       "watched": false
     },
     "21715277": {
@@ -6736,7 +6785,7 @@
           "price": 39999
         }
       ],
-      "missing_count": 46,
+      "missing_count": 45,
       "watched": false
     },
     "21715189": {
@@ -6782,7 +6831,7 @@
           "price": 77200
         }
       ],
-      "missing_count": 46,
+      "missing_count": 45,
       "watched": false
     },
     "21699458": {
@@ -6830,7 +6879,7 @@
           "price": 91700
         }
       ],
-      "missing_count": 46,
+      "missing_count": 45,
       "watched": false
     },
     "21690969": {
@@ -6881,7 +6930,7 @@
           "price": 57000
         }
       ],
-      "missing_count": 46,
+      "missing_count": 45,
       "watched": false
     },
     "21808070": {
@@ -6929,7 +6978,7 @@
           "price": 60243
         }
       ],
-      "missing_count": 49,
+      "missing_count": 48,
       "watched": false
     },
     "21785542": {
@@ -6977,7 +7026,7 @@
           "price": 63867
         }
       ],
-      "missing_count": 49,
+      "missing_count": 48,
       "watched": false
     },
     "21831546": {
@@ -7025,7 +7074,7 @@
           "price": 42999
         }
       ],
-      "missing_count": 49,
+      "missing_count": 48,
       "watched": false
     },
     "21724869": {
@@ -7073,7 +7122,7 @@
           "price": 71999
         }
       ],
-      "missing_count": 49,
+      "missing_count": 48,
       "watched": false
     },
     "21831498": {
@@ -7121,7 +7170,7 @@
           "price": 42840
         }
       ],
-      "missing_count": 49,
+      "missing_count": 48,
       "watched": false
     },
     "21832492": {
@@ -7169,7 +7218,7 @@
           "price": 55000
         }
       ],
-      "missing_count": 49,
+      "missing_count": 48,
       "watched": false
     },
     "21817824": {
@@ -7217,7 +7266,7 @@
           "price": 60867
         }
       ],
-      "missing_count": 49,
+      "missing_count": 48,
       "watched": false
     },
     "21828510": {
@@ -7265,7 +7314,7 @@
           "price": 91999
         }
       ],
-      "missing_count": 49,
+      "missing_count": 48,
       "watched": false
     },
     "21721161": {
@@ -7313,7 +7362,7 @@
           "price": 60140
         }
       ],
-      "missing_count": 49,
+      "missing_count": 48,
       "watched": false
     },
     "21829947": {
@@ -7361,7 +7410,7 @@
           "price": 43000
         }
       ],
-      "missing_count": 49,
+      "missing_count": 48,
       "watched": false
     },
     "21793538": {
@@ -7409,7 +7458,7 @@
           "price": 63867
         }
       ],
-      "missing_count": 49,
+      "missing_count": 48,
       "watched": false
     },
     "21804376": {
@@ -7457,7 +7506,7 @@
           "price": 60867
         }
       ],
-      "missing_count": 49,
+      "missing_count": 48,
       "watched": false
     },
     "21699581": {
@@ -7506,7 +7555,7 @@
           "price": 43000
         }
       ],
-      "missing_count": 49,
+      "missing_count": 48,
       "watched": false
     },
     "20922702": {
@@ -7554,7 +7603,7 @@
           "price": 59099
         }
       ],
-      "missing_count": 49,
+      "missing_count": 48,
       "watched": false
     },
     "21760093": {
@@ -7601,7 +7650,7 @@
           "price": 50600
         }
       ],
-      "missing_count": 49,
+      "missing_count": 48,
       "watched": false
     },
     "21785768": {
@@ -7650,7 +7699,7 @@
           "price": 72000
         }
       ],
-      "missing_count": 49,
+      "missing_count": 48,
       "watched": false
     },
     "21825814": {
@@ -7698,7 +7747,7 @@
           "price": 74100
         }
       ],
-      "missing_count": 49,
+      "missing_count": 48,
       "watched": false
     },
     "21824837": {
@@ -7746,7 +7795,7 @@
           "price": 79500
         }
       ],
-      "missing_count": 49,
+      "missing_count": 48,
       "watched": false
     },
     "21824350": {
@@ -7793,7 +7842,7 @@
           "price": 69800
         }
       ],
-      "missing_count": 49,
+      "missing_count": 48,
       "watched": false
     },
     "21823878": {
@@ -7843,7 +7892,7 @@
           "price": 72000
         }
       ],
-      "missing_count": 49,
+      "missing_count": 48,
       "watched": false
     },
     "21671784": {
@@ -7891,7 +7940,7 @@
           "price": 92000
         }
       ],
-      "missing_count": 49,
+      "missing_count": 48,
       "watched": false
     },
     "21817645": {
@@ -7941,7 +7990,7 @@
           "price": 60000
         }
       ],
-      "missing_count": 49,
+      "missing_count": 48,
       "watched": false
     },
     "21817402": {
@@ -7992,7 +8041,7 @@
           "price": 45000
         }
       ],
-      "missing_count": 49,
+      "missing_count": 48,
       "watched": false
     },
     "21817358": {
@@ -8040,7 +8089,7 @@
           "price": 60650
         }
       ],
-      "missing_count": 49,
+      "missing_count": 48,
       "watched": false
     },
     "21814614": {
@@ -8088,7 +8137,7 @@
           "price": 91998
         }
       ],
-      "missing_count": 49,
+      "missing_count": 48,
       "watched": false
     },
     "21813746": {
@@ -8138,7 +8187,7 @@
           "price": 68000
         }
       ],
-      "missing_count": 49,
+      "missing_count": 48,
       "watched": false
     },
     "21813704": {
@@ -8188,7 +8237,7 @@
           "price": 68000
         }
       ],
-      "missing_count": 49,
+      "missing_count": 48,
       "watched": false
     },
     "21676346": {
@@ -8236,7 +8285,7 @@
           "price": 60119
         }
       ],
-      "missing_count": 48,
+      "missing_count": 47,
       "watched": false
     },
     "21831093": {
@@ -8284,7 +8333,7 @@
           "price": 86499
         }
       ],
-      "missing_count": 48,
+      "missing_count": 47,
       "watched": false
     },
     "21735303": {
@@ -8332,7 +8381,7 @@
           "price": 60120
         }
       ],
-      "missing_count": 48,
+      "missing_count": 47,
       "watched": false
     },
     "21814286": {
@@ -8380,7 +8429,7 @@
           "price": 40749
         }
       ],
-      "missing_count": 48,
+      "missing_count": 47,
       "watched": false
     },
     "21807449": {
@@ -8428,7 +8477,7 @@
           "price": 44000
         }
       ],
-      "missing_count": 48,
+      "missing_count": 47,
       "watched": false
     },
     "21806140": {
@@ -8476,7 +8525,7 @@
           "price": 71008
         }
       ],
-      "missing_count": 48,
+      "missing_count": 47,
       "watched": false
     },
     "21805463": {
@@ -8524,7 +8573,7 @@
           "price": 59365
         }
       ],
-      "missing_count": 48,
+      "missing_count": 47,
       "watched": false
     },
     "21805178": {
@@ -8574,7 +8623,7 @@
           "price": 43000
         }
       ],
-      "missing_count": 48,
+      "missing_count": 47,
       "watched": false
     },
     "21799609": {
@@ -8622,7 +8671,7 @@
           "price": 86496
         }
       ],
-      "missing_count": 48,
+      "missing_count": 47,
       "watched": false
     },
     "21795517": {
@@ -8673,7 +8722,7 @@
           "price": 37000
         }
       ],
-      "missing_count": 48,
+      "missing_count": 47,
       "watched": false
     },
     "21790297": {
@@ -8720,7 +8769,7 @@
           "price": 86496
         }
       ],
-      "missing_count": 48,
+      "missing_count": 47,
       "watched": false
     },
     "21789881": {
@@ -8768,7 +8817,7 @@
           "price": 71200
         }
       ],
-      "missing_count": 48,
+      "missing_count": 47,
       "watched": false
     },
     "21726774": {
@@ -8816,7 +8865,7 @@
           "price": 78888
         }
       ],
-      "missing_count": 48,
+      "missing_count": 47,
       "watched": false
     },
     "21776659": {
@@ -8866,7 +8915,7 @@
           "price": 65000
         }
       ],
-      "missing_count": 48,
+      "missing_count": 47,
       "watched": false
     },
     "21771837": {
@@ -8913,7 +8962,7 @@
           "price": 64365
         }
       ],
-      "missing_count": 48,
+      "missing_count": 47,
       "watched": false
     },
     "21771254": {
@@ -8965,7 +9014,7 @@
           "price": 58000
         }
       ],
-      "missing_count": 48,
+      "missing_count": 47,
       "watched": false
     },
     "21758285": {
@@ -9014,7 +9063,7 @@
           "price": 45000
         }
       ],
-      "missing_count": 48,
+      "missing_count": 47,
       "watched": false
     },
     "21752096": {
@@ -9062,7 +9111,7 @@
           "price": 36000
         }
       ],
-      "missing_count": 48,
+      "missing_count": 47,
       "watched": false
     },
     "21750233": {
@@ -9110,7 +9159,7 @@
           "price": 70000
         }
       ],
-      "missing_count": 48,
+      "missing_count": 47,
       "watched": false
     },
     "21749075": {
@@ -9158,7 +9207,7 @@
           "price": 74000
         }
       ],
-      "missing_count": 48,
+      "missing_count": 47,
       "watched": false
     },
     "21741040": {
@@ -9207,7 +9256,7 @@
           "price": 45000
         }
       ],
-      "missing_count": 48,
+      "missing_count": 47,
       "watched": false
     },
     "21733197": {
@@ -9254,7 +9303,7 @@
           "price": 80500
         }
       ],
-      "missing_count": 48,
+      "missing_count": 47,
       "watched": false
     },
     "21718684": {
@@ -9302,7 +9351,7 @@
           "price": 74949
         }
       ],
-      "missing_count": 48,
+      "missing_count": 47,
       "watched": false
     },
     "21717456": {
@@ -9352,7 +9401,7 @@
           "price": 75000
         }
       ],
-      "missing_count": 48,
+      "missing_count": 47,
       "watched": false
     },
     "21563929": {
@@ -9400,7 +9449,7 @@
           "price": 39200
         }
       ],
-      "missing_count": 48,
+      "missing_count": 47,
       "watched": false
     },
     "21687016": {
@@ -9446,7 +9495,7 @@
           "price": 58000
         }
       ],
-      "missing_count": 48,
+      "missing_count": 47,
       "watched": false
     },
     "21512473": {
@@ -9492,7 +9541,7 @@
           "price": 40750
         }
       ],
-      "missing_count": 48,
+      "missing_count": 47,
       "watched": false
     },
     "19338557": {
@@ -9542,7 +9591,7 @@
           "price": 68000
         }
       ],
-      "missing_count": 47,
+      "missing_count": 46,
       "watched": false
     },
     "21832595": {
@@ -9593,7 +9642,7 @@
           "price": 80000
         }
       ],
-      "missing_count": 47,
+      "missing_count": 46,
       "watched": false
     },
     "21819124": {
@@ -9640,7 +9689,7 @@
           "price": 60000
         }
       ],
-      "missing_count": 47,
+      "missing_count": 46,
       "watched": false
     },
     "21780068": {
@@ -9688,7 +9737,7 @@
           "price": 76500
         }
       ],
-      "missing_count": 47,
+      "missing_count": 46,
       "watched": false
     },
     "21831084": {
@@ -9738,7 +9787,7 @@
           "price": 50000
         }
       ],
-      "missing_count": 47,
+      "missing_count": 46,
       "watched": false
     },
     "21830781": {
@@ -9786,7 +9835,7 @@
           "price": 75500
         }
       ],
-      "missing_count": 47,
+      "missing_count": 46,
       "watched": false
     },
     "21829758": {
@@ -9834,7 +9883,7 @@
           "price": 68000
         }
       ],
-      "missing_count": 47,
+      "missing_count": 46,
       "watched": false
     },
     "21662282": {
@@ -9881,7 +9930,7 @@
           "price": 69300
         }
       ],
-      "missing_count": 47,
+      "missing_count": 46,
       "watched": false
     },
     "21734540": {
@@ -9930,7 +9979,7 @@
           "price": 65000
         }
       ],
-      "missing_count": 47,
+      "missing_count": 46,
       "watched": false
     },
     "21685126": {
@@ -9977,7 +10026,7 @@
           "price": 39000
         }
       ],
-      "missing_count": 47,
+      "missing_count": 46,
       "watched": false
     },
     "21645116": {
@@ -10025,7 +10074,7 @@
           "price": 74000
         }
       ],
-      "missing_count": 47,
+      "missing_count": 46,
       "watched": false
     },
     "21400593": {
@@ -10075,7 +10124,7 @@
           "price": 69999
         }
       ],
-      "missing_count": 47,
+      "missing_count": 46,
       "watched": false
     },
     "21251447": {
@@ -10125,7 +10174,7 @@
           "price": 76000
         }
       ],
-      "missing_count": 47,
+      "missing_count": 46,
       "watched": false
     },
     "21219933": {
@@ -10174,7 +10223,7 @@
           "price": 59999
         }
       ],
-      "missing_count": 47,
+      "missing_count": 46,
       "watched": false
     },
     "21645187": {
@@ -10221,7 +10270,7 @@
           "price": 59999
         }
       ],
-      "missing_count": 47,
+      "missing_count": 46,
       "watched": false
     },
     "21787889": {
@@ -10267,7 +10316,7 @@
           "price": 61000
         }
       ],
-      "missing_count": 47,
+      "missing_count": 46,
       "watched": false
     },
     "21720035": {
@@ -10313,7 +10362,7 @@
           "price": 83140
         }
       ],
-      "missing_count": 47,
+      "missing_count": 46,
       "watched": false
     },
     "21131931": {
@@ -10363,7 +10412,7 @@
           "price": 80000
         }
       ],
-      "missing_count": 47,
+      "missing_count": 46,
       "watched": false
     },
     "20408141": {
@@ -10413,7 +10462,7 @@
           "price": 76000
         }
       ],
-      "missing_count": 47,
+      "missing_count": 46,
       "watched": false
     },
     "20924096": {
@@ -10460,7 +10509,7 @@
           "price": 69600
         }
       ],
-      "missing_count": 47,
+      "missing_count": 46,
       "watched": false
     },
     "21131547": {
@@ -10509,7 +10558,7 @@
           "price": 75000
         }
       ],
-      "missing_count": 47,
+      "missing_count": 46,
       "watched": false
     },
     "21275259": {
@@ -10559,7 +10608,7 @@
           "price": 75000
         }
       ],
-      "missing_count": 47,
+      "missing_count": 46,
       "watched": false
     },
     "21459759": {
@@ -10607,7 +10656,7 @@
           "price": 63699
         }
       ],
-      "missing_count": 47,
+      "missing_count": 46,
       "watched": false
     },
     "21728015": {
@@ -10655,7 +10704,7 @@
           "price": 55399
         }
       ],
-      "missing_count": 47,
+      "missing_count": 46,
       "watched": false
     },
     "21456975": {
@@ -10703,7 +10752,7 @@
           "price": 78999
         }
       ],
-      "missing_count": 47,
+      "missing_count": 46,
       "watched": false
     },
     "21806084": {
@@ -10750,7 +10799,7 @@
           "price": 93799
         }
       ],
-      "missing_count": 47,
+      "missing_count": 46,
       "watched": false
     },
     "21645138": {
@@ -10797,7 +10846,7 @@
           "price": 68100
         }
       ],
-      "missing_count": 47,
+      "missing_count": 46,
       "watched": false
     },
     "21357190": {
@@ -10844,7 +10893,7 @@
           "price": 58999
         }
       ],
-      "missing_count": 47,
+      "missing_count": 46,
       "watched": false
     },
     "21571164": {
@@ -10892,7 +10941,7 @@
           "price": 84508
         }
       ],
-      "missing_count": 47,
+      "missing_count": 46,
       "watched": false
     },
     "21753460": {
@@ -10940,7 +10989,7 @@
           "price": 72000
         }
       ],
-      "missing_count": 47,
+      "missing_count": 46,
       "watched": false
     },
     "21724732": {
@@ -10988,7 +11037,7 @@
           "price": 50000
         }
       ],
-      "missing_count": 48,
+      "missing_count": 47,
       "watched": false
     },
     "21752025": {
@@ -11038,7 +11087,7 @@
           "price": 71999
         }
       ],
-      "missing_count": 50,
+      "missing_count": 49,
       "watched": false
     },
     "21831254": {
@@ -11086,7 +11135,7 @@
           "price": 59800
         }
       ],
-      "missing_count": 50,
+      "missing_count": 49,
       "watched": false
     },
     "21824485": {
@@ -11136,7 +11185,7 @@
           "price": 71999
         }
       ],
-      "missing_count": 50,
+      "missing_count": 49,
       "watched": false
     },
     "21521106": {
@@ -11185,7 +11234,7 @@
           "price": 75000
         }
       ],
-      "missing_count": 48,
+      "missing_count": 47,
       "watched": false
     },
     "21829254": {
@@ -11233,7 +11282,7 @@
           "price": 77640
         }
       ],
-      "missing_count": 48,
+      "missing_count": 47,
       "watched": false
     },
     "21642020": {
@@ -11277,7 +11326,7 @@
           "price": 38900
         }
       ],
-      "missing_count": 48,
+      "missing_count": 47,
       "watched": false
     },
     "21775293": {
@@ -11321,7 +11370,7 @@
           "price": 51599
         }
       ],
-      "missing_count": 50,
+      "missing_count": 49,
       "watched": false
     },
     "21726553": {
@@ -11365,7 +11414,7 @@
           "price": 51600
         }
       ],
-      "missing_count": 50,
+      "missing_count": 49,
       "watched": false
     },
     "21742348": {
@@ -11412,7 +11461,7 @@
           "price": 38000
         }
       ],
-      "missing_count": 51,
+      "missing_count": 50,
       "watched": false
     },
     "21785949": {
@@ -11458,7 +11507,7 @@
           "price": 49500
         }
       ],
-      "missing_count": 53,
+      "missing_count": 52,
       "watched": false
     },
     "21822145": {
@@ -11506,7 +11555,7 @@
           "price": 51500
         }
       ],
-      "missing_count": 49,
+      "missing_count": 48,
       "watched": false
     },
     "21639997": {
@@ -11552,7 +11601,7 @@
           "price": 40000
         }
       ],
-      "missing_count": 52,
+      "missing_count": 51,
       "watched": false
     },
     "21638610": {
@@ -11596,7 +11645,7 @@
           "price": 45000
         }
       ],
-      "missing_count": 56,
+      "missing_count": 55,
       "watched": false
     },
     "21698964": {
@@ -11645,7 +11694,7 @@
           "price": 33000
         }
       ],
-      "missing_count": 55,
+      "missing_count": 54,
       "watched": false
     },
     "21810172": {
@@ -11692,7 +11741,7 @@
           "price": 49499
         }
       ],
-      "missing_count": 58,
+      "missing_count": 57,
       "watched": false
     },
     "21728864": {
@@ -11737,7 +11786,7 @@
           "price": 40000
         }
       ],
-      "missing_count": 55,
+      "missing_count": 54,
       "watched": false
     },
     "21699738": {
@@ -11782,7 +11831,7 @@
           "price": 43400
         }
       ],
-      "missing_count": 63,
+      "missing_count": 62,
       "watched": false
     },
     "21634073": {
@@ -11825,7 +11874,7 @@
           "price": 47000
         }
       ],
-      "missing_count": 65,
+      "missing_count": 64,
       "watched": false
     }
   }
