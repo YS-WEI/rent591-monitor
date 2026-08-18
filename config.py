@@ -53,3 +53,7 @@ SNAPSHOT_DIR = DATA_DIR / "snapshots"
 LATEST_PATH = DATA_DIR / "latest.json"
 SUBSCRIPTIONS_PATH = ROOT / "subscriptions.json"
 WATCHLIST_PATH = ROOT / "watchlist.json"
+
+# 買屋（中古屋）資料與租屋分開存
+SALE_SNAPSHOT_DIR = DATA_DIR / "snapshots-sale"
+SALE_LATEST_PATH = DATA_DIR / "sale.json"

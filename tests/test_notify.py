@@ -43,6 +43,20 @@ def test_groups_by_district_and_shows_counts():
     assert "u1" in text and "u3" in text
 
 
+def test_sale_format_uses_total_price_and_off_label():
+    report = {
+        "new": [{"title": "士林三房", "district": "士林區", "total_price": 2800,
+                 "unit_price": 61.3, "houseage": 16, "rooms": 3, "halls": 2, "baths": 1,
+                 "size_ping": 35.0, "has_carport": True, "cart_model": "平面式",
+                 "url": "https://sale.591.com.tw/x"}],
+        "price_drop": [], "removed": [{"title": "已成交案", "district": "士林區"}],
+    }
+    text = format_report(report, header="外婆家的買屋監控", kind="sale")
+    assert "2800萬" in text
+    assert "❌ 下架/成交 1" in text
+    assert "61.3萬/坪" in text and "16年" in text and "平面式" in text
+
+
 def test_discord_no_changes_returns_empty():
     assert format_discord({"new": [], "price_drop": [], "removed": []}) == []
 

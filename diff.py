@@ -22,11 +22,11 @@
 from __future__ import annotations
 
 
-def _last_price(rec: dict) -> int | None:
+def _last_price(rec: dict, price_key: str = "total_monthly"):
     hist = rec.get("price_history") or []
     if hist:
         return hist[-1]["price"]
-    return rec.get("total_monthly")
+    return rec.get(price_key)
 
 
 def diff_snapshots(
@@ -35,6 +35,7 @@ def diff_snapshots(
     today: str,
     missing_rounds_before_removed: int = 2,
     covered_districts: set | None = None,
+    price_key: str = "total_monthly",
 ) -> tuple[dict, dict]:
     """比對前次狀態與本輪抓取結果。
 
@@ -52,7 +53,7 @@ def diff_snapshots(
 
     # 1) 本輪出現的物件：判斷新增 / 降價 / 續存
     for lid, cur in current_by_id.items():
-        cur_total = cur.get("total_monthly")
+        cur_total = cur.get(price_key)
         if lid not in prev_listings:
             rec = {
                 **cur,
@@ -69,7 +70,7 @@ def diff_snapshots(
             continue
 
         prev = prev_listings[lid]
-        prev_price = _last_price(prev)
+        prev_price = _last_price(prev, price_key)
         history = list(prev.get("price_history") or [])
 
         rec = {

@@ -44,10 +44,34 @@ def _kind_ok(kind_name: str | None, kind) -> bool:
 
 
 def matches(listing: dict, sub: dict) -> bool:
-    """物件是否符合訂閱條件（房數、租金、坪數、類型）。"""
+    """租屋物件是否符合訂閱條件（房數、租金、坪數、類型）。"""
     return (
         _layout_ok(listing.get("rooms"), sub.get("layout"))
         and _range_ok(listing.get("price"), sub.get("price_min"), sub.get("price_max"))
         and _range_ok(listing.get("size_ping"), sub.get("acreage_min"), sub.get("acreage_max"))
         and _kind_ok(listing.get("kind_name"), sub.get("kind"))
+    )
+
+
+def _shape_ok(shape_name, shape_codes) -> bool:
+    if not shape_codes:
+        return True
+    names = {config.SHAPE_NAMES.get(str(s)) for s in shape_codes}
+    return shape_name in names
+
+
+def matches_sale(listing: dict, sub: dict) -> bool:
+    """買屋（中古屋）物件是否符合訂閱條件。
+
+    total_price（萬）用 sub.price_min/price_max；坪數 acreage_min/max；
+    屋齡上限 houseage_max；型態 shape（以名稱比對）。591 SSR 未必套用房數等篩選，
+    故一律在程式端過濾。
+    """
+    return (
+        _layout_ok(listing.get("rooms"), sub.get("layout"))
+        and _range_ok(listing.get("total_price"), sub.get("price_min"), sub.get("price_max"))
+        and _range_ok(listing.get("size_ping"), sub.get("acreage_min"), sub.get("acreage_max"))
+        and (sub.get("houseage_max") is None
+             or (listing.get("houseage") is not None and listing["houseage"] <= sub["houseage_max"]))
+        and _shape_ok(listing.get("shape_name"), sub.get("shape"))
     )

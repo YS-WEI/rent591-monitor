@@ -8,7 +8,33 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-from filters import matches, _layout_ok  # noqa: E402
+from filters import matches, matches_sale, _layout_ok  # noqa: E402
+
+SALE_SUB = {"layout": ["3", "4"], "price_min": 2000, "price_max": 3500,
+            "acreage_min": None, "acreage_max": None, "houseage_max": 30, "shape": ["2"]}
+
+
+def _sale(**kw):
+    d = {"rooms": 3, "total_price": 2800, "size_ping": 35.0, "houseage": 16, "shape_name": "電梯大樓"}
+    d.update(kw)
+    return d
+
+
+def test_sale_rejects_over_total_price():
+    assert not matches_sale(_sale(total_price=4000), SALE_SUB)
+    assert matches_sale(_sale(total_price=3000), SALE_SUB)
+
+
+def test_sale_rejects_too_old():
+    assert not matches_sale(_sale(houseage=45), SALE_SUB)
+
+
+def test_sale_rejects_wrong_shape():
+    assert not matches_sale(_sale(shape_name="公寓"), SALE_SUB)
+
+
+def test_sale_rejects_wrong_room():
+    assert not matches_sale(_sale(rooms=1), SALE_SUB)
 
 SUB = {"kind": "1", "layout": ["4"], "price_min": 0, "price_max": 50000,
        "acreage_min": 30, "acreage_max": None}

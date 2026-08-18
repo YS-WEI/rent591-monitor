@@ -1,46 +1,41 @@
-name: 591 監控排程
+name: 591 買屋監控排程
 
 on:
   schedule:
-    # 每 2 小時一輪（cron 為 UTC）。用第 17 分而非整點，避開整點排程尖峰
-    # （減少 GitHub 排程延遲與 591 對機房 IP 的偶發封鎖）。可依需求改成 */3 ~ */6。
-    - cron: "17 */2 * * *"
-  workflow_dispatch: {}  # 允許在 Actions 頁面手動觸發（改完訂閱想立即跑）
+    # 中古屋變動慢，每 6 小時一輪（UTC；第 47 分與租屋 :17 錯開）
+    - cron: "47 */6 * * *"
+  workflow_dispatch: {}
 
-# 讓 job 能把快照 commit 回 repo
 permissions:
   contents: write
 
-# 與買屋 workflow 共用同一 group → 兩者不會同時跑（避免同時 push 撞版）
+# 與租屋共用同一 group → 不會同時跑
 concurrency:
   group: rent591-data
   cancel-in-progress: false
 
 jobs:
-  monitor:
+  monitor-sale:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
       - uses: actions/setup-python@v5
         with:
           python-version: "3.13"
           cache: pip
-
       - uses: actions/setup-node@v4
         with:
           node-version: "20"
-
       - name: 安裝相依套件
         run: pip install -r requirements.txt
 
-      - name: 執行監控
+      - name: 執行買屋監控
         env:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
-          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
-          NOTIFY_ROUTES: ${{ secrets.NOTIFY_ROUTES }}
-        run: python main.py
+          SALE_TELEGRAM_CHAT_ID: ${{ secrets.SALE_TELEGRAM_CHAT_ID }}
+          SALE_DISCORD_WEBHOOK_URL: ${{ secrets.SALE_DISCORD_WEBHOOK_URL }}
+          SALE_NOTIFY_ROUTES: ${{ secrets.SALE_NOTIFY_ROUTES }}
+        run: python main.py --type sale
 
       - name: Commit 快照
         run: |
@@ -50,8 +45,7 @@ jobs:
           if git diff --cached --quiet; then
             echo "本輪無資料變動，略過 commit。"
           else
-            git commit -m "chore: 更新租屋快照 $(date -u +'%Y-%m-%d %H:%M UTC')"
-            # push 前先 rebase（與買屋 workflow 寫不同檔，衝突可自動併），重試幾次
+            git commit -m "chore: 更新買屋快照 $(date -u +'%Y-%m-%d %H:%M UTC')"
             for i in 1 2 3; do
               git push && break || { echo "push 撞版，rebase 重試 $i"; git pull --rebase --autostash; }
             done
