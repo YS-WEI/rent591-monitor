@@ -1,14 +1,14 @@
-"""把一筆買屋（中古屋）訂閱條件組成 sale.591 列表頁網址。
+"""把一筆買屋（中古屋）訂閱條件組成 591 買屋 BFF API 網址。
 
-實測參數（2026-08）：
-  https://sale.591.com.tw/?shType=list&regionid=1&section=8&kind=9&price=2000_3000&shape=2&firstRow=0
-- regionid：縣市（沿用縣市代碼）
-- section：區域（沿用區代碼，逗號複選）
-- kind：類型（9=住宅，其餘見 config.SALE_KIND_NAMES）
-- shape：型態（沿用租屋代碼，逗號複選）
-- price：總價範圍（萬），格式 `min_max`；開放端留空（如 `2000_`、`_3000`）
-- firstRow：分頁起始列（0/30/60…）
-屋齡、坪數、房數等在程式端過濾（JSON 已有 houseage/area/room），不放 URL。
+直接打 JSON API（無需 cookie），比抓 HTML+eval 乾淨：
+  https://bff-house.591.com.tw/v1/web/sale/list?type=2&category=1&regionid=3&section=43&kind=9&price=$0_$2500&shape=2&pattern=4,5&firstRow=0&shType=list
+回傳 data.house_list（物件）與 data.total（總筆數）。
+- regionid/section：縣市/區（沿用代碼，section 逗號複選）
+- kind：9=住宅（見 config.SALE_KIND_NAMES）；shape：型態（逗號複選）
+- pattern：房數（4=4房以上→展開 4,5）
+- price：總價（萬），格式 `$min_$max`，開放上限 `$min_$`
+- firstRow：分頁起始列（0/30/60…）；每頁約 30
+坪數/屋齡等仍在程式端過濾。
 """
 from __future__ import annotations
 
@@ -37,7 +37,10 @@ def _pattern(layout) -> str | None:
 
 
 def build_sale_url(sub: dict, section: str | None = None, first_row: int = 0) -> str:
-    params: list[tuple[str, str]] = [("shType", "list"), ("regionid", str(sub["region"]))]
+    params: list[tuple[str, str]] = [
+        ("type", "2"), ("category", "1"), ("shType", "list"),
+        ("regionid", str(sub["region"])),
+    ]
 
     secs = [section] if section is not None else (sub.get("sections") or [])
     if secs:
@@ -60,4 +63,4 @@ def build_sale_url(sub: dict, section: str | None = None, first_row: int = 0) ->
     params.append(("firstRow", str(first_row)))
 
     query = "&".join(f"{k}={v}" for k, v in params)
-    return f"https://sale.591.com.tw/?{query}"
+    return f"https://bff-house.591.com.tw/v1/web/sale/list?{query}"

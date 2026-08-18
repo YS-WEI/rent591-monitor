@@ -60,7 +60,7 @@ def _map(r: dict, fetched_iso: str, fetched_at: datetime) -> dict:
         "total_price": _num(r.get("price")),        # 總價（萬）— 比價基準
         "unit_price": _num(r.get("unitprice")),     # 單價（萬/坪）
         "unit_price_text": r.get("unit_price"),
-        "houseage": (int(r["houseage"]) if str(r.get("houseage") or "").isdigit() else None),
+        "houseage": (int(r["houseage"]) if str(r.get("houseage")).lstrip("-").isdigit() else None),
         "has_carport": bool(r.get("has_carport")),
         "cart_model": r.get("cartmodel") or None,
         "poster_name": r.get("nick_name") or r.get("linkman"),
