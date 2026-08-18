@@ -101,10 +101,10 @@
       "sort": "posttime_desc"
     },
     {
-      "id": "sub-1787050114426",
+      "id": "sub-1787050187051",
       "type": "sale",
-      "name": "三重 3房/4房以上",
-      "group": "我",
+      "name": "三重 4房以上",
+      "group": "三重",
       "enabled": true,
       "region": "3",
       "sections": [
@@ -112,14 +112,13 @@
       ],
       "kind": "9",
       "layout": [
-        "3",
         "4"
       ],
       "shape": [
         "2"
       ],
       "price_min": 0,
-      "price_max": 2000,
+      "price_max": 2500,
       "acreage_min": null,
       "acreage_max": null,
       "sort": "posttime_desc",
