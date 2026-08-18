@@ -14,10 +14,14 @@ import httpx
 import config
 import filters
 from scraper.list_scraper import _build_ssl_context, fetch_list_html, merge_listings
-from scraper.sale_parser import parse_sale_html
+from scraper.nuxt import extract_page
+from scraper.sale_parser import listings_from_sale_json
 from scraper.sale_url_builder import build_sale_url
 
 log = logging.getLogger(__name__)
+
+PAGE_SIZE = 30       # 591 每頁筆數（firstRow 以此遞增）
+MAX_PAGES = 10       # 每區最多翻幾頁（封頂避免請求爆量）
 
 
 def scrape_sale_subscription(
@@ -44,21 +48,39 @@ def scrape_sale_subscription(
     first = True
     try:
         for section in sections:
-            if not first:
-                time.sleep(config.REQUEST_INTERVAL_SEC)
-            first = False
-            url = build_sale_url(sub, section=section, first_row=0)
-            html = fetch_list_html(url, client)
-            if not html:
-                continue  # 被擋：此區未涵蓋
-            if section is not None:
-                covered.add(str(section))
-            parsed = parse_sale_html(html, fetched_at=fetched_at)
-            rows = [r for r in parsed if filters.matches_sale(r, sub)]
-            batches.append(rows)
+            seen: set = set()          # 該區已見過的 houseid（判斷是否還有新頁）
+            total = None
+            matched = 0
+            for page in range(MAX_PAGES):
+                if not first:
+                    time.sleep(config.REQUEST_INTERVAL_SEC)
+                first = False
+                url = build_sale_url(sub, section=section, first_row=page * PAGE_SIZE)
+                html = fetch_list_html(url, client)
+                if not html:
+                    break  # 被擋/失敗
+                if section is not None:
+                    covered.add(str(section))
+                pg = extract_page(html)
+                items = pg["items"]
+                if total is None:
+                    total = pg["total"]
+                if not items:
+                    break
+                new_ids = {str(it.get("houseid")) for it in items} - seen
+                if not new_ids:
+                    break  # 這頁沒有新物件（591 已重複），停止翻頁
+                seen |= new_ids
+                rows = [r for r in listings_from_sale_json(items, fetched_at)
+                        if filters.matches_sale(r, sub)]
+                batches.append(rows)
+                matched += len(rows)
+                if total is not None and len(seen) >= total:
+                    break  # 已涵蓋官方總數
             running = merge_listings(sub, batches, region_name)
-            log.info("[%s] sec=%s → 符合 %d/%d 筆（聯集累計 %d）",
-                     sub["id"], section, len(rows), len(parsed), len(running))
+            note = "（591 分頁重排，未完全涵蓋）" if total and len(seen) < total else ""
+            log.info("[%s] sec=%s → 抓過 %d/%s、符合累計 %d%s",
+                     sub["id"], section, len(seen), total, len(running), note)
     finally:
         if own:
             client.close()

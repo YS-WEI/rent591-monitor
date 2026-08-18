@@ -14,10 +14,10 @@ import config
 _JS = config.ROOT / "scraper" / "nuxt_extract.js"
 
 
-def extract_listings(html: str) -> list[dict]:
-    """回傳列表頁 __NUXT__ 內的物件清單（list of dict）；失敗回空清單或拋錯。"""
+def extract_page(html: str) -> dict:
+    """回傳 {"items": [...], "total": int|None}。total 為 591 官方總筆數（供分頁）。"""
     if not html:
-        return []
+        return {"items": [], "total": None}
     try:
         proc = subprocess.run(
             ["node", str(_JS)],
@@ -27,4 +27,13 @@ def extract_listings(html: str) -> list[dict]:
         raise RuntimeError("找不到 node，無法解析 591 列表 JSON") from exc
     if proc.returncode != 0:
         raise RuntimeError(f"node 解析失敗：{proc.stderr[:200]}")
-    return json.loads(proc.stdout or "[]")
+    data = json.loads(proc.stdout or "{}")
+    # 相容舊格式（曾直接回陣列）
+    if isinstance(data, list):
+        return {"items": data, "total": None}
+    return {"items": data.get("items", []), "total": data.get("total")}
+
+
+def extract_listings(html: str) -> list[dict]:
+    """回傳列表頁 __NUXT__ 內的物件清單（list of dict）。"""
+    return extract_page(html)["items"]

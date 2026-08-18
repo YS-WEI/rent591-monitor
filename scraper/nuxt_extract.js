@@ -16,15 +16,22 @@ process.stdin.on("end", () => {
     process.exit(2);
   }
   // 找出「物件清單陣列」：元素是物件、且含 id 與 price 欄位，取最長的一個
-  let best = null;
+  // 同時找總筆數（買屋 wareTotal / 一般 total/records），供分頁判斷。
+  let best = null, total = null;
   (function walk(o, d) {
-    if (!o || d > 9 || typeof o !== "object") return;
+    if (!o || d > 10 || typeof o !== "object") return;
     if (Array.isArray(o) && o.length && o[0] && typeof o[0] === "object") {
       const ks = Object.keys(o[0]);
-      // 租屋物件有 id、買屋物件有 houseid，皆含 price
       if ((ks.includes("id") || ks.includes("houseid")) && ks.includes("price") && (!best || o.length > best.length)) best = o;
     }
-    for (const k in o) { try { walk(o[k], d + 1); } catch (e) {} }
+    for (const k in o) {
+      const v = o[k];
+      if (/^(wareTotal|total|records|totalRows)$/i.test(k)) {
+        const n = Number(v);
+        if (Number.isFinite(n) && (total === null || n > total)) total = n;
+      }
+      try { walk(v, d + 1); } catch (e) {}
+    }
   })(nuxt, 0);
-  process.stdout.write(JSON.stringify(best || []));
+  process.stdout.write(JSON.stringify({ items: best || [], total: total }));
 });
