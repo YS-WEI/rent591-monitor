@@ -65,7 +65,8 @@ def scrape_sale_subscription(
         for section in sections:
             seen: set = set()          # 該區已見過的 houseid（判斷是否還有新頁）
             total = None
-            matched = 0
+            # 同一 section 的所有分頁共用一個 timestamp，讓 591 把查詢定格、頁間重疊更少
+            ts = int(time.time() * 1000)
             for page in range(MAX_PAGES):
                 # 不翻過首頁回報的 total：591 對超過筆數的 firstRow 會回「另一組」資料
                 if page > 0 and total is not None and page * PAGE_SIZE >= total:
@@ -73,8 +74,7 @@ def scrape_sale_subscription(
                 if not first:
                     time.sleep(config.REQUEST_INTERVAL_SEC)
                 first = False
-                url = build_sale_url(sub, section=section, first_row=page * PAGE_SIZE,
-                                     timestamp=int(time.time() * 1000))
+                url = build_sale_url(sub, section=section, first_row=page * PAGE_SIZE, timestamp=ts)
                 items, page_total = _fetch_page(url, client)
                 if total is None:
                     total = page_total
@@ -89,7 +89,6 @@ def scrape_sale_subscription(
                 rows = [r for r in listings_from_sale_json(items, fetched_at)
                         if filters.matches_sale(r, sub)]
                 batches.append(rows)
-                matched += len(rows)
                 if total is not None and len(seen) >= total:
                     break  # 已涵蓋官方總數
             running = merge_listings(sub, batches, region_name)
