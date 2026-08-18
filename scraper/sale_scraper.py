@@ -63,12 +63,10 @@ def scrape_sale_subscription(
     first = True
     try:
         for section in sections:
-            seen: set = set()          # 該區已見過的 houseid（判斷是否還有新頁）
-            total = None
-            # 同一 section 的所有分頁共用一個 timestamp，讓 591 把查詢定格、頁間重疊更少
-            ts = int(time.time() * 1000)
+            seen: set = set()          # 該區已見過的 houseid（去重＝實際量，不信 591 的 total）
+            total = None               # 只用來擋「翻過頭」：firstRow 超過 total 會回一組雜資料
+            ts = int(time.time() * 1000)  # 同一區各分頁共用 timestamp（定格、頁間重疊少）
             for page in range(MAX_PAGES):
-                # 不翻過首頁回報的 total：591 對超過筆數的 firstRow 會回「另一組」資料
                 if page > 0 and total is not None and page * PAGE_SIZE >= total:
                     break
                 if not first:
@@ -79,22 +77,19 @@ def scrape_sale_subscription(
                 if total is None:
                     total = page_total
                 if not items:
-                    break  # 被擋/失敗/無資料
+                    break  # 被擋/失敗/翻到底
                 if section is not None:
                     covered.add(str(section))
                 new_ids = {str(it.get("houseid")) for it in items} - seen
                 if not new_ids:
-                    break  # 這頁沒有新物件（591 已重複），停止翻頁
+                    break  # 這頁全是看過的（591 重排重複）→ 停止翻頁
                 seen |= new_ids
                 rows = [r for r in listings_from_sale_json(items, fetched_at)
                         if filters.matches_sale(r, sub)]
                 batches.append(rows)
-                if total is not None and len(seen) >= total:
-                    break  # 已涵蓋官方總數
             running = merge_listings(sub, batches, region_name)
-            note = "（591 分頁重排，未完全涵蓋）" if total and len(seen) < total else ""
-            log.info("[%s] sec=%s → 抓過 %d/%s、符合累計 %d%s",
-                     sub["id"], section, len(seen), total, len(running), note)
+            log.info("[%s] sec=%s → 抓過 %d 筆（591 report total=%s，不採信）、符合累計 %d",
+                     sub["id"], section, len(seen), total, len(running))
     finally:
         if own:
             client.close()
