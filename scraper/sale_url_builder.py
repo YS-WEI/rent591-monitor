@@ -36,11 +36,14 @@ def _pattern(layout) -> str | None:
     return ",".join(seen)
 
 
-def build_sale_url(sub: dict, section: str | None = None, first_row: int = 0) -> str:
+def build_sale_url(sub: dict, section: str | None = None, first_row: int = 0,
+                   timestamp: int | None = None) -> str:
     params: list[tuple[str, str]] = [
         ("type", "2"), ("category", "1"), ("shType", "list"),
         ("regionid", str(sub["region"])),
     ]
+    if timestamp is not None:
+        params.append(("timestamp", str(timestamp)))
 
     secs = [section] if section is not None else (sub.get("sections") or [])
     if secs:

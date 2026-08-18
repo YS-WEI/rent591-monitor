@@ -73,7 +73,8 @@ def scrape_sale_subscription(
                 if not first:
                     time.sleep(config.REQUEST_INTERVAL_SEC)
                 first = False
-                url = build_sale_url(sub, section=section, first_row=page * PAGE_SIZE)
+                url = build_sale_url(sub, section=section, first_row=page * PAGE_SIZE,
+                                     timestamp=int(time.time() * 1000))
                 items, page_total = _fetch_page(url, client)
                 if total is None:
                     total = page_total
