@@ -1,0 +1,19 @@
+{
+  "generated_at": "2026-08-18T10:52:03+00:00",
+  "kind": "sale",
+  "subscriptions": [
+    {
+      "id": "sub-1787050187051",
+      "name": "三重 4房以上",
+      "group": "三重",
+      "fetched": 0,
+      "unique_added": 0
+    }
+  ],
+  "report": {
+    "new": [],
+    "price_drop": [],
+    "removed": []
+  },
+  "listings": {}
+}
