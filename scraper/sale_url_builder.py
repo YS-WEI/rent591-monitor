@@ -14,9 +14,26 @@ from __future__ import annotations
 
 
 def _price_wan(low, high) -> str | None:
+    """總價（萬）→ 591 格式 `$min_$max`；開放上限為 `$min_$`。"""
     if low is None and high is None:
         return None
-    return f"{'' if low is None else low}_{'' if high is None else high}"
+    low_part = f"${0 if low is None else low}"
+    high_part = f"${high}" if high is not None else "$"
+    return f"{low_part}_{high_part}"
+
+
+def _pattern(layout) -> str | None:
+    """房數 → 591 買屋的 pattern 參數。'4'（4房以上）展開為 4,5（591 5=5房以上）。"""
+    if not layout:
+        return None
+    nums: list[str] = []
+    for l in layout:
+        if str(l) == "4":
+            nums += ["4", "5"]
+        else:
+            nums.append(str(l))
+    seen = list(dict.fromkeys(nums))  # 去重保序
+    return ",".join(seen)
 
 
 def build_sale_url(sub: dict, section: str | None = None, first_row: int = 0) -> str:
@@ -31,6 +48,10 @@ def build_sale_url(sub: dict, section: str | None = None, first_row: int = 0) ->
     shape = sub.get("shape") or []
     if shape:
         params.append(("shape", ",".join(str(s) for s in shape)))
+
+    pattern = _pattern(sub.get("layout"))
+    if pattern is not None:
+        params.append(("pattern", pattern))  # 房數（伺服器端篩選）
 
     price = _price_wan(sub.get("price_min"), sub.get("price_max"))
     if price is not None:
