@@ -21,7 +21,8 @@ process.stdin.on("end", () => {
     if (!o || d > 9 || typeof o !== "object") return;
     if (Array.isArray(o) && o.length && o[0] && typeof o[0] === "object") {
       const ks = Object.keys(o[0]);
-      if (ks.includes("id") && ks.includes("price") && (!best || o.length > best.length)) best = o;
+      // 租屋物件有 id、買屋物件有 houseid，皆含 price
+      if ((ks.includes("id") || ks.includes("houseid")) && ks.includes("price") && (!best || o.length > best.length)) best = o;
     }
     for (const k in o) { try { walk(o[k], d + 1); } catch (e) {} }
   })(nuxt, 0);
