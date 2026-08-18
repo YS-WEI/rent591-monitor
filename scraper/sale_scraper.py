@@ -52,6 +52,9 @@ def scrape_sale_subscription(
             total = None
             matched = 0
             for page in range(MAX_PAGES):
+                # 不翻過首頁回報的 total：591 對超過筆數的 firstRow 會回「另一組」資料
+                if page > 0 and total is not None and page * PAGE_SIZE >= total:
+                    break
                 if not first:
                     time.sleep(config.REQUEST_INTERVAL_SEC)
                 first = False
