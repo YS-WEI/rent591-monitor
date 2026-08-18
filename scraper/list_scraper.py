@@ -1,10 +1,9 @@
-"""列表頁抓取：多排序聯集法。
+"""列表頁抓取：逐區 + firstRow 分頁。
 
-CLAUDE.md 實測：列表頁是 JS 動態渲染，純 HTTP 只拿得到 SSR 首頁約 30 筆、
-page 參數無效。折衷做法為同一條件用多種 sort 各抓一次，以 listing_id 取聯集，
-結果 < 60 筆時通常能湊齊。
+列表資料取自 __NUXT__ 的結構化 JSON（見 scraper/nuxt.py）。每個 section 用 firstRow
+分頁抓到官方總數（total）或無新頁為止，以 listing_id 去重。
 
-反爬：請求間隔 ≥ 3 秒、帶正常 UA、失敗重試後跳過（不中斷整輪）。
+反爬：請求間隔 ≥ 4 秒、帶正常 UA、失敗重試後跳過（不中斷整輪）。
 """
 from __future__ import annotations
 
@@ -18,10 +17,14 @@ import httpx
 
 import config
 import filters
-from scraper.list_parser import parse_list_html
+from scraper.list_parser import listings_from_json
+from scraper.nuxt import extract_page
 from scraper.url_builder import build_list_url
 
 log = logging.getLogger(__name__)
+
+PAGE_SIZE = 30       # 591 每頁筆數（firstRow 遞增量）
+MAX_PAGES = 10       # 每區最多翻幾頁（封頂避免請求爆量）
 
 
 def _build_ssl_context() -> ssl.SSLContext:
@@ -106,36 +109,48 @@ def scrape_subscription(
     covered_sections: set = set()
     batches: list[list[dict]] = []
     first = True
+    sort = (sorts[0] if sorts else None) or sub.get("sort") or "posttime_desc"
     try:
         for section in sections:
             sub_one = sub if section is None else {**sub, "sections": [section]}
-            for sort in sorts:
+            seen: set = set()
+            total = None
+            for page in range(MAX_PAGES):
                 if not first:
                     time.sleep(config.REQUEST_INTERVAL_SEC)
                 first = False
-                url = build_list_url(sub_one, sort=sort)
+                url = build_list_url(sub_one, sort=sort, first_row=page * PAGE_SIZE)
                 html = fetch_list_html(url, client)
                 if not html:
-                    continue  # 被擋：此 section 這輪未涵蓋，不加入 covered
+                    break  # 被擋/失敗：此 section 未涵蓋，不加入 covered
                 if section is not None:
                     covered_sections.add(str(section))
-                parsed = parse_list_html(html, fetched_at=fetched_at)
-                if not parsed:
-                    # 200 但解析不到物件：多半是反爬頁／機房 IP 被擋，記標題方便診斷
-                    import re as _re
-                    m = _re.search(r"<title>([^<]*)</title>", html)
-                    log.warning(
-                        "[%s] sec=%s sort=%s → 0 筆（HTML %d bytes，title=%r）疑似反爬",
-                        sub["id"], section, sort, len(html), (m.group(1) if m else "?"),
-                    )
+                pg = extract_page(html)
+                items = pg["items"]
+                if total is None:
+                    total = pg["total"]
+                if not items:
+                    if page == 0 and total == 0:
+                        log.info("[%s] sec=%s → 此區無符合條件（total=0）", sub["id"], section)
+                    elif page == 0:
+                        import re as _re
+                        m = _re.search(r"<title>([^<]*)</title>", html)
+                        log.warning("[%s] sec=%s → 0 筆（HTML %d bytes，title=%r）疑似反爬",
+                                    sub["id"], section, len(html), (m.group(1) if m else "?"))
+                    break
+                new_ids = {str(it.get("id")) for it in items} - seen
+                if not new_ids:
+                    break  # 這頁沒有新物件（591 已重複），停止翻頁
+                seen |= new_ids
                 # 591 SSR 未套用房數/坪數等篩選，於程式端過濾
-                rows = [r for r in parsed if filters.matches(r, sub)]
+                rows = [r for r in listings_from_json(items, fetched_at) if filters.matches(r, sub)]
                 batches.append(rows)
-                running = merge_listings(sub, batches, region_name)
-                log.info(
-                    "[%s] sec=%s sort=%s → 符合 %d/%d 筆（聯集累計 %d）",
-                    sub["id"], section, sort, len(rows), len(parsed), len(running),
-                )
+                if total is not None and len(seen) >= total:
+                    break
+            running = merge_listings(sub, batches, region_name)
+            note = "（591 分頁重排，未完全涵蓋）" if total and len(seen) < total else ""
+            log.info("[%s] sec=%s → 抓過 %d/%s、符合累計 %d%s",
+                     sub["id"], section, len(seen), total, len(running), note)
     finally:
         if own_client:
             client.close()

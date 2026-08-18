@@ -19,11 +19,11 @@ def _range_param(low, high) -> str | None:
     return f"{low_part}$_{high_part}"
 
 
-def build_list_url(sub: dict, sort: str | None = None) -> str:
+def build_list_url(sub: dict, sort: str | None = None, first_row: int = 0) -> str:
     """訂閱 dict → 591 列表頁完整網址。
 
     參數順序刻意對齊 CLAUDE.md 的範例，方便人工核對。
-    `sort` 可覆寫訂閱自身的排序（多排序聯集抓取時會用到）。
+    `sort` 可覆寫訂閱自身的排序；`first_row` 為分頁起始列（0 時不附加，維持原網址）。
     """
     params: list[tuple[str, str]] = []
 
@@ -52,6 +52,9 @@ def build_list_url(sub: dict, sort: str | None = None) -> str:
     acreage = _range_param(sub.get("acreage_min"), sub.get("acreage_max"))
     if acreage is not None:
         params.append(("acreage", acreage))
+
+    if first_row:
+        params.append(("firstRow", str(first_row)))
 
     query = "&".join(f"{k}={v}" for k, v in params)
     return f"https://rent.591.com.tw/list?{query}"
