@@ -1,2 +1,3 @@
 httpx>=0.27
-selectolax>=0.3.21
+# 列表資料改從 __NUXT__ 取結構化 JSON（用 node eval），不再解析 HTML DOM，
+# 故不需 selectolax。內頁 enrich（若日後加）再視需要引入解析器。

@@ -11,8 +11,11 @@
 2. **SSR 只按 region/section 回傳，不套用 layout（房數）/acreage（坪數）等篩選**
    —— 那些是前端 JS 做的。實測查「台北中正 4 房」，SSR 回一堆 2 房/13 坪。
    → **必須在程式端自行過濾**（`filters.py`），否則案件數會灌水、通知誤報。
-3. **`window.__NUXT__` 是函式包裹的壓縮 JS**（非純 JSON），脆弱難解。
-   → 改走 **DOM 解析**（selectolax；主列表卡片 `div.item[data-id]`）。
+3. **列表結果放在 `window.__NUXT__`**（函式包裹的 Nuxt 狀態）。
+   → 用 **node（vm 沙箱 + timeout）eval** 取出結構化 JSON（見 `scraper/nuxt.py`）。
+   比解析 HTML DOM 更準、更穩、欄位更全（含 591 自算的 `diff_price`/`down_price_percent`、
+   結構化 `extra_fee`）。**v1.1 起租屋改用此法，不再用 selectolax。**
+   註：租屋 `layoutStr` 只有「房+廳」無「衛」；買屋 `room` 才含「衛」。
 4. **時間只有相對值**（「N 天前更新」「12 分鐘前」）→ 抓取當下即時換算絕對日期
    （`posted_at ≈ fetch_time − 相對時間`，誤差約一天內）。
 5. **反爬**：對機房 IP（GitHub Actions＝Azure，非台灣）**偶發 403**，但重試通常能過。
