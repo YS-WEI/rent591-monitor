@@ -78,6 +78,34 @@ rent591-monitor/
 5. **反爬**：請求間隔建議 ≥ 3 秒、帶正常 User-Agent。591 對高頻請求會擋。
    偶發失敗要能重試與跳過，不可讓整輪更新中斷。
 
+## ⚠️ 買屋（中古屋）實測發現（2026-08-19 驗證）
+
+1. **租屋與買屋是不同後端，抓法不同**：
+   - 租屋走 `rent.591.com.tw` HTML（SSR），資料在 DOM 也在 `__NUXT__`；我們取
+     `__NUXT__` 的結構化 JSON。**`firstRow` 翻頁有效**（本機測 0/30/60 三頁 id
+     零重疊；Actions 產出的 latest.json 單訂閱破 79、單區破 32，證明機房 IP 能翻）。
+   - 買屋走 BFF JSON API `bff-house.591.com.tw/v1/web/sale/list`（免 CSRF token，
+     只要正常 cookie）。**買屋的 `sale.591.com.tw` HTML SSR 不吃翻頁**（firstRow/page
+     都回第一頁），翻頁只能靠 BFF；瀏覽器點下一頁其實是 JS 打 BFF 的 XHR。
+
+2. **BFF 對 GitHub Actions 機房 IP 會冷啟動 403**：非永久封鎖，是速率限制冷卻窗口。
+   - 解法（已採用）：每次開跑先 GET `sale.591.com.tw` 主站拿 cookie
+     （webp/urlJumpIp/T591_TOKEN）**暖機**，再打 BFF → 實測第一枪即 200、零 403。
+   - 兜底：每區第一枪重試 4→6 次（退避 …64→128）熬過冷卻；一旦一枪 200，同 session
+     後續分頁全放行。（未暖機時實測需熬到第 5 次 ~60s 才過。）
+
+3. **BFF 有做伺服器端篩選**（與租屋 SSR 相反）：`pattern`（房數）、`shape`、`price`、
+   `section` 都生效（實測帶 `pattern=4,5` → total 由 1285 降為 97）。故程式端**不重篩**
+   這些，只補篩未進 API 的坪數(acreage)、屋齡(houseage_max)。
+
+4. **591 把「開放式格局」歸進「N 房以上」清單**：帶 `pattern=4,5` 時約半數回傳
+   `room="開放式格局"`（解析不出房數，多為新成屋/預售換約）。預設**過濾掉**；訂閱設
+   `include_open_plan=true` 才保留（filters `_layout_ok(unknown_ok=)`）。
+
+5. **`total` 不可信**：同條件會跳動（如 93↔97、492…係 API bug）。以 `house_list` 用
+   `houseid` 去重後的數量為實際量；`total` 僅用來擋 `firstRow` 翻過頭（超過會回另一組
+   ~374 筆雜資料）。
+
 ## 列表頁可解析欄位
 
 物件 ID（URL 尾碼）、標題、租金、額外費用（「額外費用 1,580元/月」）或

@@ -12,12 +12,17 @@ from __future__ import annotations
 import config
 
 
-def _layout_ok(rooms: int | None, layout: list | None) -> bool:
-    """房數是否符合。layout 值 '4' 代表「4 房以上」，其餘為精確房數。"""
+def _layout_ok(rooms: int | None, layout: list | None, unknown_ok: bool = False) -> bool:
+    """房數是否符合。layout 值 '4' 代表「4 房以上」，其餘為精確房數。
+
+    unknown_ok：房數解析不出（rooms=None，如「開放式格局」）時是否放行。
+    租屋 SSR 未做房數篩選 → 預設 False（嚴格）；買屋 BFF 已用 pattern 篩過房數
+    → 傳 True，解析不出就信任伺服器，不再誤殺。
+    """
     if not layout:
         return True
     if rooms is None:
-        return False  # 無房數（如開放式/工作室）不算符合 X 房
+        return unknown_ok
     for l in layout:
         l = int(l)
         if l >= 4 and rooms >= 4:
@@ -63,12 +68,18 @@ def _shape_ok(shape_name, shape_codes) -> bool:
 def matches_sale(listing: dict, sub: dict) -> bool:
     """買屋（中古屋）物件是否符合訂閱條件。
 
-    total_price（萬）用 sub.price_min/price_max；坪數 acreage_min/max；
-    屋齡上限 houseage_max；型態 shape（以名稱比對）。591 SSR 未必套用房數等篩選，
-    故一律在程式端過濾。
+    買屋走 BFF API，房數(pattern)、型態(shape)、總價(price)、區域(section) 已由
+    伺服器端篩過（實測帶 pattern=4,5 → total 1285 降為 97）。其中 591 會把「開放式
+    格局」歸類進「N 房以上」清單，但這類物件解析不出房數（rooms=None）。
+
+    預設把「開放式格局」過濾掉；訂閱設 include_open_plan=true 才保留
+    （透過 _layout_ok 的 unknown_ok）。
+
+    坪數(acreage_min/max)、屋齡上限(houseage_max) 未送進 API，仍在程式端過濾。
     """
     return (
-        _layout_ok(listing.get("rooms"), sub.get("layout"))
+        _layout_ok(listing.get("rooms"), sub.get("layout"),
+                   unknown_ok=bool(sub.get("include_open_plan")))
         and _range_ok(listing.get("total_price"), sub.get("price_min"), sub.get("price_max"))
         and _range_ok(listing.get("size_ping"), sub.get("acreage_min"), sub.get("acreage_max"))
         and (sub.get("houseage_max") is None

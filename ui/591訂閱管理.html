@@ -109,6 +109,8 @@ input:focus{outline:2px solid var(--accent);outline-offset:1px;border-color:var(
 .modebtn{flex:1;text-align:center;padding:10px;border-radius:12px;font-size:15px;font-weight:800;border:1px solid var(--line);background:var(--card);color:var(--muted);cursor:pointer;font-family:inherit}
 .modebtn.on{background:var(--ink);color:#fff;border-color:var(--ink)}
 .hide{display:none!important}
+.chk{display:flex;align-items:center;gap:8px;cursor:pointer;font-weight:400}
+.chk input{width:16px;height:16px;cursor:pointer}
 .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 18px;border-radius:12px;font-size:13px;opacity:0;transition:opacity .25s;pointer-events:none;z-index:99;max-width:90%;text-align:center}
 .toast.show{opacity:1}
 .loading{text-align:center;color:var(--muted);padding:40px 0;font-size:14px}
@@ -169,6 +171,8 @@ input:focus{outline:2px solid var(--accent);outline-offset:1px;border-color:var(
       <input type="number" id="f-acreMax" placeholder="不限" min="0"></div></div>
     <div class="field hide" id="f-houseage-wrap"><label>屋齡上限（年）<span class="hint">留空＝不限</span></label>
       <input type="number" id="f-houseage" placeholder="不限" min="0"></div>
+    <div class="field hide" id="f-openplan-wrap"><label>開放式格局<span class="hint">591 會把開放式歸進 N 房清單，預設濾掉</span></label>
+      <label class="chk"><input type="checkbox" id="f-openplan"> 也納入開放式格局的物件</label></div>
     <div class="panel-actions">
       <button class="btn-line" onclick="closeEditor()">取消</button>
       <button class="btn-main" onclick="saveSub()">儲存訂閱</button>
@@ -230,7 +234,7 @@ let watchFilter="";               // 關注頁「只看區域」篩選
 let watchPerson="";               // 關注頁「看誰的」篩選
 let form=blankForm();
 
-function blankForm(){return{group:"我",type:mode,region:"3",sections:[],kind:(mode==="sale"?"9":"1"),layout:[],shape:[],name:"",price_min:"",price_max:"",acreage_min:"",acreage_max:"",houseage_max:""};}
+function blankForm(){return{group:"我",type:mode,region:"3",sections:[],kind:(mode==="sale"?"9":"1"),layout:[],shape:[],name:"",price_min:"",price_max:"",acreage_min:"",acreage_max:"",houseage_max:"",include_open_plan:false};}
 // 自動從 GitHub Pages 網址判斷 owner/repo（免手動設定）
 function detectRepo(){
   const h=location.hostname,p=location.pathname.split("/").filter(Boolean);
@@ -540,7 +544,7 @@ async function persistSubs(msg){
 function openEditor(id){
   editingId=id||null;
   const s=id?subsDoc.subscriptions.find(x=>x.id===id):null;
-  form=s?{group:s.group||"我",type:s.type||"rent",region:s.region,sections:[...(s.sections||[])],kind:s.kind||(s.type==="sale"?"9":"1"),layout:[...(s.layout||[])],shape:[...(s.shape||[])],name:s.name||"",price_min:s.price_min??"",price_max:s.price_max??"",acreage_min:s.acreage_min??"",acreage_max:s.acreage_max??"",houseage_max:s.houseage_max??""}:blankForm();
+  form=s?{group:s.group||"我",type:s.type||"rent",region:s.region,sections:[...(s.sections||[])],kind:s.kind||(s.type==="sale"?"9":"1"),layout:[...(s.layout||[])],shape:[...(s.shape||[])],name:s.name||"",price_min:s.price_min??"",price_max:s.price_max??"",acreage_min:s.acreage_min??"",acreage_max:s.acreage_max??"",houseage_max:s.houseage_max??"",include_open_plan:!!s.include_open_plan}:blankForm();
   const isSale=(form.type||"rent")==="sale";
   document.getElementById("panelTitle").textContent=(id?"編輯":"新增")+(isSale?"買屋":"租屋")+"訂閱";
   document.getElementById("f-group").value=form.group||"我";
@@ -550,9 +554,11 @@ function openEditor(id){
   document.getElementById("f-acreMin").value=form.acreage_min??"";
   document.getElementById("f-acreMax").value=form.acreage_max??"";
   document.getElementById("f-houseage").value=form.houseage_max??"";
+  document.getElementById("f-openplan").checked=!!form.include_open_plan;
   // 依租/買切換欄位
   document.getElementById("f-kind-wrap").classList.toggle("hide",isSale);      // 買屋不選租屋類型
   document.getElementById("f-houseage-wrap").classList.toggle("hide",!isSale); // 屋齡只買屋
+  document.getElementById("f-openplan-wrap").classList.toggle("hide",!isSale); // 開放式格局只買屋
   document.getElementById("f-price-label").textContent=isSale?"總價（萬）":"租金（元/月）";
   document.getElementById("f-priceMin").step=isSale?100:1000;
   document.getElementById("f-priceMax").step=isSale?100:1000;
@@ -593,7 +599,7 @@ async function saveSub(){
   if(!form.sections.length){showToast("請至少選一個區域");return;}
   if(!form.name) form.name=form.sections.map(id=>REGIONS[form.region].sections[id]).join("・")+((form.layout||[]).length?" "+form.layout.map(l=>LAYOUTS[l]).join("/"):"");
   const rec={id:editingId||("sub-"+Date.now()),type:form.type||"rent",name:form.name,group:form.group,enabled:true,region:form.region,sections:form.sections,kind:isSale?(form.kind||"9"):form.kind,layout:form.layout,shape:form.shape,price_min:pmin,price_max:pmax,acreage_min:amin,acreage_max:amax,sort:"posttime_desc"};
-  if(isSale) rec.houseage_max=num(document.getElementById("f-houseage").value);
+  if(isSale){rec.houseage_max=num(document.getElementById("f-houseage").value);rec.include_open_plan=document.getElementById("f-openplan").checked;}
   if(editingId){const i=subsDoc.subscriptions.findIndex(x=>x.id===editingId);rec.enabled=subsDoc.subscriptions[i].enabled;subsDoc.subscriptions[i]=rec;}
   else subsDoc.subscriptions.push(rec);
   closeEditor();renderSubs();

@@ -36,6 +36,20 @@ def test_sale_rejects_wrong_shape():
 def test_sale_rejects_wrong_room():
     assert not matches_sale(_sale(rooms=1), SALE_SUB)
 
+
+def test_sale_open_plan_filtered_by_default():
+    # 591 會把「開放式格局」（解析不出房數）歸進 N 房以上清單；預設過濾掉
+    assert not matches_sale(_sale(rooms=None), SALE_SUB)
+
+
+def test_sale_open_plan_kept_when_opted_in():
+    # 訂閱設 include_open_plan=true 才保留開放式格局
+    sub = {**SALE_SUB, "include_open_plan": True}
+    assert matches_sale(_sale(rooms=None), sub)
+    # 但明確解析出的錯房數仍要擋（防呆），且其他條件照常
+    assert not matches_sale(_sale(rooms=1), sub)
+    assert not matches_sale(_sale(rooms=None, total_price=4000), sub)
+
 SUB = {"kind": "1", "layout": ["4"], "price_min": 0, "price_max": 50000,
        "acreage_min": 30, "acreage_max": None}
 
