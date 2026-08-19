@@ -15,7 +15,7 @@ import httpx
 import config
 import filters
 from scraper.list_scraper import _build_ssl_context, fetch_list_html, merge_listings
-from scraper.sale_parser import listings_from_sale_json
+from scraper.sale_parser import dedupe_sale_units, listings_from_sale_json
 from scraper.sale_url_builder import build_sale_url
 
 log = logging.getLogger(__name__)
@@ -108,7 +108,10 @@ def scrape_sale_subscription(
             client.close()
 
     merged = merge_listings(sub, batches, region_name)
+    deduped = dedupe_sale_units(merged)
+    if len(deduped) != len(merged):
+        log.info("[%s] 同案去重 + 濾死連結：%d → %d 筆", sub["id"], len(merged), len(deduped))
     covered_districts = None if region_wide else {section_map[s] for s in covered if s in section_map}
-    log.info("[%s] 完成，聯集共 %d 筆（涵蓋區：%s）",
-             sub["id"], len(merged), "全區" if covered_districts is None else "、".join(sorted(covered_districts)) or "無")
-    return merged, covered_districts
+    log.info("[%s] 完成，共 %d 筆（涵蓋區：%s）",
+             sub["id"], len(deduped), "全區" if covered_districts is None else "、".join(sorted(covered_districts)) or "無")
+    return deduped, covered_districts

@@ -9,6 +9,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from filters import matches, matches_sale, _layout_ok  # noqa: E402
+from scraper.sale_parser import dedupe_sale_units  # noqa: E402
 
 SALE_SUB = {"layout": ["3", "4"], "price_min": 2000, "price_max": 3500,
             "acreage_min": None, "acreage_max": None, "houseage_max": 30, "shape": ["2"]}
@@ -49,6 +50,43 @@ def test_sale_open_plan_kept_when_opted_in():
     # 但明確解析出的錯房數仍要擋（防呆），且其他條件照常
     assert not matches_sale(_sale(rooms=1), sub)
     assert not matches_sale(_sale(rooms=None, total_price=4000), sub)
+
+def _unit(lid, **kw):
+    d = {"listing_id": str(lid), "community": "三重第一站", "size_ping": 22.95,
+         "floor": "1F", "rooms": 4, "total_price": 1798.0}
+    d.update(kw)
+    return d
+
+
+def test_dedupe_same_unit_keeps_one_live():
+    # 同一物件 11 個仲介刊登（含 24 號段死連結）→ 收成一筆，且是活連結
+    rows = [_unit(20679197), _unit(20568512), _unit(24876613), _unit(24899709),
+            _unit(20130917)]
+    out = dedupe_sale_units(rows)
+    assert len(out) == 1
+    assert out[0]["listing_id"] == "20130917"  # 最小 houseid，跨輪最穩定
+    assert not any(r["listing_id"].startswith("24") for r in out)  # 死連結不留
+
+
+def test_dedupe_drops_all_dead_orphan():
+    # 一間只剩 24 號段（全死連結）→ 整組丟棄，不留死連結
+    assert dedupe_sale_units([_unit(24876613), _unit(24899709)]) == []
+
+
+def test_dedupe_distinct_units_survive():
+    a = _unit(20111111, community="A", total_price=1500.0)
+    b = _unit(20222222, community="B", total_price=1500.0)
+    out = dedupe_sale_units([a, b])
+    assert {r["listing_id"] for r in out} == {"20111111", "20222222"}
+
+
+def test_dedupe_no_community_passthrough():
+    # 無社區資訊無法安全歸併 → 原樣保留（但死連結仍濾除）
+    live = _unit(20333333, community="")
+    dead = _unit(24333333, community="")
+    out = dedupe_sale_units([live, dead])
+    assert [r["listing_id"] for r in out] == ["20333333"]
+
 
 SUB = {"kind": "1", "layout": ["4"], "price_min": 0, "price_max": 50000,
        "acreage_min": 30, "acreage_max": None}
