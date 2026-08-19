@@ -63,11 +63,10 @@ def scrape_sale_subscription(
             follow_redirects=True, verify=_build_ssl_context(),
         )
         # 暖機：先載主站取得 cookie（webp/urlJumpIp/T591_TOKEN），模仿瀏覽器「先載頁再打 API」，
-        # 降低 BFF 冷啟動 403 機率。失敗不影響後續（照樣靠重試熬）。
-        try:
-            client.get(WARMUP_URL, timeout=config.REQUEST_TIMEOUT_SEC)
-        except Exception as exc:  # noqa: BLE001
-            log.warning("暖機請求失敗（略過，續打 BFF）：%s", exc)
+        # 降低 BFF 冷啟動 403 機率。主站本身也會對機房 IP 冷啟動 403，故走 fetch_list_html
+        # 的指數退避重試（會 raise_for_status，403 才算失敗）；重試後仍失敗就略過，續靠 BFF 自身重試。
+        if fetch_list_html(WARMUP_URL, client, max_retries=COLD_START_RETRIES) is None:
+            log.warning("暖機請求重試後仍失敗（略過，續打 BFF）：%s", WARMUP_URL)
 
     covered: set = set()
     batches: list[list[dict]] = []
