@@ -22,11 +22,16 @@ log = logging.getLogger(__name__)
 
 PAGE_SIZE = 30       # 591 每頁筆數（firstRow 以此遞增）
 MAX_PAGES = 10       # 每區最多翻幾頁（封頂避免請求爆量）
+# BFF 對機房 IP 冷啟動會連續 403，需靠退避熬過冷卻窗口。實測第 5 次（累計 ~60s）
+# 才放行，故多留幾次（退避 …64→128，累計 ~4 分）確保突破；一旦有一枪 200，
+# 同一 session 後續分頁即全部放行，不再付這個成本。
+COLD_START_RETRIES = 6
+WARMUP_URL = "https://sale.591.com.tw/"  # 先載主站（未被 IP 擋）取得 cookie，再打 BFF
 
 
-def _fetch_page(url: str, client: httpx.Client) -> tuple[list, int | None]:
+def _fetch_page(url: str, client: httpx.Client, max_retries: int | None = None) -> tuple[list, int | None]:
     """打 BFF API 回傳 (house_list, total)；失敗回 ([], None)。"""
-    text = fetch_list_html(url, client)  # 沿用其重試/退避；回傳字串
+    text = fetch_list_html(url, client, max_retries=max_retries)  # 沿用其重試/退避；回傳字串
     if not text:
         return [], None
     try:
@@ -57,6 +62,12 @@ def scrape_sale_subscription(
                      "Accept": "application/json", "Referer": "https://sale.591.com.tw/"},
             follow_redirects=True, verify=_build_ssl_context(),
         )
+        # 暖機：先載主站取得 cookie（webp/urlJumpIp/T591_TOKEN），模仿瀏覽器「先載頁再打 API」，
+        # 降低 BFF 冷啟動 403 機率。失敗不影響後續（照樣靠重試熬）。
+        try:
+            client.get(WARMUP_URL, timeout=config.REQUEST_TIMEOUT_SEC)
+        except Exception as exc:  # noqa: BLE001
+            log.warning("暖機請求失敗（略過，續打 BFF）：%s", exc)
 
     covered: set = set()
     batches: list[list[dict]] = []
@@ -73,7 +84,9 @@ def scrape_sale_subscription(
                     time.sleep(config.REQUEST_INTERVAL_SEC)
                 first = False
                 url = build_sale_url(sub, section=section, first_row=page * PAGE_SIZE, timestamp=ts)
-                items, page_total = _fetch_page(url, client)
+                # 每區第一枪多給幾次重試熬過冷啟動 403；破關後同 session 後續分頁走預設即可
+                retries = COLD_START_RETRIES if page == 0 else None
+                items, page_total = _fetch_page(url, client, max_retries=retries)
                 if total is None:
                     total = page_total
                 if not items:

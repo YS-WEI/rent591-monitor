@@ -39,16 +39,21 @@ def _build_ssl_context() -> ssl.SSLContext:
     return ctx
 
 
-def fetch_list_html(url: str, client: httpx.Client) -> str | None:
-    """抓單一列表頁 HTML；失敗重試 config.MAX_RETRIES 次後回 None（不拋出）。"""
-    for attempt in range(config.MAX_RETRIES + 1):
+def fetch_list_html(url: str, client: httpx.Client, max_retries: int | None = None) -> str | None:
+    """抓單一列表頁 HTML；失敗重試後回 None（不拋出）。
+
+    max_retries 未指定則用 config.MAX_RETRIES。買屋 BFF 對機房 IP 冷啟動會連續 403，
+    需較多次退避才熬得過冷卻窗口（見 sale_scraper），故可傳較大值。
+    """
+    retries = config.MAX_RETRIES if max_retries is None else max_retries
+    for attempt in range(retries + 1):
         try:
             resp = client.get(url, timeout=config.REQUEST_TIMEOUT_SEC)
             resp.raise_for_status()
             return resp.text
         except Exception as exc:  # noqa: BLE001 — 任何失敗都應可跳過重試
-            if attempt < config.MAX_RETRIES:
-                backoff = config.REQUEST_INTERVAL_SEC * (2 ** attempt)  # 指數退避 4→8→16→32
+            if attempt < retries:
+                backoff = config.REQUEST_INTERVAL_SEC * (2 ** attempt)  # 指數退避 4→8→16→32…
                 log.warning("抓取失敗（第 %d 次重試，等 %ds）：%s", attempt + 1, backoff, exc)
                 time.sleep(backoff)
                 continue
