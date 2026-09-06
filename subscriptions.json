@@ -148,6 +148,7 @@
     },
     {
       "id": "sub-1788677370187",
+      "type": "rent",
       "name": "單人台北",
       "group": "單人",
       "enabled": true,
@@ -159,9 +160,7 @@
         "9"
       ],
       "kind": "2",
-      "layout": [
-        "1"
-      ],
+      "layout": [],
       "shape": [],
       "price_min": null,
       "price_max": 15000,
