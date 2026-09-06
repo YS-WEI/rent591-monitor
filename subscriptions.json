@@ -186,7 +186,7 @@
       "shape": [],
       "price_min": null,
       "price_max": 15000,
-      "acreage_min": null,
+      "acreage_min": 8,
       "acreage_max": null,
       "sort": "posttime_desc"
     },
