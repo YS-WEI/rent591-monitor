@@ -170,17 +170,18 @@
       "sort": "posttime_desc"
     },
     {
-      "id": "sub-1788677870178",
+      "id": "sub-1788677942025",
+      "type": "rent",
       "name": "單人新北",
       "group": "單人",
       "enabled": true,
       "region": "3",
       "sections": [
-        "44",
         "43",
+        "44",
         "47"
       ],
-      "kind": "1",
+      "kind": "2",
       "layout": [
         "1"
       ],
