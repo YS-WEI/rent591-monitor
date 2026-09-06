@@ -125,6 +125,28 @@
       "houseage_max": null
     },
     {
+      "id": "sub-1788677303859",
+      "name": "單人",
+      "group": "單人",
+      "enabled": true,
+      "region": "3",
+      "sections": [
+        "43",
+        "47",
+        "44"
+      ],
+      "kind": "1",
+      "layout": [
+        "1"
+      ],
+      "shape": [],
+      "price_min": null,
+      "price_max": 15000,
+      "acreage_min": null,
+      "acreage_max": null,
+      "sort": "posttime_desc"
+    },
+    {
       "id": "sub-1788677370187",
       "name": "單人台北",
       "group": "單人",
@@ -148,18 +170,42 @@
       "sort": "posttime_desc"
     },
     {
-      "id": "sub-1788677870178",
+      "id": "sub-1788677942025",
       "type": "rent",
       "name": "單人新北",
       "group": "單人",
       "enabled": true,
       "region": "3",
       "sections": [
-        "44",
         "43",
+        "44",
         "47"
       ],
       "kind": "2",
+      "layout": [
+        "1"
+      ],
+      "shape": [],
+      "price_min": null,
+      "price_max": 15000,
+      "acreage_min": null,
+      "acreage_max": null,
+      "sort": "posttime_desc"
+    },
+    {
+      "id": "sub-1788678076742",
+      "type": "rent",
+      "name": "單人台北",
+      "group": "單人",
+      "enabled": true,
+      "region": "1",
+      "sections": [
+        "4",
+        "7",
+        "11",
+        "9"
+      ],
+      "kind": "1",
       "layout": [
         "1"
       ],
