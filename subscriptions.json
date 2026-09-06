@@ -168,6 +168,28 @@
       "acreage_min": null,
       "acreage_max": null,
       "sort": "posttime_desc"
+    },
+    {
+      "id": "sub-1788677870178",
+      "name": "單人新北",
+      "group": "單人",
+      "enabled": true,
+      "region": "3",
+      "sections": [
+        "44",
+        "43",
+        "47"
+      ],
+      "kind": "1",
+      "layout": [
+        "1"
+      ],
+      "shape": [],
+      "price_min": null,
+      "price_max": 15000,
+      "acreage_min": null,
+      "acreage_max": null,
+      "sort": "posttime_desc"
     }
   ],
   "settings": {
