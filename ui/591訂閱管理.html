@@ -322,6 +322,7 @@ async function boot(){
     showToast("⚠️ "+e.message);
   }
   subsDirty=false;updateSaveBar(); // 剛從 GitHub 載入＝乾淨狀態
+  maybeRestoreDraft();            // 若有未存草稿（上次沒按儲存）問要不要接續
   const tab=readUrl();            // 從網址還原模式/篩選/分頁
   applyMode();                    // 依 mode 設定 latest 與按鈕
   renderStatus();renderSubs();renderWatch();
@@ -553,7 +554,10 @@ function renderSubs(){
     </div>`).join("");
 }
 // ===== 批次存檔：本地累積變更，全部改完再一次寫回 GitHub =====
-function markDirty(){subsDirty=true;updateSaveBar();}
+const DRAFT_KEY="rent591_subs_draft";  // 未存變更的本地草稿（重整/手滑救援用）
+function saveDraft(){try{localStorage.setItem(DRAFT_KEY,JSON.stringify({savedAt:Date.now(),doc:subsDoc}));}catch(e){}}
+function clearDraft(){try{localStorage.removeItem(DRAFT_KEY);}catch(e){}}
+function markDirty(){subsDirty=true;saveDraft();updateSaveBar();}
 function updateSaveBar(){document.getElementById("saveBar").classList.toggle("show",subsDirty);}
 async function commitChanges(){
   if(!subsDirty) return;
@@ -561,7 +565,7 @@ async function commitChanges(){
   const btn=document.getElementById("saveBarBtn");btn.disabled=true;const label=btn.textContent;btn.textContent="儲存中…";
   try{
     await ghPutFile("subscriptions.json",subsDoc,"更新訂閱設定");
-    subsDirty=false;updateSaveBar();
+    subsDirty=false;clearDraft();updateSaveBar();
     showToast("已存回 GitHub ✓（約數分鐘後排程生效）");
   }catch(e){showToast("⚠️ "+e.message);}
   finally{btn.disabled=false;btn.textContent=label;}
@@ -572,9 +576,22 @@ async function discardChanges(){
   try{
     const s=await pubGet("../subscriptions.json");
     subsDoc=s||{subscriptions:[],settings:{}};
-    subsDirty=false;updateSaveBar();renderSubs();
+    subsDirty=false;clearDraft();updateSaveBar();renderSubs();
     showToast("已還原為 GitHub 版本");
   }catch(e){showToast("⚠️ 還原失敗："+e.message);}
+}
+// 重整/重開後，若有和 GitHub 版本不同的未存草稿，問使用者要不要接續
+function maybeRestoreDraft(){
+  let d=null;try{d=JSON.parse(localStorage.getItem(DRAFT_KEY)||"null");}catch(e){}
+  if(!d||!d.doc) return;
+  if(JSON.stringify(d.doc)===JSON.stringify(subsDoc)){clearDraft();return;} // 與線上相同＝無意義
+  const when=new Date(d.savedAt||Date.now()).toLocaleString();
+  if(confirm(`偵測到上次未儲存的訂閱編輯（${when}）。\n\n按「確定」接續這些編輯（記得之後按儲存）；\n按「取消」捨棄、使用 GitHub 上的版本。`)){
+    subsDoc=d.doc;subsDirty=true;
+  }else{
+    clearDraft();
+  }
+  updateSaveBar();
 }
 // 有未存變更時，離開/重整前提醒（本地變更尚未寫回 GitHub）
 window.addEventListener("beforeunload",(e)=>{if(subsDirty){e.preventDefault();e.returnValue="";}});
