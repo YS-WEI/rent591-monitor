@@ -113,6 +113,16 @@ input:focus{outline:2px solid var(--accent);outline-offset:1px;border-color:var(
 .chk input{width:16px;height:16px;cursor:pointer}
 .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 18px;border-radius:12px;font-size:13px;opacity:0;transition:opacity .25s;pointer-events:none;z-index:99;max-width:90%;text-align:center}
 .toast.show{opacity:1}
+.savebar{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);display:none;
+  align-items:center;gap:12px;background:var(--ink);color:#fff;padding:10px 14px;border-radius:14px;
+  box-shadow:0 6px 24px rgba(0,0,0,.25);z-index:100;max-width:94%}
+.savebar.show{display:flex}
+.savebar .sb-msg{font-size:13px;line-height:1.3}
+.savebar .sb-msg b{font-weight:600}
+.savebar button{border:0;border-radius:10px;padding:8px 14px;font-size:13px;cursor:pointer}
+.savebar .sb-save{background:#fff;color:var(--ink);font-weight:600}
+.savebar .sb-save:disabled{opacity:.6;cursor:default}
+.savebar .sb-discard{background:transparent;color:#fff;border:1px solid rgba(255,255,255,.4)}
 .loading{text-align:center;color:var(--muted);padding:40px 0;font-size:14px}
 @media(min-width:600px){.overlay{align-items:center}.panel{border-radius:18px}}
 @media(prefers-reduced-motion:reduce){.toast{transition:none}}
@@ -204,6 +214,11 @@ input:focus{outline:2px solid var(--accent);outline-offset:1px;border-color:var(
   </div>
 </div>
 
+<div class="savebar" id="saveBar">
+  <div class="sb-msg"><b>有未儲存的訂閱變更</b><br>全部改完再按儲存，一次更新（約數分鐘後排程生效）</div>
+  <button class="sb-discard" onclick="discardChanges()">捨棄</button>
+  <button class="sb-save" id="saveBarBtn" onclick="commitChanges()">💾 儲存全部變更</button>
+</div>
 <div class="toast" id="toast"></div>
 
 <script>
@@ -228,6 +243,7 @@ let watchDoc={items:{}};             // watchlist.json 內容
 let latestRent=null, latestSale=null;// 兩種模式的資料
 let latest=null;                     // 目前模式的 latest（=latestRent/latestSale）
 let editingId=null;
+let subsDirty=false;                 // 訂閱有未存回 GitHub 的本地變更（批次存檔用）
 let statusFilter="";              // 狀態頁「只看區域」篩選
 let personFilter="";              // 狀態頁「看誰的」篩選
 let watchFilter="";               // 關注頁「只看區域」篩選
@@ -305,6 +321,7 @@ async function boot(){
     document.getElementById("genAt").textContent="載入失敗："+e.message;
     showToast("⚠️ "+e.message);
   }
+  subsDirty=false;updateSaveBar(); // 剛從 GitHub 載入＝乾淨狀態
   const tab=readUrl();            // 從網址還原模式/篩選/分頁
   applyMode();                    // 依 mode 設定 latest 與按鈕
   renderStatus();renderSubs();renderWatch();
@@ -535,10 +552,32 @@ function renderSubs(){
       </div>
     </div>`).join("");
 }
-async function persistSubs(msg){
-  try{await ghPutFile("subscriptions.json",subsDoc,msg);showToast("已存回 GitHub ✓");}
-  catch(e){showToast("⚠️ "+e.message);}
+// ===== 批次存檔：本地累積變更，全部改完再一次寫回 GitHub =====
+function markDirty(){subsDirty=true;updateSaveBar();}
+function updateSaveBar(){document.getElementById("saveBar").classList.toggle("show",subsDirty);}
+async function commitChanges(){
+  if(!subsDirty) return;
+  if(!hasToken()){needToken();return;}
+  const btn=document.getElementById("saveBarBtn");btn.disabled=true;const label=btn.textContent;btn.textContent="儲存中…";
+  try{
+    await ghPutFile("subscriptions.json",subsDoc,"更新訂閱設定");
+    subsDirty=false;updateSaveBar();
+    showToast("已存回 GitHub ✓（約數分鐘後排程生效）");
+  }catch(e){showToast("⚠️ "+e.message);}
+  finally{btn.disabled=false;btn.textContent=label;}
 }
+async function discardChanges(){
+  if(!subsDirty) return;
+  if(!confirm("捨棄所有未儲存的訂閱變更，還原成 GitHub 上的版本？"))return;
+  try{
+    const s=await pubGet("../subscriptions.json");
+    subsDoc=s||{subscriptions:[],settings:{}};
+    subsDirty=false;updateSaveBar();renderSubs();
+    showToast("已還原為 GitHub 版本");
+  }catch(e){showToast("⚠️ 還原失敗："+e.message);}
+}
+// 有未存變更時，離開/重整前提醒（本地變更尚未寫回 GitHub）
+window.addEventListener("beforeunload",(e)=>{if(subsDirty){e.preventDefault();e.returnValue="";}});
 
 // ===== 編輯面板 =====
 function openEditor(id){
@@ -602,11 +641,10 @@ async function saveSub(){
   if(isSale){rec.houseage_max=num(document.getElementById("f-houseage").value);rec.include_open_plan=document.getElementById("f-openplan").checked;}
   if(editingId){const i=subsDoc.subscriptions.findIndex(x=>x.id===editingId);rec.enabled=subsDoc.subscriptions[i].enabled;subsDoc.subscriptions[i]=rec;}
   else subsDoc.subscriptions.push(rec);
-  closeEditor();renderSubs();
-  await persistSubs(editingId?`更新訂閱 ${rec.name}`:`新增訂閱 ${rec.name}`);
+  closeEditor();renderSubs();markDirty();
 }
-async function toggleSub(id){if(!hasToken()){needToken();return;}const s=subsDoc.subscriptions.find(x=>x.id===id);s.enabled=!s.enabled;renderSubs();await persistSubs(`${s.enabled?"啟用":"暫停"}訂閱 ${s.name}`);}
-async function delSub(id){if(!hasToken()){needToken();return;}const s=subsDoc.subscriptions.find(x=>x.id===id);if(!confirm(`確定刪除「${s.name}」？`))return;subsDoc.subscriptions=subsDoc.subscriptions.filter(x=>x.id!==id);renderSubs();await persistSubs(`刪除訂閱 ${s.name}`);}
+function toggleSub(id){if(!hasToken()){needToken();return;}const s=subsDoc.subscriptions.find(x=>x.id===id);s.enabled=!s.enabled;renderSubs();markDirty();}
+function delSub(id){if(!hasToken()){needToken();return;}const s=subsDoc.subscriptions.find(x=>x.id===id);if(!confirm(`確定刪除「${s.name}」？`))return;subsDoc.subscriptions=subsDoc.subscriptions.filter(x=>x.id!==id);renderSubs();markDirty();}
 
 // ===== 關注 =====
 async function toggleWatch(id){
