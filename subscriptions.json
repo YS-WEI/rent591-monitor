@@ -164,7 +164,7 @@
       "layout": [],
       "shape": [],
       "price_min": null,
-      "price_max": 15000,
+      "price_max": 10000,
       "acreage_min": 8,
       "acreage_max": null,
       "sort": "posttime_desc"
@@ -179,13 +179,14 @@
       "sections": [
         "43",
         "44",
-        "47"
+        "47",
+        "26"
       ],
       "kind": "2",
       "layout": [],
       "shape": [],
       "price_min": null,
-      "price_max": 15000,
+      "price_max": 10000,
       "acreage_min": 8,
       "acreage_max": null,
       "sort": "posttime_desc"
