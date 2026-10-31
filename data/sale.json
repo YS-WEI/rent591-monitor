@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-30T22:39:41+00:00",
+  "generated_at": "2026-10-31T06:19:08+00:00",
   "kind": "sale",
   "subscriptions": [
     {
@@ -13,52 +13,7 @@
   "report": {
     "new": [],
     "price_drop": [],
-    "removed": [
-      {
-        "listing_id": "21018013",
-        "title": "捷運台北橋電梯邊間4房車-祐",
-        "url": "https://sale.591.com.tw/home/house/detail/2/21018013.html",
-        "image": "https://img1.591.com.tw/house/2026/07/25/178496828065401401.jpg!400x300.jpg",
-        "region": "新北市",
-        "district": "三重區",
-        "community": "無社區",
-        "address": "環河南路",
-        "kind_name": "住宅",
-        "shape_name": "電梯大樓",
-        "rooms": 4,
-        "halls": 2,
-        "baths": 2,
-        "size_ping": 41.6,
-        "main_area": 0.0,
-        "floor": "7F",
-        "total_floor": "12F",
-        "total_price": 1999.0,
-        "unit_price": 48.05,
-        "unit_price_text": "48.05萬/坪",
-        "houseage": 31,
-        "has_carport": true,
-        "cart_model": "機械式",
-        "poster_name": "仲介黃聖祐",
-        "posted_at": "2026-10-05",
-        "updated_rel": "26天前",
-        "is_down_price": false,
-        "first_seen": "2026-10-05",
-        "last_seen": "2026-10-30",
-        "status": "removed",
-        "subscription_id": "sub-1787050187051",
-        "groups": [
-          "三重"
-        ],
-        "price_history": [
-          {
-            "date": "2026-10-05",
-            "price": 1999.0
-          }
-        ],
-        "missing_count": 2,
-        "watched": false
-      }
-    ]
+    "removed": []
   },
   "listings": {
     "20865841": {
@@ -90,7 +45,7 @@
       "updated_rel": "54天前",
       "is_down_price": true,
       "first_seen": "2026-09-07",
-      "last_seen": "2026-10-30",
+      "last_seen": "2026-10-31",
       "status": "active",
       "subscription_id": "sub-1787050187051",
       "groups": [
@@ -109,55 +64,11 @@
       "missing_count": 0,
       "watched": false
     },
-    "20854772": {
-      "listing_id": "20854772",
-      "title": "下竹圍街電梯套房收租屋",
-      "url": "https://sale.591.com.tw/home/house/detail/2/20854772.html",
-      "image": "https://img1.591.com.tw/house/2026/05/05/177796363105206609.jpg!400x300.jpg",
-      "region": "新北市",
-      "district": "三重區",
-      "community": null,
-      "address": "下竹圍街",
-      "kind_name": "住宅",
-      "shape_name": "電梯大樓",
-      "rooms": 4,
-      "halls": null,
-      "baths": 4,
-      "size_ping": 24.07,
-      "main_area": 0.0,
-      "floor": "5F",
-      "total_floor": "7F",
-      "total_price": 1588.0,
-      "unit_price": 65.97,
-      "unit_price_text": "65.97萬/坪",
-      "houseage": 32,
-      "has_carport": false,
-      "cart_model": null,
-      "poster_name": "仲介值班小姐",
-      "posted_at": "2026-09-05",
-      "updated_rel": "56天前",
-      "is_down_price": false,
-      "first_seen": "2026-09-05",
-      "last_seen": "2026-10-30",
-      "status": "active",
-      "subscription_id": "sub-1787050187051",
-      "groups": [
-        "三重"
-      ],
-      "price_history": [
-        {
-          "date": "2026-09-05",
-          "price": 1588.0
-        }
-      ],
-      "missing_count": 0,
-      "watched": false
-    },
     "20944671": {
       "listing_id": "20944671",
       "title": "🏠現成房東🔥電梯4房4衛｜長期滿租｜低總價收租宅",
       "url": "https://sale.591.com.tw/home/house/detail/2/20944671.html",
-      "image": "https://img2.591.com.tw/house/2026/09/21/178998395824574908.jpg!400x300.jpg",
+      "image": "https://img1.591.com.tw/house/2026/09/21/178998395824574908.jpg!400x300.jpg",
       "region": "新北市",
       "district": "三重區",
       "community": null,
@@ -182,7 +93,7 @@
       "updated_rel": "17天前",
       "is_down_price": false,
       "first_seen": "2026-10-14",
-      "last_seen": "2026-10-30",
+      "last_seen": "2026-10-31",
       "status": "active",
       "subscription_id": "sub-1787050187051",
       "groups": [
@@ -201,7 +112,7 @@
       "listing_id": "21130311",
       "title": "二重國小華廈五套房",
       "url": "https://sale.591.com.tw/home/house/detail/2/21130311.html",
-      "image": "https://img2.591.com.tw/house/2026/06/20/178195137583002108.jpg!400x300.jpg",
+      "image": "https://img1.591.com.tw/house/2026/06/20/178195137583002108.jpg!400x300.jpg",
       "region": "新北市",
       "district": "三重區",
       "community": null,
@@ -226,7 +137,7 @@
       "updated_rel": "7天前",
       "is_down_price": false,
       "first_seen": "2026-10-24",
-      "last_seen": "2026-10-30",
+      "last_seen": "2026-10-31",
       "status": "active",
       "subscription_id": "sub-1787050187051",
       "groups": [
@@ -241,11 +152,55 @@
       "missing_count": 0,
       "watched": false
     },
+    "20854772": {
+      "listing_id": "20854772",
+      "title": "下竹圍街電梯套房收租屋",
+      "url": "https://sale.591.com.tw/home/house/detail/2/20854772.html",
+      "image": "https://img2.591.com.tw/house/2026/05/05/177796363105206609.jpg!400x300.jpg",
+      "region": "新北市",
+      "district": "三重區",
+      "community": null,
+      "address": "下竹圍街",
+      "kind_name": "住宅",
+      "shape_name": "電梯大樓",
+      "rooms": 4,
+      "halls": null,
+      "baths": 4,
+      "size_ping": 24.07,
+      "main_area": 0.0,
+      "floor": "5F",
+      "total_floor": "7F",
+      "total_price": 1588.0,
+      "unit_price": 65.97,
+      "unit_price_text": "65.97萬/坪",
+      "houseage": 32,
+      "has_carport": false,
+      "cart_model": null,
+      "poster_name": "仲介值班小姐",
+      "posted_at": "2026-09-05",
+      "updated_rel": "56天前",
+      "is_down_price": false,
+      "first_seen": "2026-09-05",
+      "last_seen": "2026-10-31",
+      "status": "active",
+      "subscription_id": "sub-1787050187051",
+      "groups": [
+        "三重"
+      ],
+      "price_history": [
+        {
+          "date": "2026-09-05",
+          "price": 1588.0
+        }
+      ],
+      "missing_count": 0,
+      "watched": false
+    },
     "20760211": {
       "listing_id": "20760211",
       "title": "大同北漂亮裝潢社區一樓~",
       "url": "https://sale.591.com.tw/home/house/detail/2/20760211.html",
-      "image": "https://img1.591.com.tw/house/2026/10/28/179319865683284504.jpg!400x300.jpg",
+      "image": "https://img2.591.com.tw/house/2026/10/28/179319865683284504.jpg!400x300.jpg",
       "region": "新北市",
       "district": "三重區",
       "community": "三重第一站",
@@ -267,10 +222,10 @@
       "cart_model": null,
       "poster_name": "仲介劉先生",
       "posted_at": "2026-08-19",
-      "updated_rel": "73天前",
+      "updated_rel": "74天前",
       "is_down_price": false,
       "first_seen": "2026-10-28",
-      "last_seen": "2026-10-30",
+      "last_seen": "2026-10-31",
       "status": "active",
       "subscription_id": "sub-1787050187051",
       "groups": [
@@ -311,10 +266,10 @@
       "cart_model": null,
       "poster_name": "仲介許鈴英",
       "posted_at": "2026-10-14",
-      "updated_rel": "7小時前",
+      "updated_rel": "4小時前",
       "is_down_price": false,
       "first_seen": "2026-10-14",
-      "last_seen": "2026-10-30",
+      "last_seen": "2026-10-31",
       "status": "active",
       "subscription_id": "sub-1787050187051",
       "groups": [
@@ -355,10 +310,10 @@
       "cart_model": "機械式",
       "poster_name": "仲介王先生",
       "posted_at": "2026-10-30",
-      "updated_rel": "14小時前",
+      "updated_rel": "22小時前",
       "is_down_price": false,
       "first_seen": "2026-10-30",
-      "last_seen": "2026-10-30",
+      "last_seen": "2026-10-31",
       "status": "active",
       "subscription_id": "sub-1787050187051",
       "groups": [
@@ -399,10 +354,10 @@
       "cart_model": null,
       "poster_name": "仲介楊佳穎",
       "posted_at": "2026-07-03",
-      "updated_rel": "13小時前",
+      "updated_rel": "2小時前",
       "is_down_price": false,
       "first_seen": "2026-10-07",
-      "last_seen": "2026-10-30",
+      "last_seen": "2026-10-31",
       "status": "active",
       "subscription_id": "sub-1787050187051",
       "groups": [
@@ -443,10 +398,10 @@
       "cart_model": null,
       "poster_name": "仲介值班人員",
       "posted_at": "2026-08-23",
-      "updated_rel": "7小時前",
+      "updated_rel": "3小時前",
       "is_down_price": true,
       "first_seen": "2026-08-24",
-      "last_seen": "2026-10-30",
+      "last_seen": "2026-10-31",
       "status": "active",
       "subscription_id": "sub-1787050187051",
       "groups": [
@@ -491,10 +446,10 @@
       "cart_model": "平面式",
       "poster_name": "仲介黃承祐",
       "posted_at": "2026-10-30",
-      "updated_rel": "7小時前",
+      "updated_rel": "15小時前",
       "is_down_price": false,
       "first_seen": "2026-10-30",
-      "last_seen": "2026-10-30",
+      "last_seen": "2026-10-31",
       "status": "active",
       "subscription_id": "sub-1787050187051",
       "groups": [
@@ -509,99 +464,11 @@
       "missing_count": 0,
       "watched": false
     },
-    "20841132": {
-      "listing_id": "20841132",
-      "title": "※071捷運三重國小站台北橋電梯四房+車位",
-      "url": "https://sale.591.com.tw/home/house/detail/2/20841132.html",
-      "image": "https://img1.591.com.tw/house/2026/09/28/179056448043610508.jpg!400x300.jpg",
-      "region": "新北市",
-      "district": "三重區",
-      "community": "宏泰戲苑",
-      "address": "長壽街",
-      "kind_name": "住宅",
-      "shape_name": "電梯大樓",
-      "rooms": 4,
-      "halls": 2,
-      "baths": 2,
-      "size_ping": 49.77,
-      "main_area": 0.0,
-      "floor": "4F",
-      "total_floor": "7F",
-      "total_price": 2500.0,
-      "unit_price": 50.23,
-      "unit_price_text": "50.23萬/坪",
-      "houseage": 27,
-      "has_carport": true,
-      "cart_model": null,
-      "poster_name": "仲介值班小姐",
-      "posted_at": "2026-09-03",
-      "updated_rel": "20天前",
-      "is_down_price": false,
-      "first_seen": "2026-09-30",
-      "last_seen": "2026-10-30",
-      "status": "active",
-      "subscription_id": "sub-1787050187051",
-      "groups": [
-        "三重"
-      ],
-      "price_history": [
-        {
-          "date": "2026-09-30",
-          "price": 2500.0
-        }
-      ],
-      "missing_count": 0,
-      "watched": false
-    },
-    "20685124": {
-      "listing_id": "20685124",
-      "title": "不用2000萬❗️三和國中旁🔥稀有露台電梯四房車",
-      "url": "https://sale.591.com.tw/home/house/detail/2/20685124.html",
-      "image": "https://img2.591.com.tw/house/2025/12/01/176456652316308607.jpg!400x300.jpg",
-      "region": "新北市",
-      "district": "三重區",
-      "community": "三和福邸",
-      "address": "自強路三段110巷",
-      "kind_name": "住宅",
-      "shape_name": "電梯大樓",
-      "rooms": 4,
-      "halls": 2,
-      "baths": 2,
-      "size_ping": 47.22,
-      "main_area": 0.0,
-      "floor": "2F",
-      "total_floor": "8F",
-      "total_price": 1980.0,
-      "unit_price": 41.93,
-      "unit_price_text": "41.93萬/坪",
-      "houseage": 30,
-      "has_carport": true,
-      "cart_model": "機械式",
-      "poster_name": "仲介李奇佳",
-      "posted_at": "2026-08-06",
-      "updated_rel": "86天前",
-      "is_down_price": false,
-      "first_seen": "2026-08-22",
-      "last_seen": "2026-10-30",
-      "status": "active",
-      "subscription_id": "sub-1787050187051",
-      "groups": [
-        "三重"
-      ],
-      "price_history": [
-        {
-          "date": "2026-08-22",
-          "price": 1980.0
-        }
-      ],
-      "missing_count": 0,
-      "watched": false
-    },
     "20747930": {
       "listing_id": "20747930",
       "title": "三重第一廣場溪尾街1樓住商兩用可登記公司",
       "url": "https://sale.591.com.tw/home/house/detail/2/20747930.html",
-      "image": "https://img2.591.com.tw/house/2026/07/12/178382999941197403.jpg!400x300.jpg",
+      "image": "https://img1.591.com.tw/house/2026/07/12/178382999941197403.jpg!400x300.jpg",
       "region": "新北市",
       "district": "三重區",
       "community": "第一廣場",
@@ -623,10 +490,10 @@
       "cart_model": null,
       "poster_name": "仲介吳小姐",
       "posted_at": "2026-08-17",
-      "updated_rel": "75天前",
+      "updated_rel": "76天前",
       "is_down_price": false,
       "first_seen": "2026-08-19",
-      "last_seen": "2026-10-30",
+      "last_seen": "2026-10-31",
       "status": "active",
       "subscription_id": "sub-1787050187051",
       "groups": [
@@ -636,50 +503,6 @@
         {
           "date": "2026-08-19",
           "price": 2400.0
-        }
-      ],
-      "missing_count": 0,
-      "watched": false
-    },
-    "20881560": {
-      "listing_id": "20881560",
-      "title": "菜寮捷運站三重第一站挑高5米美麗4加1",
-      "url": "https://sale.591.com.tw/home/house/detail/2/20881560.html",
-      "image": "https://images.591.com.tw/index/house/newVersion/noImgBigNew-v2.png",
-      "region": "新北市",
-      "district": "三重區",
-      "community": "大同北路130號之1",
-      "address": "大同北路",
-      "kind_name": "住宅",
-      "shape_name": "電梯大樓",
-      "rooms": 4,
-      "halls": 2,
-      "baths": 2,
-      "size_ping": 22.95,
-      "main_area": 16.74,
-      "floor": "1F",
-      "total_floor": "18F",
-      "total_price": 1750.0,
-      "unit_price": 76.25,
-      "unit_price_text": "76.25萬/坪",
-      "houseage": 31,
-      "has_carport": false,
-      "cart_model": null,
-      "poster_name": "仲介藍志宏",
-      "posted_at": "2026-09-10",
-      "updated_rel": "51天前",
-      "is_down_price": false,
-      "first_seen": "2026-09-10",
-      "last_seen": "2026-10-30",
-      "status": "active",
-      "subscription_id": "sub-1787050187051",
-      "groups": [
-        "三重"
-      ],
-      "price_history": [
-        {
-          "date": "2026-09-10",
-          "price": 1750.0
         }
       ],
       "missing_count": 0,
@@ -714,7 +537,7 @@
       "updated_rel": "43天前",
       "is_down_price": false,
       "first_seen": "2026-09-18",
-      "last_seen": "2026-10-30",
+      "last_seen": "2026-10-31",
       "status": "active",
       "subscription_id": "sub-1787050187051",
       "groups": [
@@ -729,11 +552,99 @@
       "missing_count": 0,
       "watched": false
     },
+    "20685124": {
+      "listing_id": "20685124",
+      "title": "不用2000萬❗️三和國中旁🔥稀有露台電梯四房車",
+      "url": "https://sale.591.com.tw/home/house/detail/2/20685124.html",
+      "image": "https://img2.591.com.tw/house/2025/12/01/176456652316308607.jpg!400x300.jpg",
+      "region": "新北市",
+      "district": "三重區",
+      "community": "三和福邸",
+      "address": "自強路三段110巷",
+      "kind_name": "住宅",
+      "shape_name": "電梯大樓",
+      "rooms": 4,
+      "halls": 2,
+      "baths": 2,
+      "size_ping": 47.22,
+      "main_area": 0.0,
+      "floor": "2F",
+      "total_floor": "8F",
+      "total_price": 1980.0,
+      "unit_price": 41.93,
+      "unit_price_text": "41.93萬/坪",
+      "houseage": 30,
+      "has_carport": true,
+      "cart_model": "機械式",
+      "poster_name": "仲介李奇佳",
+      "posted_at": "2026-08-06",
+      "updated_rel": "86天前",
+      "is_down_price": false,
+      "first_seen": "2026-08-22",
+      "last_seen": "2026-10-31",
+      "status": "active",
+      "subscription_id": "sub-1787050187051",
+      "groups": [
+        "三重"
+      ],
+      "price_history": [
+        {
+          "date": "2026-08-22",
+          "price": 1980.0
+        }
+      ],
+      "missing_count": 0,
+      "watched": false
+    },
+    "20841132": {
+      "listing_id": "20841132",
+      "title": "※071捷運三重國小站台北橋電梯四房+車位",
+      "url": "https://sale.591.com.tw/home/house/detail/2/20841132.html",
+      "image": "https://img1.591.com.tw/house/2026/09/28/179056448043610508.jpg!400x300.jpg",
+      "region": "新北市",
+      "district": "三重區",
+      "community": "宏泰戲苑",
+      "address": "長壽街",
+      "kind_name": "住宅",
+      "shape_name": "電梯大樓",
+      "rooms": 4,
+      "halls": 2,
+      "baths": 2,
+      "size_ping": 49.77,
+      "main_area": 0.0,
+      "floor": "4F",
+      "total_floor": "7F",
+      "total_price": 2500.0,
+      "unit_price": 50.23,
+      "unit_price_text": "50.23萬/坪",
+      "houseage": 27,
+      "has_carport": true,
+      "cart_model": null,
+      "poster_name": "仲介值班小姐",
+      "posted_at": "2026-09-03",
+      "updated_rel": "20天前",
+      "is_down_price": false,
+      "first_seen": "2026-09-30",
+      "last_seen": "2026-10-31",
+      "status": "active",
+      "subscription_id": "sub-1787050187051",
+      "groups": [
+        "三重"
+      ],
+      "price_history": [
+        {
+          "date": "2026-09-30",
+          "price": 2500.0
+        }
+      ],
+      "missing_count": 0,
+      "watched": false
+    },
     "20996205": {
       "listing_id": "20996205",
       "title": "k3-67台北橋花園魔術挑高夾層小資宅電梯四房",
       "url": "https://sale.591.com.tw/home/house/detail/2/20996205.html",
-      "image": "https://img2.591.com.tw/house/2026/10/01/179084549378158100.jpg!400x300.jpg",
+      "image": "https://img1.591.com.tw/house/2026/10/01/179084549378158100.jpg!400x300.jpg",
       "region": "新北市",
       "district": "三重區",
       "community": "台北橋花園",
@@ -758,7 +669,7 @@
       "updated_rel": "30天前",
       "is_down_price": false,
       "first_seen": "2026-10-01",
-      "last_seen": "2026-10-30",
+      "last_seen": "2026-10-31",
       "status": "active",
       "subscription_id": "sub-1787050187051",
       "groups": [
@@ -768,50 +679,6 @@
         {
           "date": "2026-10-01",
           "price": 1998.0
-        }
-      ],
-      "missing_count": 0,
-      "watched": false
-    },
-    "21058414": {
-      "listing_id": "21058414",
-      "title": "*專任*三重｜三和國中站｜電梯四房（車位可租）",
-      "url": "https://sale.591.com.tw/home/house/detail/2/21058414.html",
-      "image": "https://img1.591.com.tw/house/2026/06/10/178108316133948209.jpg!400x300.jpg",
-      "region": "新北市",
-      "district": "三重區",
-      "community": "麗寶團緣",
-      "address": "力行路一段",
-      "kind_name": "住宅",
-      "shape_name": "電梯大樓",
-      "rooms": 4,
-      "halls": 2,
-      "baths": 3,
-      "size_ping": 35.42,
-      "main_area": 27.6,
-      "floor": "6F",
-      "total_floor": "12F",
-      "total_price": 2080.0,
-      "unit_price": 58.72,
-      "unit_price_text": "58.72萬/坪",
-      "houseage": 28,
-      "has_carport": false,
-      "cart_model": null,
-      "poster_name": "仲介劉子謙",
-      "posted_at": "2026-10-12",
-      "updated_rel": "19天前",
-      "is_down_price": false,
-      "first_seen": "2026-10-12",
-      "last_seen": "2026-10-30",
-      "status": "active",
-      "subscription_id": "sub-1787050187051",
-      "groups": [
-        "三重"
-      ],
-      "price_history": [
-        {
-          "date": "2026-10-12",
-          "price": 2080.0
         }
       ],
       "missing_count": 0,
@@ -843,10 +710,10 @@
       "cart_model": null,
       "poster_name": "仲介值班經紀人",
       "posted_at": "2026-10-19",
-      "updated_rel": "12天前",
+      "updated_rel": "13天前",
       "is_down_price": false,
       "first_seen": "2026-10-19",
-      "last_seen": "2026-10-30",
+      "last_seen": "2026-10-31",
       "status": "active",
       "subscription_id": "sub-1787050187051",
       "groups": [
@@ -856,6 +723,94 @@
         {
           "date": "2026-10-19",
           "price": 1438.0
+        }
+      ],
+      "missing_count": 0,
+      "watched": false
+    },
+    "20881560": {
+      "listing_id": "20881560",
+      "title": "菜寮捷運站三重第一站挑高5米美麗4加1",
+      "url": "https://sale.591.com.tw/home/house/detail/2/20881560.html",
+      "image": "https://images.591.com.tw/index/house/newVersion/noImgBigNew-v2.png",
+      "region": "新北市",
+      "district": "三重區",
+      "community": "大同北路130號之1",
+      "address": "大同北路",
+      "kind_name": "住宅",
+      "shape_name": "電梯大樓",
+      "rooms": 4,
+      "halls": 2,
+      "baths": 2,
+      "size_ping": 22.95,
+      "main_area": 16.74,
+      "floor": "1F",
+      "total_floor": "18F",
+      "total_price": 1750.0,
+      "unit_price": 76.25,
+      "unit_price_text": "76.25萬/坪",
+      "houseage": 31,
+      "has_carport": false,
+      "cart_model": null,
+      "poster_name": "仲介藍志宏",
+      "posted_at": "2026-09-10",
+      "updated_rel": "52天前",
+      "is_down_price": false,
+      "first_seen": "2026-09-10",
+      "last_seen": "2026-10-31",
+      "status": "active",
+      "subscription_id": "sub-1787050187051",
+      "groups": [
+        "三重"
+      ],
+      "price_history": [
+        {
+          "date": "2026-09-10",
+          "price": 1750.0
+        }
+      ],
+      "missing_count": 0,
+      "watched": false
+    },
+    "21058414": {
+      "listing_id": "21058414",
+      "title": "*專任*三重｜三和國中站｜電梯四房（車位可租）",
+      "url": "https://sale.591.com.tw/home/house/detail/2/21058414.html",
+      "image": "https://img2.591.com.tw/house/2026/06/10/178108316133948209.jpg!400x300.jpg",
+      "region": "新北市",
+      "district": "三重區",
+      "community": "麗寶團緣",
+      "address": "力行路一段",
+      "kind_name": "住宅",
+      "shape_name": "電梯大樓",
+      "rooms": 4,
+      "halls": 2,
+      "baths": 3,
+      "size_ping": 35.42,
+      "main_area": 27.6,
+      "floor": "6F",
+      "total_floor": "12F",
+      "total_price": 2080.0,
+      "unit_price": 58.72,
+      "unit_price_text": "58.72萬/坪",
+      "houseage": 28,
+      "has_carport": false,
+      "cart_model": null,
+      "poster_name": "仲介劉子謙",
+      "posted_at": "2026-10-12",
+      "updated_rel": "20天前",
+      "is_down_price": false,
+      "first_seen": "2026-10-12",
+      "last_seen": "2026-10-31",
+      "status": "active",
+      "subscription_id": "sub-1787050187051",
+      "groups": [
+        "三重"
+      ],
+      "price_history": [
+        {
+          "date": "2026-10-12",
+          "price": 2080.0
         }
       ],
       "missing_count": 0,
@@ -902,7 +857,7 @@
           "price": 1999.0
         }
       ],
-      "missing_count": 2,
+      "missing_count": 3,
       "watched": false
     },
     "20781205": {
@@ -946,7 +901,7 @@
           "price": 1750.0
         }
       ],
-      "missing_count": 7,
+      "missing_count": 8,
       "watched": false
     },
     "20801529": {
@@ -990,7 +945,7 @@
           "price": 1499.0
         }
       ],
-      "missing_count": 15,
+      "missing_count": 16,
       "watched": false
     },
     "20785444": {
@@ -1034,7 +989,7 @@
           "price": 1588.0
         }
       ],
-      "missing_count": 28,
+      "missing_count": 29,
       "watched": false
     },
     "20350164": {
@@ -1078,7 +1033,7 @@
           "price": 1588.0
         }
       ],
-      "missing_count": 39,
+      "missing_count": 40,
       "watched": false
     },
     "20783598": {
@@ -1122,7 +1077,7 @@
           "price": 2498.0
         }
       ],
-      "missing_count": 43,
+      "missing_count": 44,
       "watched": false
     },
     "20760518": {
@@ -1166,7 +1121,7 @@
           "price": 1860.0
         }
       ],
-      "missing_count": 46,
+      "missing_count": 47,
       "watched": false
     },
     "20760541": {
@@ -1210,7 +1165,7 @@
           "price": 1798.0
         }
       ],
-      "missing_count": 46,
+      "missing_count": 47,
       "watched": false
     },
     "20746921": {
@@ -1254,7 +1209,7 @@
           "price": 1438.0
         }
       ],
-      "missing_count": 55,
+      "missing_count": 56,
       "watched": false
     },
     "20897088": {
@@ -1298,7 +1253,7 @@
           "price": 1458.0
         }
       ],
-      "missing_count": 61,
+      "missing_count": 62,
       "watched": false
     },
     "20739199": {
@@ -1346,7 +1301,7 @@
           "price": 2068.0
         }
       ],
-      "missing_count": 62,
+      "missing_count": 63,
       "watched": false
     },
     "20752411": {
@@ -1390,7 +1345,7 @@
           "price": 2198.0
         }
       ],
-      "missing_count": 68,
+      "missing_count": 69,
       "watched": false
     },
     "20722670": {
@@ -1434,7 +1389,7 @@
           "price": 1798.0
         }
       ],
-      "missing_count": 69,
+      "missing_count": 70,
       "watched": false
     },
     "20716764": {
@@ -1482,7 +1437,7 @@
           "price": 2068.0
         }
       ],
-      "missing_count": 73,
+      "missing_count": 74,
       "watched": false
     },
     "20712528": {
@@ -1538,7 +1493,7 @@
           "price": 2080.0
         }
       ],
-      "missing_count": 74,
+      "missing_count": 75,
       "watched": false
     },
     "20894069": {
@@ -1582,7 +1537,7 @@
           "price": 2500.0
         }
       ],
-      "missing_count": 77,
+      "missing_count": 78,
       "watched": false
     },
     "20509447": {
@@ -1626,7 +1581,7 @@
           "price": 2200.0
         }
       ],
-      "missing_count": 82,
+      "missing_count": 83,
       "watched": false
     },
     "20900824": {
@@ -1670,7 +1625,7 @@
           "price": 1680.0
         }
       ],
-      "missing_count": 82,
+      "missing_count": 83,
       "watched": false
     },
     "20689723": {
@@ -1714,7 +1669,7 @@
           "price": 1680.0
         }
       ],
-      "missing_count": 85,
+      "missing_count": 86,
       "watched": false
     },
     "20693722": {
@@ -1758,7 +1713,7 @@
           "price": 1588.0
         }
       ],
-      "missing_count": 85,
+      "missing_count": 86,
       "watched": false
     },
     "20682666": {
@@ -1806,7 +1761,7 @@
           "price": 1750.0
         }
       ],
-      "missing_count": 89,
+      "missing_count": 90,
       "watched": false
     },
     "20678527": {
@@ -1850,7 +1805,7 @@
           "price": 1750.0
         }
       ],
-      "missing_count": 91,
+      "missing_count": 92,
       "watched": false
     },
     "20672500": {
@@ -1894,7 +1849,7 @@
           "price": 2500.0
         }
       ],
-      "missing_count": 95,
+      "missing_count": 96,
       "watched": false
     },
     "20679197": {
@@ -1938,7 +1893,7 @@
           "price": 1750.0
         }
       ],
-      "missing_count": 104,
+      "missing_count": 105,
       "watched": false
     },
     "20639574": {
@@ -1982,7 +1937,7 @@
           "price": 1680.0
         }
       ],
-      "missing_count": 111,
+      "missing_count": 112,
       "watched": false
     },
     "20638616": {
@@ -2026,7 +1981,7 @@
           "price": 1588.0
         }
       ],
-      "missing_count": 113,
+      "missing_count": 114,
       "watched": false
     },
     "20633979": {
@@ -2074,7 +2029,7 @@
           "price": 1750.0
         }
       ],
-      "missing_count": 115,
+      "missing_count": 116,
       "watched": false
     },
     "20886610": {
@@ -2118,7 +2073,7 @@
           "price": 1798.0
         }
       ],
-      "missing_count": 118,
+      "missing_count": 119,
       "watched": false
     },
     "20615531": {
@@ -2162,7 +2117,7 @@
           "price": 2280.0
         }
       ],
-      "missing_count": 119,
+      "missing_count": 120,
       "watched": false
     },
     "20282066": {
@@ -2206,7 +2161,7 @@
           "price": 2498.0
         }
       ],
-      "missing_count": 127,
+      "missing_count": 128,
       "watched": false
     },
     "20788045": {
@@ -2250,7 +2205,7 @@
           "price": 1438.0
         }
       ],
-      "missing_count": 135,
+      "missing_count": 136,
       "watched": false
     },
     "20594634": {
@@ -2294,7 +2249,7 @@
           "price": 1680.0
         }
       ],
-      "missing_count": 142,
+      "missing_count": 143,
       "watched": false
     },
     "20246875": {
@@ -2342,7 +2297,7 @@
           "price": 1750.0
         }
       ],
-      "missing_count": 149,
+      "missing_count": 150,
       "watched": false
     },
     "20568007": {
@@ -2386,7 +2341,7 @@
           "price": 1798.0
         }
       ],
-      "missing_count": 161,
+      "missing_count": 162,
       "watched": false
     },
     "20222621": {
@@ -2430,7 +2385,7 @@
           "price": 2098.0
         }
       ],
-      "missing_count": 163,
+      "missing_count": 164,
       "watched": false
     },
     "20555900": {
@@ -2474,7 +2429,7 @@
           "price": 2198.0
         }
       ],
-      "missing_count": 168,
+      "missing_count": 169,
       "watched": false
     },
     "20622268": {
@@ -2518,7 +2473,7 @@
           "price": 2498.0
         }
       ],
-      "missing_count": 185,
+      "missing_count": 186,
       "watched": false
     },
     "20523251": {
@@ -2562,7 +2517,7 @@
           "price": 2188.0
         }
       ],
-      "missing_count": 188,
+      "missing_count": 189,
       "watched": false
     },
     "20510021": {
@@ -2606,7 +2561,7 @@
           "price": 1588.0
         }
       ],
-      "missing_count": 196,
+      "missing_count": 197,
       "watched": false
     },
     "20510910": {
@@ -2650,7 +2605,7 @@
           "price": 1980.0
         }
       ],
-      "missing_count": 196,
+      "missing_count": 197,
       "watched": false
     },
     "20526228": {
@@ -2694,7 +2649,7 @@
           "price": 2498.0
         }
       ],
-      "missing_count": 206,
+      "missing_count": 207,
       "watched": false
     },
     "20130917": {
@@ -2738,7 +2693,7 @@
           "price": 1798.0
         }
       ],
-      "missing_count": 218,
+      "missing_count": 219,
       "watched": false
     },
     "20474210": {
@@ -2782,7 +2737,7 @@
           "price": 1860.0
         }
       ],
-      "missing_count": 218,
+      "missing_count": 219,
       "watched": false
     },
     "20453800": {
@@ -2826,7 +2781,7 @@
           "price": 1680.0
         }
       ],
-      "missing_count": 220,
+      "missing_count": 221,
       "watched": false
     },
     "20472391": {
@@ -2870,7 +2825,7 @@
           "price": 2198.0
         }
       ],
-      "missing_count": 220,
+      "missing_count": 221,
       "watched": false
     },
     "20451125": {
@@ -2914,7 +2869,7 @@
           "price": 1998.0
         }
       ],
-      "missing_count": 231,
+      "missing_count": 232,
       "watched": false
     },
     "20450190": {
@@ -2958,7 +2913,7 @@
           "price": 1499.0
         }
       ],
-      "missing_count": 232,
+      "missing_count": 233,
       "watched": false
     },
     "20438638": {
@@ -3002,7 +2957,7 @@
           "price": 1860.0
         }
       ],
-      "missing_count": 240,
+      "missing_count": 241,
       "watched": false
     },
     "20428122": {
@@ -3046,7 +3001,7 @@
           "price": 1438.0
         }
       ],
-      "missing_count": 247,
+      "missing_count": 248,
       "watched": false
     },
     "20249750": {
@@ -3090,7 +3045,7 @@
           "price": 2280.0
         }
       ],
-      "missing_count": 251,
+      "missing_count": 252,
       "watched": false
     },
     "20420512": {
@@ -3134,7 +3089,7 @@
           "price": 1588.0
         }
       ],
-      "missing_count": 255,
+      "missing_count": 256,
       "watched": false
     },
     "20420421": {
@@ -3178,7 +3133,7 @@
           "price": 1588.0
         }
       ],
-      "missing_count": 255,
+      "missing_count": 256,
       "watched": false
     }
   }
