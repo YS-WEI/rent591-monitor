@@ -2,15 +2,17 @@
   "subscriptions": [
     {
       "id": "sub-001",
+      "type": "rent",
       "name": "新北 板橋・三重・蘆洲・新莊 4房",
-      "enabled": true,
       "group": "我",
+      "enabled": true,
       "region": "3",
       "sections": [
         "43",
         "47",
         "44",
-        "26"
+        "26",
+        "27"
       ],
       "kind": "1",
       "layout": [
