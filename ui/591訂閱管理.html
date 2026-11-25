@@ -142,6 +142,7 @@ input:focus{outline:2px solid var(--accent);outline-offset:1px;border-color:var(
   <div>
     <h1>591 租屋訂閱監控</h1>
     <p id="genAt">尚未連線 GitHub</p>
+    <p id="uiVer" style="font-size:11px;margin-top:2px"></p>
   </div>
   <button class="gear" id="gearBtn" onclick="openSettings()">⚙️ 設定</button>
 </header>
@@ -864,6 +865,8 @@ function saveSettings(){
 
 function showToast(msg){const t=document.getElementById("toast");t.textContent=msg;t.classList.add("show");clearTimeout(t._h);t._h=setTimeout(()=>t.classList.remove("show"),2600);}
 
+// 介面版本＝此頁面的部署時間（GitHub Pages 的 Last-Modified），用來確認畫面是否已更新
+document.getElementById("uiVer").textContent="介面更新：" + fmtTime(document.lastModified);
 boot();
 </script>
 </body>
