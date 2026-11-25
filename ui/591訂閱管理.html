@@ -865,8 +865,10 @@ function saveSettings(){
 
 function showToast(msg){const t=document.getElementById("toast");t.textContent=msg;t.classList.add("show");clearTimeout(t._h);t._h=setTimeout(()=>t.classList.remove("show"),2600);}
 
-// 介面版本＝此頁面的部署時間（GitHub Pages 的 Last-Modified），用來確認畫面是否已更新
-document.getElementById("uiVer").textContent="介面更新：" + fmtTime(document.lastModified);
+// 介面版本：每次改介面時手動更新（台灣時間）。
+// 不用 document.lastModified：bot 每次 commit 資料都會整站重新部署，那個時間不代表介面有更新。
+const UI_VERSION="2026-11-25 17:30";
+document.getElementById("uiVer").textContent="介面版本："+UI_VERSION;
 boot();
 </script>
 </body>
