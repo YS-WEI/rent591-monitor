@@ -47,6 +47,15 @@ button{font-family:inherit;cursor:pointer;border:none;border-radius:10px;font-si
 
 .toolbar{display:flex;gap:8px;margin:16px 0 8px;flex-wrap:wrap}
 .toolbar .btn-main,.toolbar .btn-line{flex:1;min-width:140px;padding:12px}
+.wp{background:var(--card);border:1px solid var(--accent);border-radius:var(--radius);padding:12px 14px;margin-bottom:14px}
+.wp-head{font-size:14px;font-weight:600;margin-bottom:6px}
+.wp-row{display:flex;align-items:center;gap:8px;padding:7px 0;border-top:1px solid var(--line);font-size:13.5px}
+.wp-row a{flex:1;min-width:0;color:var(--ink);text-decoration:none;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.wp-tag{flex-shrink:0;font-size:12px;padding:2px 7px;border-radius:6px;color:#fff}
+.wp-tag.add{background:var(--accent)}
+.wp-tag.del{background:var(--danger)}
+.wp-undo{flex-shrink:0;padding:4px 10px;font-size:12px}
+.wp-hint{font-size:12px;color:var(--muted);margin-top:6px}
 .empty{background:var(--card);border:1px dashed var(--line);border-radius:var(--radius);padding:32px 16px;text-align:center;color:var(--muted);font-size:14px}
 
 /* 狀態/物件卡 */
@@ -215,7 +224,7 @@ input:focus{outline:2px solid var(--accent);outline-offset:1px;border-color:var(
 </div>
 
 <div class="savebar" id="saveBar">
-  <div class="sb-msg"><b>有未儲存的訂閱變更</b><br>全部改完再按儲存，一次更新（約數分鐘後排程生效）</div>
+  <div class="sb-msg"><b id="sbTitle">有未儲存的變更</b><br>全部改完再按儲存，一次寫回 GitHub</div>
   <button class="sb-discard" onclick="discardChanges()">捨棄</button>
   <button class="sb-save" id="saveBarBtn" onclick="commitChanges()">💾 儲存全部變更</button>
 </div>
@@ -239,7 +248,8 @@ const CFG_KEY="rent591-gh-config";
 let cfg=loadCfg();
 let mode="rent";                     // rent | sale（租/買 模式）
 let subsDoc=null;                    // subscriptions.json 內容（含租+買）
-let watchDoc={items:{}};             // watchlist.json 內容
+let watchDoc={items:{}};             // watchlist.json 內容（含本地未存的加入/取消）
+let watchOrig={items:{}};            // 最後一次從 GitHub 載入/存回的版本（用來算未存變更）
 let latestRent=null, latestSale=null;// 兩種模式的資料
 let latest=null;                     // 目前模式的 latest（=latestRent/latestSale）
 let editingId=null;
@@ -303,6 +313,14 @@ async function ghPutFile(path,obj,message){
   const r=await fetch(apiUrl(path),{method:"PUT",headers:authHeaders(),body:JSON.stringify(body)});
   if(!r.ok){const t=await r.text();throw new Error(`寫入 ${path} 失敗（${r.status}）：${t.slice(0,120)}`);}
 }
+// 經 API 讀 GitHub 上最新內容（Pages 有部署延遲，存檔合併時不能用 pubGet）
+async function ghGetJson(path){
+  const g=await fetch(`${apiUrl(path)}?ref=${cfg.branch}`,{headers:authHeaders(),cache:"no-store"});
+  if(g.status===404) return null;
+  if(!g.ok) throw new Error(`讀取 ${path} 失敗（${g.status}）`);
+  const j=await g.json();
+  return JSON.parse(decodeURIComponent(escape(atob(j.content.replace(/\n/g,"")))));
+}
 
 // ===== 載入（免 token 讀取，任何瀏覽器打開即可看）=====
 async function boot(){
@@ -317,12 +335,14 @@ async function boot(){
     latestRent=l; latestSale=sale;
     subsDoc=s||{subscriptions:[],settings:{}};
     watchDoc=w?(w.items?w:{items:w}):{items:{}};
+    watchOrig=cloneDoc(watchDoc);
   }catch(e){
     document.getElementById("genAt").textContent="載入失敗："+e.message;
     showToast("⚠️ "+e.message);
   }
   subsDirty=false;updateSaveBar(); // 剛從 GitHub 載入＝乾淨狀態
   maybeRestoreDraft();            // 若有未存草稿（上次沒按儲存）問要不要接續
+  maybeRestoreWatchDraft();updateSaveBar();
   const tab=readUrl();            // 從網址還原模式/篩選/分頁
   applyMode();                    // 依 mode 設定 latest 與按鈕
   renderStatus();renderSubs();renderWatch();
@@ -558,27 +578,49 @@ const DRAFT_KEY="rent591_subs_draft";  // 未存變更的本地草稿（重整/�
 function saveDraft(){try{localStorage.setItem(DRAFT_KEY,JSON.stringify({savedAt:Date.now(),doc:subsDoc}));}catch(e){}}
 function clearDraft(){try{localStorage.removeItem(DRAFT_KEY);}catch(e){}}
 function markDirty(){subsDirty=true;saveDraft();updateSaveBar();}
-function updateSaveBar(){document.getElementById("saveBar").classList.toggle("show",subsDirty);}
+function updateSaveBar(){
+  const c=watchChanges(),wd=c.added.length+c.removed.length>0;
+  const parts=[];if(subsDirty)parts.push("訂閱");if(wd)parts.push(`關注（＋${c.added.length}／－${c.removed.length}）`);
+  document.getElementById("sbTitle").textContent="有未儲存的變更："+parts.join("、");
+  document.getElementById("saveBar").classList.toggle("show",subsDirty||wd);
+}
 async function commitChanges(){
-  if(!subsDirty) return;
+  const c=watchChanges(),wd=c.added.length+c.removed.length>0;
+  if(!subsDirty&&!wd) return;
   if(!hasToken()){needToken();return;}
   const btn=document.getElementById("saveBarBtn");btn.disabled=true;const label=btn.textContent;btn.textContent="儲存中…";
   try{
-    await ghPutFile("subscriptions.json",subsDoc,"更新訂閱設定");
-    subsDirty=false;clearDraft();updateSaveBar();
+    if(subsDirty){
+      await ghPutFile("subscriptions.json",subsDoc,"更新訂閱設定");
+      subsDirty=false;clearDraft();
+    }
+    if(wd){
+      // 只把本地的加入/取消套到 GitHub 最新版，避免覆蓋其他裝置在這段期間的變更
+      const remote=await ghGetJson("watchlist.json");
+      const base=remote?(remote.items?remote:{items:remote}):{items:{}};
+      const next=applyWatchChanges(base,Object.fromEntries(c.added.map(id=>[id,watchDoc.items[id]])),c.removed);
+      await ghPutFile("watchlist.json",next,`更新關注清單（+${c.added.length} -${c.removed.length}）`);
+      watchDoc=next;watchOrig=cloneDoc(next);clearWatchDraft();
+      renderStatus();renderWatch();
+    }
     showToast("已存回 GitHub ✓（約數分鐘後排程生效）");
   }catch(e){showToast("⚠️ "+e.message);}
-  finally{btn.disabled=false;btn.textContent=label;}
+  finally{btn.disabled=false;btn.textContent=label;updateSaveBar();}
 }
 async function discardChanges(){
-  if(!subsDirty) return;
-  if(!confirm("捨棄所有未儲存的訂閱變更，還原成 GitHub 上的版本？"))return;
+  const wd=watchDirty();
+  if(!subsDirty&&!wd) return;
+  if(!confirm("捨棄所有未儲存的變更（訂閱、關注），還原成 GitHub 上的版本？"))return;
+  if(wd){watchDoc=cloneDoc(watchOrig);clearWatchDraft();renderStatus();renderWatch();}
   try{
-    const s=await pubGet("../subscriptions.json");
-    subsDoc=s||{subscriptions:[],settings:{}};
-    subsDirty=false;clearDraft();updateSaveBar();renderSubs();
+    if(subsDirty){
+      const s=await pubGet("../subscriptions.json");
+      subsDoc=s||{subscriptions:[],settings:{}};
+      subsDirty=false;clearDraft();renderSubs();
+    }
     showToast("已還原為 GitHub 版本");
   }catch(e){showToast("⚠️ 還原失敗："+e.message);}
+  finally{updateSaveBar();}
 }
 // 重整/重開後，若有和 GitHub 版本不同的未存草稿，問使用者要不要接續
 function maybeRestoreDraft(){
@@ -594,7 +636,7 @@ function maybeRestoreDraft(){
   updateSaveBar();
 }
 // 有未存變更時，離開/重整前提醒（本地變更尚未寫回 GitHub）
-window.addEventListener("beforeunload",(e)=>{if(subsDirty){e.preventDefault();e.returnValue="";}});
+window.addEventListener("beforeunload",(e)=>{if(subsDirty||watchDirty()){e.preventDefault();e.returnValue="";}});
 
 // ===== 編輯面板 =====
 function openEditor(id){
@@ -663,25 +705,70 @@ async function saveSub(){
 function toggleSub(id){if(!hasToken()){needToken();return;}const s=subsDoc.subscriptions.find(x=>x.id===id);s.enabled=!s.enabled;renderSubs();markDirty();}
 function delSub(id){if(!hasToken()){needToken();return;}const s=subsDoc.subscriptions.find(x=>x.id===id);if(!confirm(`確定刪除「${s.name}」？`))return;subsDoc.subscriptions=subsDoc.subscriptions.filter(x=>x.id!==id);renderSubs();markDirty();}
 
-// ===== 關注 =====
-async function toggleWatch(id){
+// ===== 關注：本地累積加入/取消，按「儲存全部變更」才寫回 GitHub =====
+const WATCH_DRAFT_KEY="rent591_watch_draft";  // 未存的關注變更（重整/手滑救援用，存「差異」而非整份）
+function cloneDoc(o){return JSON.parse(JSON.stringify(o));}
+// 與 GitHub 版本相比：本地新加入 / 取消了哪些（加了又取消＝無變更）
+function watchChanges(){
+  const cur=watchDoc.items||{},orig=watchOrig.items||{};
+  return {added:Object.keys(cur).filter(id=>!orig[id]),removed:Object.keys(orig).filter(id=>!cur[id])};
+}
+function watchDirty(){const c=watchChanges();return c.added.length+c.removed.length>0;}
+function applyWatchChanges(doc,added,removed){
+  const out=cloneDoc(doc);out.items=out.items||{};
+  removed.forEach(id=>{delete out.items[id];});
+  Object.entries(added).forEach(([id,it])=>{out.items[id]=it;});
+  return out;
+}
+function saveWatchDraft(){
+  try{
+    const c=watchChanges();
+    if(!c.added.length&&!c.removed.length){clearWatchDraft();return;}
+    localStorage.setItem(WATCH_DRAFT_KEY,JSON.stringify({savedAt:Date.now(),added:Object.fromEntries(c.added.map(id=>[id,watchDoc.items[id]])),removed:c.removed}));
+  }catch(e){}
+}
+function clearWatchDraft(){try{localStorage.removeItem(WATCH_DRAFT_KEY);}catch(e){}}
+function maybeRestoreWatchDraft(){
+  let d=null;try{d=JSON.parse(localStorage.getItem(WATCH_DRAFT_KEY)||"null");}catch(e){}
+  if(!d) return;
+  const next=applyWatchChanges(watchOrig,d.added||{},d.removed||[]);
+  if(JSON.stringify(next.items)===JSON.stringify(watchOrig.items)){clearWatchDraft();return;} // 與線上相同＝無意義
+  const when=new Date(d.savedAt||Date.now()).toLocaleString();
+  if(confirm(`偵測到上次未儲存的關注變更（${when}）。\n\n按「確定」接續這些變更（記得之後按儲存）；\n按「取消」捨棄、使用 GitHub 上的版本。`)) watchDoc=next;
+  else clearWatchDraft();
+}
+function toggleWatch(id){
   if(!hasToken()){needToken();return;}
   if(watchDoc.items[id]) delete watchDoc.items[id];
+  else if(watchOrig.items[id]) watchDoc.items[id]=watchOrig.items[id]; // 取消後又加回＝還原原紀錄（保留 added_at/note）
   else{
     const r=(latest&&latest.listings&&latest.listings[id])||{};
     watchDoc.items[id]={added_at:new Date().toISOString().slice(0,10),note:"",title:r.title||"",url:r.url||`https://rent.591.com.tw/${id}`};
   }
-  // 即時更新畫面星號
+  saveWatchDraft();updateSaveBar();
   renderStatus();renderWatch();
-  try{await ghPutFile("watchlist.json",watchDoc,`更新關注清單`);showToast("關注已更新 ✓");}
-  catch(e){showToast("⚠️ "+e.message);}
+}
+// 關注頁頂端：列出未儲存的加入/取消，可逐筆復原
+function watchPendingHtml(){
+  const c=watchChanges();
+  if(!c.added.length&&!c.removed.length) return "";
+  const row=(id,add)=>{
+    const it=(add?watchDoc.items[id]:watchOrig.items[id])||{};
+    return `<div class="wp-row"><span class="wp-tag ${add?"add":"del"}">${add?"＋ 加入":"－ 取消"}</span>`+
+      `<a href="${esc(it.url||`https://rent.591.com.tw/${id}`)}" target="_blank" rel="noopener">${esc(it.title||("物件 "+id))}</a>`+
+      `<button class="btn-line wp-undo" onclick="toggleWatch('${id}')">復原</button></div>`;
+  };
+  return `<div class="wp"><div class="wp-head">未儲存的關注變更（加入 ${c.added.length}、取消 ${c.removed.length}）</div>`+
+    c.added.map(id=>row(id,true)).join("")+c.removed.map(id=>row(id,false)).join("")+
+    `<div class="wp-hint">按下方「💾 儲存全部變更」才會寫回 GitHub</div></div>`;
 }
 function renderWatch(){
   const el=document.getElementById("view-watch");
   const listings=(latest&&latest.listings)||{};
   // 只顯示目前模式（租/買）資料中找得到的關注物件
   const ids=Object.keys(watchDoc.items||{}).filter(id=>listings[id]);
-  if(!ids.length){el.innerHTML=`<div class="empty">此模式還沒有關注的物件。<br>在「狀態」頁點物件右側的 ☆ 即可加入關注，排程會持續追蹤其降價與下架。</div>`;return;}
+  const pending=watchPendingHtml();
+  if(!ids.length){el.innerHTML=pending+`<div class="empty">此模式還沒有關注的物件。<br>在「狀態」頁點物件右側的 ☆ 即可加入關注，排程會持續追蹤其降價與下架。</div>`;return;}
   const rows=ids.map(id=>{
     const live=listings[id]; const w=watchDoc.items[id];
     return {...live,listing_id:id,title:live.title||w.title||("物件 "+id),url:live.url||w.url,note:w.note};
@@ -702,7 +789,7 @@ function renderWatch(){
       `<option value="">全部人（${rows.length}）</option>`+
       wgroups.map(g=>`<option value="${esc(g)}" ${watchPerson===g?"selected":""}>${esc(g)}（${rows.filter(r=>(r.groups||[]).includes(g)).length}）</option>`).join("")+
       `</select></div>` : "";
-  el.innerHTML=personSelect+
+  el.innerHTML=pending+personSelect+
     `<div class="field" style="margin-bottom:12px"><label>只看區域</label>`+
     `<select class="sel-input" onchange="onWatchFilter(this.value)">`+
     `<option value="">全部區域（${pRows.length}）</option>`+
