@@ -2,11 +2,10 @@ name: 591 監控排程
 
 on:
   schedule:
-    # 每小時一輪（cron 為 UTC）。用第 17 分而非整點，避開整點排程尖峰
-    # （減少 GitHub 排程延遲與 591 對機房 IP 的偶發封鎖）。
-    # 註：GitHub 排程是 best-effort，實測 */2 時約 3/4 的排程被丟（一天只跑 ~3 次），
-    # 改每小時是用排程次數換實際執行次數；仍不穩定的話改用外部觸發 workflow_dispatch。
-    - cron: "17 * * * *"
+    # 主要排程改由外部 Google Apps Script 每小時呼叫 workflow_dispatch 觸發
+    # （GitHub 排程是 best-effort，實測 */2、每小時都常被丟，一天只跑 ~3 次）。
+    # 這裡僅留作備援：每 6 小時（UTC 3/9/15/21 點第 17 分，與買屋 0/6/12/18 點錯開）。
+    - cron: "17 3-23/6 * * *"
   workflow_dispatch: {}  # 允許在 Actions 頁面手動觸發（改完訂閱想立即跑）
 
 # 讓 job 能把快照 commit 回 repo
