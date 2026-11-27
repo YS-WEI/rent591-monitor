@@ -66,12 +66,12 @@ def _spec_sale(r):
     return "／".join(parts)
 
 
-SOURCE_LABELS = {"sinyi": "［信義］"}
+SOURCE_LABELS = {"591": "［591］", "sinyi": "［信義］"}
 
 
 def _title(r) -> str:
-    """標題；非 591 來源加上來源標記（591 物件無 source，維持原樣）。"""
-    return SOURCE_LABELS.get(r.get("source"), "") + (r.get("title") or "")
+    """標題前加來源標記。591 物件沒有 source 欄位，視為 591。"""
+    return SOURCE_LABELS.get(r.get("source") or "591", "") + (r.get("title") or "")
 
 
 def _new_line(r, kind):

@@ -145,10 +145,11 @@ def test_sinyi_covered_counts_missing():
     assert state["listings"]["C1"]["missing_count"] == 1
 
 
-def test_notification_marks_sinyi_source():
+def test_notification_marks_every_source():
+    # 兩個來源混在同一則通知裡，每筆都要看得出來自哪個網站
     report = {"new": [{**_rec("C1", "板橋區", "sinyi"), "title": "好房"},
                       {**_rec("1", "板橋區"), "title": "591房"}],
               "price_drop": [], "removed": []}
     text = format_report(report)
     assert "· ［信義］好房" in text
-    assert "· 591房" in text  # 591 物件維持原樣
+    assert "· ［591］591房" in text  # 591 物件沒有 source 欄位，也要標成 591
