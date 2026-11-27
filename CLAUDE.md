@@ -132,6 +132,23 @@ rent591-monitor/
 5. **涵蓋判斷分來源**（`diff.cover_key`）：信義為 `sinyi:板橋區`。任一頁失敗 → 信義本輪
    視為未涵蓋，不判其物件下架；信義任何例外都不中斷 591。
 
+## ⚠️ 住商不動產租屋（第三來源）實測發現（2026-11-27 驗證）
+
+`scraper/hb_scraper.py`，與信義一起列在 `main.EXTRA_RENT_SOURCES`。
+
+1. `https://www.hbhousing.com.tw/renthouse/<路徑>` 為 Nuxt 3 SSR，物件在
+   `<script id="__NUXT_DATA__">`（devalue 扁平陣列，值為索引），純 HTTP 可抓。
+2. **路徑篩選、伺服器端套用**（片段順序比照前端）：`台北市|新北市` / 郵遞區號 `241-247` /
+   型態 `noelevator|elevator|mansion|villa-style`（電梯大樓=大樓+華廈）/ 租金 `0-5-price`
+   （**單位萬**，`1.5-down`、`2-up`）/ 類型 `apartment|cottage|subletsuite|housesharing-type` /
+   坪數 `area-30-up-area` / 房數 `4_up_room-pattern`、`1_room-pattern`、`2_3_room-pattern` /
+   翻頁 `N-page`（每頁 10 筆）。範圍格式同前端 `rt()`：`a-b`、`a-up`、`b-down`。
+3. **`rentPrice` 單位是萬**（3.3 = 33,000 元），轉換時乘 10000。
+4. ID 加 `hb-` 前綴（sn 有 ZR/OR/gOT… 開頭）；`modifiedDate` 常為 null → posted_at 留空。
+5. 同一間房可能同時刊在 591 / 信義 / 住商（不同 ID），目前不跨站合併。
+6. 頁面的 `window.__NUXT__` 設定含第三方地圖服務的公開金鑰，與本專案無關，勿使用或存檔
+   （測試 fixture 只保留 `__NUXT_DATA__`）。
+
 ## 列表頁可解析欄位
 
 物件 ID（URL 尾碼）、標題、租金、額外費用（「額外費用 1,580元/月」）或

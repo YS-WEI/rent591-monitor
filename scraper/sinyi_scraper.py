@@ -49,7 +49,7 @@ def build_sinyi_path(sub: dict) -> str | None:
         return None
     segs = [city]
 
-    zips = [config.SINYI_ZIP.get(region, {}).get(str(s)) for s in (sub.get("sections") or [])]
+    zips = [config.SECTION_ZIP.get(region, {}).get(str(s)) for s in (sub.get("sections") or [])]
     zips = [z for z in zips if z]
     if zips:
         segs.append("-".join(zips) + "-zip")

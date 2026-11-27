@@ -45,8 +45,8 @@ SINYI_HOUSE_URL = "https://www.sinyi.com.tw/rent/houseno/"
 SINYI_PAGE_SIZE = 20
 SINYI_MAX_PAGES = 10
 SINYI_CITY = {"1": "Taipei-city", "3": "NewTaipei-city"}
-# 591 section 代碼 → 郵遞區號（信義以郵遞區號篩區）
-SINYI_ZIP = {
+# 591 section 代碼 → 郵遞區號（信義、住商都以郵遞區號篩區）
+SECTION_ZIP = {
     "1": {"1": "100", "2": "103", "3": "104", "4": "105", "5": "106", "6": "108",
           "7": "110", "8": "111", "9": "112", "10": "114", "11": "115", "12": "116"},
     "3": {"26": "220", "27": "221", "28": "222", "34": "231", "37": "234", "38": "235",
@@ -57,6 +57,20 @@ SINYI_ZIP = {
 SINYI_USE = {"1": "house", "2": "rent1", "3": "rent2", "4": "rent3"}
 # 591 shape → 信義型態：t1 公寓、t2 電梯華廈大樓、t4 透天厝（別墅併入透天）
 SINYI_TYPE = {"1": "t1", "2": "t2", "3": "t4", "4": "t4"}
+
+# ---------- 住商不動產租屋（第三來源，沿用同一份租屋訂閱）----------
+# Nuxt 3 SSR：物件在頁面的 __NUXT_DATA__（devalue 格式）；篩選寫在路徑、伺服器端套用；
+# 路徑尾加 N-page 翻頁（每頁 10 筆）。租金單位是「萬」。
+HB_LIST_URL = "https://www.hbhousing.com.tw/renthouse/"
+HB_DETAIL_URL = "https://www.hbhousing.com.tw/detail?sn="
+HB_PAGE_SIZE = 10
+HB_MAX_PAGES = 10
+HB_CITY = {"1": "台北市", "3": "新北市"}
+# 591 kind → 住商類型：住宅 / 獨立套房 / 分租套房 / 雅房
+HB_TYPE = {"1": "apartment", "2": "cottage", "3": "subletsuite", "4": "housesharing"}
+# 591 shape → 住商型態。住商把 10 樓以下有電梯的歸「華廈」，故電梯大樓 = 大樓 + 華廈
+HB_STYLE = {"1": ["noelevator"], "2": ["elevator", "mansion"], "3": ["villa"], "4": ["villa"]}
+HB_STYLE_ORDER = ["noelevator", "elevator", "mansion", "villa"]  # 與住商前端組網址的順序一致
 
 # 反爬：請求間隔與重試
 REQUEST_INTERVAL_SEC = 4  # 請求間隔；拉長較不易被 591 擋

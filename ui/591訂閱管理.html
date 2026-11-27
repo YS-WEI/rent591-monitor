@@ -458,7 +458,7 @@ function listingCard(r,{flag,stripe,drop}={}){
           <div class="l-title"><a href="${esc(r.url)}" target="_blank" rel="noopener">${flagHtml} ${esc(r.title)}</a></div>
           ${star}
         </div>
-        <div class="l-meta"><span class="mchip plain">${r.source==="sinyi"?"信義":"591"}</span>${meta}${loc?`<span class="mchip plain">${esc(loc)}</span>`:""}</div>
+        <div class="l-meta"><span class="mchip plain">${({sinyi:"信義",hb:"住商"})[r.source]||"591"}</span>${meta}${loc?`<span class="mchip plain">${esc(loc)}</span>`:""}</div>
         ${dateLine(r)}
         ${r.note?`<div class="l-note">✍️ ${esc(r.note)}</div>`:""}
       </div>
@@ -867,7 +867,7 @@ function showToast(msg){const t=document.getElementById("toast");t.textContent=m
 
 // 介面版本：每次改介面時手動更新（台灣時間）。
 // 不用 document.lastModified：bot 每次 commit 資料都會整站重新部署，那個時間不代表介面有更新。
-const UI_VERSION="2026-11-27 信義來源";
+const UI_VERSION="2026-11-27 信義+住商來源";
 document.getElementById("uiVer").textContent="介面版本："+UI_VERSION;
 boot();
 </script>

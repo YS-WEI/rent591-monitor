@@ -17,27 +17,36 @@ import notify
 from diff import diff_snapshots
 from scraper.list_scraper import scrape_subscription
 from scraper.sale_scraper import scrape_sale_subscription
-from scraper.sinyi_scraper import SOURCE as SINYI, scrape_sinyi_subscription
+from scraper import hb_scraper, sinyi_scraper
 from storage import load_latest, load_watchlist, save_snapshot
 
 log = logging.getLogger("main")
 
+# 591 以外的租屋來源：(source 代碼, 抓取函式)。皆沿用同一份訂閱。
+EXTRA_RENT_SOURCES = [
+    (sinyi_scraper.SOURCE, sinyi_scraper.scrape_sinyi_subscription),
+    (hb_scraper.SOURCE, hb_scraper.scrape_hb_subscription),
+]
+
 
 def scrape_rent_all(sub, fetched_at=None):
-    """租屋訂閱同時抓 591 與信義，回傳 (合併物件, 涵蓋單位集合)。
+    """租屋訂閱同時抓 591 與其他來源，回傳 (合併物件, 涵蓋單位集合)。
 
-    涵蓋單位見 diff.cover_key：591 為行政區名、信義為 'sinyi:行政區'。
-    任一來源失敗都不影響另一來源（例外吞掉、該來源視為未涵蓋）。
+    涵蓋單位見 diff.cover_key：591 為行政區名、其他來源為 '<source>:行政區'。
+    任一來源失敗都不影響其他來源（例外吞掉、該來源視為未涵蓋）。
     """
     rows, covered = scrape_subscription(sub, fetched_at=fetched_at)
-    if covered is None:  # 591 全區訂閱 → 展開成該城市所有區，才能與信義的涵蓋合併
+    if covered is None:  # 591 全區訂閱 → 展開成該城市所有區，才能與其他來源的涵蓋合併
         covered = set(config.SECTION_NAMES.get(str(sub["region"]), {}).values())
-    try:
-        s_rows, s_cov = scrape_sinyi_subscription(sub, fetched_at=fetched_at)
-    except Exception:  # noqa: BLE001 — 信義任何錯誤都不可中斷整輪
-        log.exception("[信義][%s] 抓取失敗，本輪略過", sub["id"])
-        s_rows, s_cov = [], set()
-    return rows + s_rows, covered | {f"{SINYI}:{d}" for d in s_cov}
+    for source, scrape in EXTRA_RENT_SOURCES:
+        try:
+            s_rows, s_cov = scrape(sub, fetched_at=fetched_at)
+        except Exception:  # noqa: BLE001 — 任一來源出錯都不可中斷整輪
+            log.exception("[%s][%s] 抓取失敗，本輪略過", source, sub["id"])
+            s_rows, s_cov = [], set()
+        rows = rows + s_rows
+        covered = covered | {f"{source}:{d}" for d in s_cov}
+    return rows, covered
 
 
 # 各類型的差異集中在這裡

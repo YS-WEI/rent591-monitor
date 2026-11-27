@@ -66,7 +66,7 @@ def _spec_sale(r):
     return "／".join(parts)
 
 
-SOURCE_LABELS = {"591": "［591］", "sinyi": "［信義］"}
+SOURCE_LABELS = {"591": "［591］", "sinyi": "［信義］", "hb": "［住商］"}
 
 
 def _title(r) -> str:
