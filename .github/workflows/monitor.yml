@@ -1,12 +1,10 @@
 name: 591 監控排程
 
 on:
-  schedule:
-    # 主要排程改由外部 Google Apps Script 每小時呼叫 workflow_dispatch 觸發
-    # （GitHub 排程是 best-effort，實測 */2、每小時都常被丟，一天只跑 ~3 次）。
-    # 這裡僅留作備援：每 6 小時（UTC 3/9/15/21 點第 17 分，與買屋 0/6/12/18 點錯開）。
-    - cron: "17 3-23/6 * * *"
-  workflow_dispatch: {}  # 允許在 Actions 頁面手動觸發（改完訂閱想立即跑）
+  # 排程由外部 Google Apps Script（triggerRent，每小時）呼叫 workflow_dispatch 觸發。
+  # 不用 GitHub schedule：它是 best-effort，實測 */2、每小時都常被丟（一天只跑 ~3 次），
+  # 且與外部觸發撞期時會造成多餘的排隊執行。網頁「立即更新」也走 workflow_dispatch。
+  workflow_dispatch: {}
 
 # 讓 job 能把快照 commit 回 repo
 permissions:
@@ -22,6 +20,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          # 取分支「開跑當下」的最新版，而非觸發當下的 SHA：
+          # concurrency 排隊等前一輪跑完時，才能拿到前一輪剛 push 的快照（否則用舊快照比對、push 衝突失敗）
+          ref: ${{ github.ref_name }}
 
       - uses: actions/setup-python@v5
         with:

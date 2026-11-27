@@ -1,9 +1,8 @@
 name: 591 買屋監控排程
 
 on:
-  schedule:
-    # 中古屋變動慢，每 6 小時一輪（UTC；第 47 分與租屋 :17 錯開）
-    - cron: "47 */6 * * *"
+  # 排程由外部 Google Apps Script（triggerSale，每 6 小時）呼叫 workflow_dispatch 觸發。
+  # 不用 GitHub schedule（best-effort，常被丟；原理同 monitor.yml）。
   workflow_dispatch: {}
 
 permissions:
@@ -19,6 +18,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          # 取分支開跑當下的最新版（concurrency 排隊後才拿得到前一輪剛 push 的快照）
+          ref: ${{ github.ref_name }}
       - uses: actions/setup-python@v5
         with:
           python-version: "3.13"
