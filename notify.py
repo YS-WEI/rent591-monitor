@@ -66,18 +66,26 @@ def _spec_sale(r):
     return "／".join(parts)
 
 
+SOURCE_LABELS = {"sinyi": "［信義］"}
+
+
+def _title(r) -> str:
+    """標題；非 591 來源加上來源標記（591 物件無 source，維持原樣）。"""
+    return SOURCE_LABELS.get(r.get("source"), "") + (r.get("title") or "")
+
+
 def _new_line(r, kind):
     if kind == "sale":
         tp = r.get("total_price")
-        return f"· {r.get('title','')} {tp:g}萬（{_spec_sale(r)}）\n  {r.get('url','')}"
-    return f"· {r.get('title','')} ${r.get('total_monthly')}／月（{_spec_rent(r)}）\n  {r.get('url','')}"
+        return f"· {_title(r)} {tp:g}萬（{_spec_sale(r)}）\n  {r.get('url','')}"
+    return f"· {_title(r)} ${r.get('total_monthly')}／月（{_spec_rent(r)}）\n  {r.get('url','')}"
 
 
 def _drop_line(r, kind):
     if kind == "sale":
-        return (f"· {r.get('title','')} {r['old_price']:g}→{r['new_price']:g}萬"
+        return (f"· {_title(r)} {r['old_price']:g}→{r['new_price']:g}萬"
                 f"（↓{r['drop_pct']}%）\n  {r.get('url','')}")
-    return (f"· {r.get('title','')} ${r['old_price']}→${r['new_price']}"
+    return (f"· {_title(r)} ${r['old_price']}→${r['new_price']}"
             f"（↓{r['drop_pct']}%）\n  {r.get('url','')}")
 
 
@@ -103,7 +111,7 @@ def format_report(report: dict, header: str = "591 租屋監控", kind: str = "r
         lines.append(f"\n❌ {_off_label(kind)}")
         for d, rows in _group_by_district(removed).items():
             lines.append(f"📍{d}")
-            lines.extend(f"· {r.get('title','')}" for r in rows)
+            lines.extend(f"· {_title(r)}" for r in rows)
     return "\n".join(lines)
 
 
@@ -153,7 +161,7 @@ def _discord_embed(r, flag, kind):
         desc.append(spec)
     if r.get("district"):
         desc.append(r["district"])
-    embed = {"title": f"{emoji} {r.get('title','')}"[:250], "url": r.get("url"),
+    embed = {"title": f"{emoji} {_title(r)}"[:250], "url": r.get("url"),
              "color": color, "description": " · ".join(desc)}
     if r.get("image"):
         embed["thumbnail"] = {"url": r["image"]}

@@ -36,6 +36,28 @@ SECTION_NAMES = {
           "11": "南港區", "12": "文山區"},
 }
 
+# ---------- 信義房屋租屋（第二來源，沿用同一份租屋訂閱）----------
+# 列表由前端 POST ajaxSearchHouse.php 載入（JSON，含 total/totalPage，可翻頁）；
+# params 為列表網址 /rent/list/ 之後的路徑片段，如 "NewTaipei-city/220-241-zip/house-use/4-up-room"。
+SINYI_API_URL = "https://www.sinyi.com.tw/rent/ajaxSearchHouse.php"
+SINYI_LIST_URL = "https://www.sinyi.com.tw/rent/list/"
+SINYI_HOUSE_URL = "https://www.sinyi.com.tw/rent/houseno/"
+SINYI_PAGE_SIZE = 20
+SINYI_MAX_PAGES = 10
+SINYI_CITY = {"1": "Taipei-city", "3": "NewTaipei-city"}
+# 591 section 代碼 → 郵遞區號（信義以郵遞區號篩區）
+SINYI_ZIP = {
+    "1": {"1": "100", "2": "103", "3": "104", "4": "105", "5": "106", "6": "108",
+          "7": "110", "8": "111", "9": "112", "10": "114", "11": "115", "12": "116"},
+    "3": {"26": "220", "27": "221", "28": "222", "34": "231", "37": "234", "38": "235",
+          "39": "236", "40": "237", "41": "238", "42": "239", "43": "241", "44": "242",
+          "45": "243", "46": "244", "47": "247", "48": "248", "49": "249", "50": "251"},
+}
+# 591 kind → 信義用途：整層住家 / 獨立套房 / 分租套房 / 雅房
+SINYI_USE = {"1": "house", "2": "rent1", "3": "rent2", "4": "rent3"}
+# 591 shape → 信義型態：t1 公寓、t2 電梯華廈大樓、t4 透天厝（別墅併入透天）
+SINYI_TYPE = {"1": "t1", "2": "t2", "3": "t4", "4": "t4"}
+
 # 反爬：請求間隔與重試
 REQUEST_INTERVAL_SEC = 4  # 請求間隔；拉長較不易被 591 擋
 REQUEST_TIMEOUT_SEC = 20

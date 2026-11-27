@@ -22,6 +22,16 @@
 from __future__ import annotations
 
 
+def cover_key(rec: dict) -> str | None:
+    """物件所屬的「涵蓋單位」：591 為行政區名；其他來源加前綴（如 'sinyi:板橋區'）。
+
+    多來源各自可能被擋：信義失敗時不能拿 591 成功的區來判信義物件下架，反之亦然。
+    591 物件沒有 source 欄位，維持原本只用 district 的行為。
+    """
+    src = rec.get("source")
+    return f"{src}:{rec.get('district')}" if src else rec.get("district")
+
+
 def _last_price(rec: dict, price_key: str = "total_monthly"):
     hist = rec.get("price_history") or []
     if hist:
@@ -102,7 +112,7 @@ def diff_snapshots(
         if lid in current_by_id:
             continue
         # 此物件所在區這輪沒抓到（被擋）→ 原狀保留，不算 missing、不誤判下架
-        if covered_districts is not None and prev.get("district") not in covered_districts:
+        if covered_districts is not None and cover_key(prev) not in covered_districts:
             new_state_listings[lid] = {**prev}
             continue
         prev_status = prev.get("status", "active")

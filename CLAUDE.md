@@ -114,6 +114,24 @@ rent591-monitor/
    對策（`sale_parser.dedupe_sale_units`）：丟棄 24 號段死連結，再以（社區/坪數/樓層/
    房數/總價）模糊鍵同案去重，代表取**最小 houseid**（跨輪最穩定，減少假新增/假下架）。
 
+## ⚠️ 信義房屋租屋（第二來源）實測發現（2026-11-27 驗證）
+
+租屋訂閱同時抓 591 與信義（`scraper/sinyi_scraper.py`，由 `main.scrape_rent_all` 合併）。
+
+1. **列表網址的 `N-page` 不會翻頁**（SSR 只有第一頁）。資料其實是前端 POST
+   `https://www.sinyi.com.tw/rent/ajaxSearchHouse.php`（`params`=路徑、`page`、`limit`）
+   取得的 JSON，含 `total`/`totalPage`，翻頁正常、免 token。
+2. **篩選寫在路徑片段、伺服器端會套用**：`{城市}-city`（Taipei / NewTaipei）、郵遞區號
+   `220-241-zip`、用途 `house|rent1|rent2|rent3-use`（整層/獨套/分套/雅房）、
+   `0-50000-price` / `20000-up-price`、`N-up-room`、`N-up-area`（任意整數皆可）、
+   型態 `t1`公寓 `t2`電梯華廈大樓 `t4`透天（可 `t1-t2-type` 複選）。
+3. 只有「N 房以上 / N 坪以上」，故抓回後一律用 `filters.matches` 依訂閱精篩。
+4. 物件 ID 為 `C` 開頭（如 `C364451`），不與 591 數字 ID 衝突；`source: "sinyi"`。
+   `address` 可能帶社區名（`成功座標 / 新北市土城區金安街`），用 `addressrwd`。
+   `updatedate` 是絕對時間。卡片無管理費 → `total_monthly` 暫等於租金。
+5. **涵蓋判斷分來源**（`diff.cover_key`）：信義為 `sinyi:板橋區`。任一頁失敗 → 信義本輪
+   視為未涵蓋，不判其物件下架；信義任何例外都不中斷 591。
+
 ## 列表頁可解析欄位
 
 物件 ID（URL 尾碼）、標題、租金、額外費用（「額外費用 1,580元/月」）或
