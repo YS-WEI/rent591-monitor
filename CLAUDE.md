@@ -114,6 +114,41 @@ rent591-monitor/
    對策（`sale_parser.dedupe_sale_units`）：丟棄 24 號段死連結，再以（社區/坪數/樓層/
    房數/總價）模糊鍵同案去重，代表取**最小 houseid**（跨輪最穩定，減少假新增/假下架）。
 
+## ⚠️ 信義房屋租屋（第二來源）實測發現（2026-11-27 驗證）
+
+租屋訂閱同時抓 591 與信義（`scraper/sinyi_scraper.py`，由 `main.scrape_rent_all` 合併）。
+
+1. **列表網址的 `N-page` 不會翻頁**（SSR 只有第一頁）。資料其實是前端 POST
+   `https://www.sinyi.com.tw/rent/ajaxSearchHouse.php`（`params`=路徑、`page`、`limit`）
+   取得的 JSON，含 `total`/`totalPage`，翻頁正常、免 token。
+2. **篩選寫在路徑片段、伺服器端會套用**：`{城市}-city`（Taipei / NewTaipei）、郵遞區號
+   `220-241-zip`、用途 `house|rent1|rent2|rent3-use`（整層/獨套/分套/雅房）、
+   `0-50000-price` / `20000-up-price`、`N-up-room`、`N-up-area`（任意整數皆可）、
+   型態 `t1`公寓 `t2`電梯華廈大樓 `t4`透天（可 `t1-t2-type` 複選）。
+3. 只有「N 房以上 / N 坪以上」，故抓回後一律用 `filters.matches` 依訂閱精篩。
+4. 物件 ID 為 `C` 開頭（如 `C364451`），不與 591 數字 ID 衝突；`source: "sinyi"`。
+   `address` 可能帶社區名（`成功座標 / 新北市土城區金安街`），用 `addressrwd`。
+   `updatedate` 是絕對時間。卡片無管理費 → `total_monthly` 暫等於租金。
+5. **涵蓋判斷分來源**（`diff.cover_key`）：信義為 `sinyi:板橋區`。任一頁失敗 → 信義本輪
+   視為未涵蓋，不判其物件下架；信義任何例外都不中斷 591。
+
+## ⚠️ 住商不動產租屋（第三來源）實測發現（2026-11-27 驗證）
+
+`scraper/hb_scraper.py`，與信義一起列在 `main.EXTRA_RENT_SOURCES`。
+
+1. `https://www.hbhousing.com.tw/renthouse/<路徑>` 為 Nuxt 3 SSR，物件在
+   `<script id="__NUXT_DATA__">`（devalue 扁平陣列，值為索引），純 HTTP 可抓。
+2. **路徑篩選、伺服器端套用**（片段順序比照前端）：`台北市|新北市` / 郵遞區號 `241-247` /
+   型態 `noelevator|elevator|mansion|villa-style`（電梯大樓=大樓+華廈）/ 租金 `0-5-price`
+   （**單位萬**，`1.5-down`、`2-up`）/ 類型 `apartment|cottage|subletsuite|housesharing-type` /
+   坪數 `area-30-up-area` / 房數 `4_up_room-pattern`、`1_room-pattern`、`2_3_room-pattern` /
+   翻頁 `N-page`（每頁 10 筆）。範圍格式同前端 `rt()`：`a-b`、`a-up`、`b-down`。
+3. **`rentPrice` 單位是萬**（3.3 = 33,000 元），轉換時乘 10000。
+4. ID 加 `hb-` 前綴（sn 有 ZR/OR/gOT… 開頭）；`modifiedDate` 常為 null → posted_at 留空。
+5. 同一間房可能同時刊在 591 / 信義 / 住商（不同 ID），目前不跨站合併。
+6. 頁面的 `window.__NUXT__` 設定含第三方地圖服務的公開金鑰，與本專案無關，勿使用或存檔
+   （測試 fixture 只保留 `__NUXT_DATA__`）。
+
 ## 列表頁可解析欄位
 
 物件 ID（URL 尾碼）、標題、租金、額外費用（「額外費用 1,580元/月」）或
